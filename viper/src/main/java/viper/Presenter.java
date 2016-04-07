@@ -14,15 +14,15 @@ public abstract class Presenter<V extends View, R extends Router> {
     mRouter = null;
   }
 
-  protected void dropView() {
+  public void dropView() {
     mView = null;
   }
 
-  protected final R getRouter() {
+  public final R getRouter() {
     return mRouter;
   }
 
-  protected final V getView() {
+  public final V getView() {
     return mView;
   }
 
