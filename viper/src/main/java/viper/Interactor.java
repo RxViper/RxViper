@@ -13,21 +13,23 @@ import rx.subscriptions.Subscriptions;
  * @since 2016-Feb-13, 22:40
  */
 public abstract class Interactor<Param, Result> {
-  private final Scheduler mJobScheduler;
-  private final Scheduler mPostExecutionScheduler;
+  private final Scheduler mSubscribeScheduler;
+  private final Scheduler mObserveScheduler;
   private Subscription mSubscription = Subscriptions.empty();
 
-  protected Interactor(Scheduler jobScheduler, Scheduler postExecutionScheduler) {
-    mJobScheduler = jobScheduler;
-    mPostExecutionScheduler = postExecutionScheduler;
+  protected Interactor(Scheduler subscribeOn, Scheduler observeOn) {
+    mSubscribeScheduler = subscribeOn;
+    mObserveScheduler = observeOn;
   }
 
-  protected abstract Observable<Result> createObservable(Param param);
-
   public void execute(Subscriber<? super Result> subscriber, Param param) {
-    mSubscription = createObservable(param).subscribeOn(mJobScheduler)
-        .observeOn(mPostExecutionScheduler)
+    mSubscription = createObservable(param).subscribeOn(mSubscribeScheduler)
+        .observeOn(mObserveScheduler)
         .subscribe(subscriber);
+  }
+
+  public void execute(Subscriber<? super Result> subscriber) {
+    execute(subscriber, null);
   }
 
   public void unsubscribe() {
@@ -37,4 +39,6 @@ public abstract class Interactor<Param, Result> {
 
     mSubscription.unsubscribe();
   }
+
+  protected abstract Observable<Result> createObservable(Param param);
 }
