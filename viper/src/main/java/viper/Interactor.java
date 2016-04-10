@@ -24,7 +24,7 @@ public abstract class Interactor<Param, Result> {
 
   protected abstract Observable<Result> createObservable(Param param);
 
-  public final void execute(Subscriber<? super Result> subscriber, Param param) {
+  public void execute(Subscriber<? super Result> subscriber, Param param) {
     mSubscription = createObservable(param).subscribeOn(mJobScheduler)
         .observeOn(mPostExecutionScheduler)
         .subscribe(subscriber);
