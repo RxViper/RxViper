@@ -11,3 +11,7 @@
 ##### 0.2.0
 * Remove `final` modifier from `Interactor#execute(subscriber, param)` (Closes [#1](https://github.com/RxViper/RxViper/issues/1))
 * Add `Interactor#execute(subscriber)` (Closes [#2](https://github.com/RxViper/RxViper/issues/2))
+
+##### 0.3.0
+* `View` was deprecated to avoid confusing naming with `android.View`
+* Add `ViewCallbacks` interface instead.
