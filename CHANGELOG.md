@@ -15,3 +15,9 @@
 ##### 0.3.0
 * `View` was deprecated to avoid confusing naming with `android.View`
 * Add `ViewCallbacks` interface instead.
+
+##### 0.4.0
+* Overload `Interactor#execute()` methods to allow using lambdas. (Closes [#3](https://github.com/RxViper/RxViper/issues/3)).
+* `Interactor` implements `rx.Subscription`. (Closes [#4](https://github.com/RxViper/RxViper/issues/4)).
+* Make `Interactor`'s `execute()` methods `final`. (Closes [#5](https://github.com/RxViper/RxViper/issues/5)).
+* Removed `viper.View` in favor of `ViewCallbacks`. (Closes [#6](https://github.com/RxViper/RxViper/issues/6)).
