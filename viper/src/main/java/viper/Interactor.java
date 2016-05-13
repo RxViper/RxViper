@@ -15,7 +15,7 @@ import rx.subscriptions.Subscriptions;
  * @author Dmitriy Zaitsev
  * @since 2016-Feb-13, 22:40
  */
-public abstract class Interactor<Param, Result> {
+public abstract class Interactor<Param, Result> implements Subscription {
   private final Scheduler mSubscribeScheduler;
   private final Scheduler mObserveScheduler;
   private Subscription mSubscription = Subscriptions.empty();
@@ -104,12 +104,16 @@ public abstract class Interactor<Param, Result> {
     });
   }
 
-  public void unsubscribe() {
+  @Override public void unsubscribe() {
     if (mSubscription.isUnsubscribed()) {
       return;
     }
 
     mSubscription.unsubscribe();
+  }
+
+  @Override public boolean isUnsubscribed() {
+    return mSubscription.isUnsubscribed();
   }
 
   protected abstract Observable<Result> createObservable(Param param);
