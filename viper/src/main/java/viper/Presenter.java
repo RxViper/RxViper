@@ -6,7 +6,7 @@ package viper;
  * @author Dmitriy Zaitsev
  * @since 2016-Feb-13, 22:33
  */
-public abstract class Presenter<V extends View, R extends Router> {
+public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   private V mView;
   private R mRouter;
 
