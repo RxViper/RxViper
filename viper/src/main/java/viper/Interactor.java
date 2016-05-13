@@ -53,7 +53,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
       @Override public void onNext(final Result result) {
         onNext.call(result);
       }
-    });
+    }, param);
   }
 
   public final void execute(final Action1<? super Result> onNext, final Action1<Throwable> onError) {
@@ -75,7 +75,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
       @Override public void onNext(final Result result) {
         onNext.call(result);
       }
-    });
+    }, param);
   }
 
   public final void execute(final Action1<? super Result> onNext, final Action1<Throwable> onError,
@@ -101,7 +101,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
       @Override public void onNext(final Result result) {
         onNext.call(result);
       }
-    });
+    }, param);
   }
 
   @Override public final void unsubscribe() {
