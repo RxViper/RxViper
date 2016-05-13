@@ -21,3 +21,6 @@
 * `Interactor` implements `rx.Subscription`. (Closes [#4](https://github.com/RxViper/RxViper/issues/4)).
 * Make `Interactor`'s `execute()` methods `final`. (Closes [#5](https://github.com/RxViper/RxViper/issues/5)).
 * Removed `viper.View` in favor of `ViewCallbacks`. (Closes [#6](https://github.com/RxViper/RxViper/issues/6)).
+
+##### 0.5.0
+* Protect `Presenter`'s methods from overriding. (Closes [#7](https://github.com/RxViper/RxViper/issues/7)).
