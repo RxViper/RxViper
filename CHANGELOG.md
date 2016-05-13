@@ -24,3 +24,6 @@
 
 ##### 0.5.0
 * Protect `Presenter`'s methods from overriding. (Closes [#7](https://github.com/RxViper/RxViper/issues/7)).
+
+##### 0.5.1
+* `Interactor.execute(lambda, param)` respects passed param. (Closes [#9](https://github.com/RxViper/RxViper/issues/9)).
