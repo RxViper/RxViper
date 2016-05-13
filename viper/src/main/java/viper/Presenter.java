@@ -10,11 +10,13 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   private V mView;
   private R mRouter;
 
-  public void dropRouter() {
+  public final void dropRouter() {
+    onDropRouter();
     mRouter = null;
   }
 
-  public void dropView() {
+  public final void dropView() {
+    onDropView();
     mView = null;
   }
 
@@ -26,11 +28,29 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
     return mView;
   }
 
-  public void takeRouter(final R router) {
+  public final void takeRouter(R router) {
     mRouter = router;
+    onTakeRouter(mRouter);
   }
 
-  public void takeView(final V view) {
+  public final void takeView(V view) {
     mView = view;
+    onTakeView(mView);
+  }
+
+  /** Called before Router is dropped */
+  protected void onDropRouter() {
+  }
+
+  /** Called after Router is taken */
+  protected void onTakeRouter(R router) {
+  }
+
+  /** Called before View is dropped */
+  protected void onDropView() {
+  }
+
+  /** Called after View is taken */
+  protected void onTakeView(V view) {
   }
 }
