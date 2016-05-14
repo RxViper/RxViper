@@ -17,10 +17,10 @@
 package viper;
 
 /**
- * ~ ~ ~ ~ Description ~ ~ ~ ~
+ * Displays what it is told to by the {@link Presenter} and relays user input back to the Presenter
  *
  * @author Dmitriy Zaitsev
- * @since 2016-Apr-19, 11:00
+ * @since 0.3.0
  */
 public interface ViewCallbacks {
 }
