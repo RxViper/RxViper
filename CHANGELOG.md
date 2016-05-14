@@ -27,3 +27,6 @@
 
 ##### 0.5.1
 * `Interactor.execute(lambda, param)` respects passed param. (Closes [#9](https://github.com/RxViper/RxViper/issues/9)).
+
+##### 0.6.0
+* `Interactor` works efficiently and safely with subscriptions. (Closes [#13](https://github.com/RxViper/RxViper/issues/13)).
