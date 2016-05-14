@@ -4,10 +4,14 @@ import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.exceptions.OnErrorNotImplementedException;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.subscriptions.Subscriptions;
+
+import static viper.Utils.OnNextOnErrorOnCompleteSubscriber;
+import static viper.Utils.OnNextOnErrorSubscriber;
+import static viper.Utils.OnNextSubscriber;
+import static viper.Utils.checkNotNull;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -21,11 +25,16 @@ public abstract class Interactor<Param, Result> implements Subscription {
   private Subscription mSubscription = Subscriptions.empty();
 
   protected Interactor(Scheduler subscribeOn, Scheduler observeOn) {
+    checkNotNull(subscribeOn, "subscribeOn");
+    checkNotNull(observeOn, "observeOn");
+
     mSubscribeScheduler = subscribeOn;
     mObserveScheduler = observeOn;
   }
 
   public final void execute(Subscriber<? super Result> subscriber, Param param) {
+    checkNotNull(subscriber, "subscriber");
+
     mSubscription = createObservable(param).subscribeOn(mSubscribeScheduler)
         .observeOn(mObserveScheduler)
         .subscribe(subscriber);
@@ -35,73 +44,38 @@ public abstract class Interactor<Param, Result> implements Subscription {
     execute(subscriber, null);
   }
 
-  public final void execute(final Action1<? super Result> onNext) {
+  public final void execute(Action1<? super Result> onNext) {
     execute(onNext, (Param) null);
   }
 
-  public final void execute(final Action1<? super Result> onNext, Param param) {
+  public final void execute(Action1<? super Result> onNext, Param param) {
     checkNotNull(onNext, "onNext");
 
-    execute(new Subscriber<Result>() {
-      @Override public void onCompleted() {
-      }
-
-      @Override public void onError(final Throwable e) {
-        throw new OnErrorNotImplementedException(e);
-      }
-
-      @Override public void onNext(final Result result) {
-        onNext.call(result);
-      }
-    }, param);
+    execute(new OnNextSubscriber<>(onNext), param);
   }
 
-  public final void execute(final Action1<? super Result> onNext, final Action1<Throwable> onError) {
+  public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError) {
     execute(onNext, onError, (Param) null);
   }
 
-  public final void execute(final Action1<? super Result> onNext, final Action1<Throwable> onError, Param param) {
+  public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError, Param param) {
     checkNotNull(onNext, "onNext");
     checkNotNull(onError, "onError");
 
-    execute(new Subscriber<Result>() {
-      @Override public void onCompleted() {
-      }
-
-      @Override public void onError(final Throwable e) {
-        onError.call(e);
-      }
-
-      @Override public void onNext(final Result result) {
-        onNext.call(result);
-      }
-    }, param);
+    execute(new OnNextOnErrorSubscriber<>(onNext, onError), param);
   }
 
-  public final void execute(final Action1<? super Result> onNext, final Action1<Throwable> onError,
-      final Action0 onComplete) {
+  public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError, Action0 onComplete) {
     execute(onNext, onError, onComplete, null);
   }
 
-  public final void execute(final Action1<? super Result> onNext, final Action1<Throwable> onError, final Action0 onComplete,
+  public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError, Action0 onComplete,
       Param param) {
     checkNotNull(onNext, "onNext");
     checkNotNull(onError, "onError");
     checkNotNull(onComplete, "onComplete");
 
-    execute(new Subscriber<Result>() {
-      @Override public void onCompleted() {
-        onComplete.call();
-      }
-
-      @Override public void onError(final Throwable e) {
-        onError.call(e);
-      }
-
-      @Override public void onNext(final Result result) {
-        onNext.call(result);
-      }
-    }, param);
+    execute(new OnNextOnErrorOnCompleteSubscriber<>(onNext, onError, onComplete), param);
   }
 
   @Override public final void unsubscribe() {
@@ -117,10 +91,4 @@ public abstract class Interactor<Param, Result> implements Subscription {
   }
 
   protected abstract Observable<Result> createObservable(Param param);
-
-  private static <T> void checkNotNull(T arg, String name) {
-    if (arg == null) {
-      throw new IllegalArgumentException(name + " can not be null");
-    }
-  }
 }
