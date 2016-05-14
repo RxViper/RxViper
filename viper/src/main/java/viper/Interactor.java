@@ -22,7 +22,7 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action0;
 import rx.functions.Action1;
-import rx.subscriptions.Subscriptions;
+import rx.subscriptions.CompositeSubscription;
 
 import static viper.Utils.OnNextOnErrorOnCompleteSubscriber;
 import static viper.Utils.OnNextOnErrorSubscriber;
@@ -36,9 +36,9 @@ import static viper.Utils.checkNotNull;
  * @since 2016-Feb-13, 22:40
  */
 public abstract class Interactor<Param, Result> implements Subscription {
-  private final Scheduler mSubscribeScheduler;
-  private final Scheduler mObserveScheduler;
-  private Subscription mSubscription = Subscriptions.empty();
+  private final Scheduler             mSubscribeScheduler;
+  private final Scheduler             mObserveScheduler;
+  private final CompositeSubscription mSubscription;
 
   protected Interactor(Scheduler subscribeOn, Scheduler observeOn) {
     checkNotNull(subscribeOn, "subscribeOn");
@@ -46,14 +46,15 @@ public abstract class Interactor<Param, Result> implements Subscription {
 
     mSubscribeScheduler = subscribeOn;
     mObserveScheduler = observeOn;
+    mSubscription = new CompositeSubscription();
   }
 
   public final void execute(Subscriber<? super Result> subscriber, Param param) {
     checkNotNull(subscriber, "subscriber");
 
-    mSubscription = createObservable(param).subscribeOn(mSubscribeScheduler)
+    mSubscription.add(createObservable(param).subscribeOn(mSubscribeScheduler)
         .observeOn(mObserveScheduler)
-        .subscribe(subscriber);
+        .subscribe(subscriber));
   }
 
   public final void execute(Subscriber<? super Result> subscriber) {
@@ -95,15 +96,12 @@ public abstract class Interactor<Param, Result> implements Subscription {
   }
 
   @Override public final void unsubscribe() {
-    if (mSubscription.isUnsubscribed()) {
-      return;
-    }
-
-    mSubscription.unsubscribe();
+    // call clear() instead of unsubscribe() to be able to manage new subscriptions
+    mSubscription.clear();
   }
 
   @Override public final boolean isUnsubscribed() {
-    return mSubscription.isUnsubscribed();
+    return !mSubscription.hasSubscriptions();
   }
 
   protected abstract Observable<Result> createObservable(Param param);

@@ -132,8 +132,8 @@ public class InteractorTest {
     verify(mInteractor).createObservable(PARAM);
   }
 
-  @Test public void shouldBeSubscribedOnStart() {
-    assertThat(mInteractor.isUnsubscribed()).isFalse();
+  @Test public void shouldBeUnSubscribedOnStart() {
+    assertThat(mInteractor.isUnsubscribed()).isTrue();
   }
 
   @Test public void shouldUnsubscribe() {
