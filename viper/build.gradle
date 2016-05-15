@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 
 android {
   compileSdkVersion 23
@@ -8,7 +11,7 @@ android {
     minSdkVersion 3
     targetSdkVersion 23
     versionCode 1
-    versionName "0.2.0"
+    versionName PUBLISH_VERSION
   }
   buildTypes {
     release {
@@ -18,6 +21,9 @@ android {
   }
   packageBuildConfig false
 }
+
+// don't move it upper. must be before dependencies
+apply from: '../publish_bintray.gradle'
 
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])

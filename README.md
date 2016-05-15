@@ -1,4 +1,5 @@
 [![](https://jitpack.io/v/RxViper/RxViper.svg)](https://jitpack.io/#RxViper/RxViper)
+[![](https://api.bintray.com/packages/rxviper/RxViper/RxViper/images/download.svg) ](https://bintray.com/rxviper/RxViper/RxViper/_latestVersion)
 
 This is a set of classes with a small, extensible API which provides basic abstractions for building your apps using VIPER architecture.
 
