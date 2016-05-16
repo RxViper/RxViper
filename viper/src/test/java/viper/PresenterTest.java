@@ -103,4 +103,14 @@ public class PresenterTest {
     mPresenter.takeRouter(mRouter);
     mPresenter.dropRouter();
   }
+
+  @Test(expected = IllegalArgumentException.class) //
+  public void takenViewShouldNotBeNull() {
+    mPresenter.takeView(null);
+  }
+
+  @Test(expected = IllegalArgumentException.class) //
+  public void takenRouterShouldNotBeNull() {
+    mPresenter.takeRouter(null);
+  }
 }

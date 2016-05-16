@@ -16,6 +16,8 @@
 
 package viper;
 
+import static viper.Utils.checkNotNull;
+
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
@@ -45,11 +47,15 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   }
 
   public final void takeRouter(R router) {
+    checkNotNull(router, "router");
+
     mRouter = router;
     onTakeRouter(mRouter);
   }
 
   public final void takeView(V view) {
+    checkNotNull(view, "view");
+
     mView = view;
     onTakeView(mView);
   }
