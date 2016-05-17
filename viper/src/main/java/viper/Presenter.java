@@ -16,6 +16,8 @@
 
 package viper;
 
+import java.lang.ref.WeakReference;
+
 import static viper.Utils.checkNotNull;
 
 /**
@@ -25,39 +27,47 @@ import static viper.Utils.checkNotNull;
  * @since 2016-Feb-13, 22:33
  */
 public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
-  private V mView;
-  private R mRouter;
+  private WeakReference<V> mViewRef;
+  private WeakReference<R> mRouterRef;
 
   public final void dropRouter() {
     onDropRouter();
-    mRouter = null;
+    releaseRouter();
   }
 
   public final void dropView() {
     onDropView();
-    mView = null;
+    releaseView();
   }
 
   public final R getRouter() {
-    return mRouter;
+    return mRouterRef == null ? null : mRouterRef.get();
   }
 
   public final V getView() {
-    return mView;
+    return mViewRef == null ? null : mViewRef.get();
   }
 
   public final void takeRouter(R router) {
     checkNotNull(router, "router");
 
-    mRouter = router;
-    onTakeRouter(mRouter);
+    assignRouter(router);
+    onTakeRouter(mRouterRef.get());
   }
 
   public final void takeView(V view) {
     checkNotNull(view, "view");
 
-    mView = view;
-    onTakeView(mView);
+    assignView(view);
+    onTakeView(mViewRef.get());
+  }
+
+  public final boolean hasRouter() {
+    return mRouterRef != null && mRouterRef.get() != null;
+  }
+
+  public final boolean hasView() {
+    return mViewRef != null && mViewRef.get() != null;
   }
 
   /** Called before Router is dropped */
@@ -74,5 +84,27 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
 
   /** Called after View is taken */
   protected void onTakeView(V view) {
+  }
+
+  void releaseView() {
+    if (mViewRef != null) {
+      mViewRef.clear();
+      mViewRef = null;
+    }
+  }
+
+  void assignView(V view) {
+    mViewRef = new WeakReference<>(view);
+  }
+
+  void assignRouter(R router) {
+    mRouterRef = new WeakReference<>(router);
+  }
+
+  void releaseRouter() {
+    if (mRouterRef != null) {
+      mRouterRef.clear();
+      mRouterRef = null;
+    }
   }
 }
