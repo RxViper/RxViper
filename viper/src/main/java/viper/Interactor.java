@@ -22,12 +22,10 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action0;
 import rx.functions.Action1;
+import rx.functions.Actions;
+import rx.internal.util.ActionSubscriber;
+import rx.internal.util.InternalObservableUtils;
 import rx.subscriptions.CompositeSubscription;
-
-import static viper.Utils.OnNextOnErrorOnCompleteSubscriber;
-import static viper.Utils.OnNextOnErrorSubscriber;
-import static viper.Utils.OnNextSubscriber;
-import static viper.Utils.checkNotNull;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -41,8 +39,8 @@ public abstract class Interactor<Param, Result> implements Subscription {
   private final CompositeSubscription mSubscription;
 
   protected Interactor(Scheduler subscribeOn, Scheduler observeOn) {
-    checkNotNull(subscribeOn, "subscribeOn");
-    checkNotNull(observeOn, "observeOn");
+    Preconditions.checkNotNull(subscribeOn, "subscribeOn");
+    Preconditions.checkNotNull(observeOn, "observeOn");
 
     mSubscribeScheduler = subscribeOn;
     mObserveScheduler = observeOn;
@@ -50,7 +48,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
   }
 
   public final void execute(Subscriber<? super Result> subscriber, Param param) {
-    checkNotNull(subscriber, "subscriber");
+    Preconditions.checkNotNull(subscriber, "subscriber");
 
     mSubscription.add(createObservable(param).subscribeOn(mSubscribeScheduler)
         .observeOn(mObserveScheduler)
@@ -66,9 +64,9 @@ public abstract class Interactor<Param, Result> implements Subscription {
   }
 
   public final void execute(Action1<? super Result> onNext, Param param) {
-    checkNotNull(onNext, "onNext");
+    Preconditions.checkNotNull(onNext, "onNext");
 
-    execute(new OnNextSubscriber<>(onNext), param);
+    execute(new ActionSubscriber<>(onNext, InternalObservableUtils.ERROR_NOT_IMPLEMENTED, Actions.empty()), param);
   }
 
   public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError) {
@@ -76,23 +74,23 @@ public abstract class Interactor<Param, Result> implements Subscription {
   }
 
   public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError, Param param) {
-    checkNotNull(onNext, "onNext");
-    checkNotNull(onError, "onError");
+    Preconditions.checkNotNull(onNext, "onNext");
+    Preconditions.checkNotNull(onError, "onError");
 
-    execute(new OnNextOnErrorSubscriber<>(onNext, onError), param);
+    execute(new ActionSubscriber<>(onNext, onError, Actions.empty()), param);
   }
 
-  public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError, Action0 onComplete) {
-    execute(onNext, onError, onComplete, null);
+  public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError, Action0 onCompleted) {
+    execute(onNext, onError, onCompleted, null);
   }
 
-  public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError, Action0 onComplete,
+  public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError, Action0 onCompleted,
       Param param) {
-    checkNotNull(onNext, "onNext");
-    checkNotNull(onError, "onError");
-    checkNotNull(onComplete, "onComplete");
+    Preconditions.checkNotNull(onNext, "onNext");
+    Preconditions.checkNotNull(onError, "onError");
+    Preconditions.checkNotNull(onCompleted, "onCompleted");
 
-    execute(new OnNextOnErrorOnCompleteSubscriber<>(onNext, onError, onComplete), param);
+    execute(new ActionSubscriber<>(onNext, onError, onCompleted), param);
   }
 
   @Override public final void unsubscribe() {
