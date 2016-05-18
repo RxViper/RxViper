@@ -16,57 +16,259 @@
 
 package viper;
 
+import java.lang.ref.WeakReference;
+
 /**
- * ~ ~ ~ ~ Description ~ ~ ~ ~
+ * Contains view logic for preparing content for display (as received from the {@link Interactor}) and for reacting to
+ * user inputs (by requesting new data from the Interactor).
  *
  * @author Dmitriy Zaitsev
- * @since 2016-Feb-13, 22:33
+ * @since 0.1.0
  */
 public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
-  private V mView;
-  private R mRouter;
+  private WeakReference<V> mViewRef;
+  private WeakReference<R> mRouterRef;
 
-  public final void dropRouter() {
-    onDropRouter();
-    mRouter = null;
+  /**
+   * Called to surrender control of taken router.
+   * <p>
+   * It is expected that this method will be called with the same argument as {@link #takeRouter(Router)}. Mismatched
+   * routers are ignored. This is to provide protection in the not uncommon case that dropRouter and takeRouter are
+   * called out of order.
+   * <p>
+   * Calls {@link #onDropRouter} before the reference to the router is cleared.
+   *
+   * @param router
+   *     router is going to be dropped
+   *
+   * @see #takeRouter(Router)
+   * @since 0.1.0
+   */
+  public final void dropRouter(R router) {
+    Preconditions.checkNotNull(router, "router");
+
+    if (getRouter() == router) {
+      onDropRouter();
+      onDropRouter(router);
+      releaseRouter();
+    }
   }
 
-  public final void dropView() {
-    onDropView();
-    mView = null;
+  /**
+   * Called to surrender control of taken view.
+   * <p>
+   * It is expected that this method will be called with the same argument as {@link #takeView(ViewCallbacks)}.
+   * Mismatched views are ignored. This is to provide protection in the not uncommon case that dropView and takeView
+   * are called out of order.
+   * <p>
+   * Calls {@link #onDropView} before the reference to the view is cleared.
+   *
+   * @param view
+   *     view is going to be dropped.
+   *
+   * @see #takeView(ViewCallbacks)
+   * @since 0.1.0
+   */
+  public final void dropView(V view) {
+    Preconditions.checkNotNull(view, "view");
+
+    if (getView() == view) {
+      onDropView();
+      onDropView(view);
+      releaseView();
+    }
   }
 
+  /**
+   * Returns the router managed by this presenter, or {@code null} if {@link #takeRouter} has never been called, or
+   * after {@link #dropRouter}.
+   * <p>
+   * You should always call {@link #hasRouter} to check if the router is taken to avoid NullPointerExceptions.
+   *
+   * @return {@code null}, if router is not taken, otherwise the concrete router instance.
+   *
+   * @since 0.1.0
+   */
   public final R getRouter() {
-    return mRouter;
+    return mRouterRef == null ? null : mRouterRef.get();
   }
 
+  /**
+   * Returns the view managed by this presenter, or {@code null} if {@link #takeView} has never been called, or after
+   * {@link #dropView}.
+   * <p>
+   * You should always call {@link #hasView} to check if the view is taken to avoid NullPointerExceptions.
+   *
+   * @return {@code null}, if view is not taken, otherwise the concrete view instance.
+   *
+   * @since 0.1.0
+   */
   public final V getView() {
-    return mView;
+    return mViewRef == null ? null : mViewRef.get();
   }
 
+  /**
+   * Called to give this presenter control of a router.
+   * <p>
+   * As soon as the reference to the router is assigned, it calls {@link #onTakeRouter} callback.
+   * <p>
+   * It is expected that {@link #dropRouter(Router)} will be called with the same argument when the router is no longer
+   * active.
+   *
+   * @param router
+   *     router that will be returned from {@link #getRouter()}.
+   *
+   * @see #dropRouter(Router)
+   * @since 0.1.0
+   */
   public final void takeRouter(R router) {
-    mRouter = router;
-    onTakeRouter(mRouter);
+    Preconditions.checkNotNull(router, "router");
+
+    final R currentRouter = getRouter();
+    if (currentRouter != router) {
+      if (currentRouter != null) {
+        dropRouter(currentRouter);
+      }
+      assignRouter(router);
+      onTakeRouter(router);
+    }
   }
 
+  /**
+   * Called to give this presenter control of a view.
+   * <p>
+   * As soon as the reference to the view is assigned, it calls {@link #onTakeView} callback.
+   * It is expected that {@link #dropView(ViewCallbacks)} will be called with the same argument when the view is no
+   * longer active.
+   *
+   * @param view
+   *     view that will be returned from {@link #getView()}.
+   *
+   * @see #dropView(ViewCallbacks)
+   * @since 0.1.0
+   */
   public final void takeView(V view) {
-    mView = view;
-    onTakeView(mView);
+    Preconditions.checkNotNull(view, "view");
+
+    final V currentView = getView();
+    if (currentView != view) {
+      if (currentView != null) {
+        dropView(currentView);
+      }
+      assignView(view);
+      onTakeView(view);
+    }
   }
 
-  /** Called before Router is dropped */
-  protected void onDropRouter() {
+  /**
+   * Checks if a router is attached to this presenter. You should always call this method before calling {@link
+   * #getRouter} to get the view instance.
+   *
+   * @return {@code true} if presenter has attached router
+   *
+   * @since 0.7.0
+   */
+  public final boolean hasRouter() {
+    return mRouterRef != null && mRouterRef.get() != null;
   }
 
-  /** Called after Router is taken */
+  /**
+   * Checks if a view is attached to this presenter. You should always call this method before calling {@link
+   * #getView} to get the view instance.
+   *
+   * @return {@code true} if presenter has attached view
+   *
+   * @since 0.7.0
+   */
+  public final boolean hasView() {
+    return mViewRef != null && mViewRef.get() != null;
+  }
+
+  /** @since 0.7.0 */
+  void releaseView() {
+    if (mViewRef != null) {
+      mViewRef.clear();
+      mViewRef = null;
+    }
+  }
+
+  /** @since 0.7.0 */
+  void assignView(V view) {
+    mViewRef = new WeakReference<>(view);
+  }
+
+  /** @since 0.7.0 */
+  void assignRouter(R router) {
+    mRouterRef = new WeakReference<>(router);
+  }
+
+  /** @since 0.7.0 */
+  void releaseRouter() {
+    if (mRouterRef != null) {
+      mRouterRef.clear();
+      mRouterRef = null;
+    }
+  }
+
+  /**
+   * Called before router is dropped.
+   *
+   * @param router
+   *     router is going to be dropped
+   *
+   * @see #dropRouter(Router)
+   * @since 0.7.0
+   */
+  protected void onDropRouter(R router) {
+  }
+
+  /**
+   * @since 0.6.0
+   * @deprecated in favor of {@link #onDropRouter(Router)}
+   */
+  @Deprecated protected void onDropRouter() {
+  }
+
+  /**
+   * Called after router is taken.
+   *
+   * @param router
+   *     router attached to this presenter
+   *
+   * @see #takeRouter(Router)
+   * @since 0.6.0
+   */
   protected void onTakeRouter(R router) {
   }
 
-  /** Called before View is dropped */
-  protected void onDropView() {
+  /**
+   * Called before view is dropped.
+   *
+   * @param view
+   *     view is going to be dropped
+   *
+   * @see #dropView(ViewCallbacks)
+   * @since 0.7.0
+   */
+  protected void onDropView(final V view) {
   }
 
-  /** Called after View is taken */
+  /**
+   * @since 0.6.0
+   * @deprecated in favor of {@link #onDropView(ViewCallbacks)}
+   */
+  @Deprecated protected void onDropView() {
+  }
+
+  /**
+   * Called after view is taken.
+   *
+   * @param view
+   *     attached to this presenter
+   *
+   * @see #takeView(ViewCallbacks)
+   * @since 0.6.0
+   */
   protected void onTakeView(V view) {
   }
 }

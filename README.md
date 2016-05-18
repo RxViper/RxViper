@@ -1,9 +1,29 @@
 [![](https://jitpack.io/v/RxViper/RxViper.svg)](https://jitpack.io/#RxViper/RxViper)
+[![](https://api.bintray.com/packages/rxviper/RxViper/RxViper/images/download.svg) ](https://bintray.com/rxviper/RxViper/RxViper/_latestVersion)
 
 This is a set of classes with a small, extensible API which provides basic abstractions for building your apps using VIPER architecture.
 
 > I copy these classes into all apps I make. I'm tired of doing it. Now it's a library. ©
 
+Download
+--------
+
+Grab via Maven:
+
+```xml
+<dependency>
+    <groupId>rxviper</groupId>
+    <artifactId>rxviper</artifactId>
+    <version>0.7.0</version>
+    <type>pom</type>
+</dependency>
+```
+
+Gradle:
+
+```groovy
+compile 'rxviper:rxviper:0.7.0'
+```
 ## License
 
     Copyright 2016 Dmytro Zaitsev

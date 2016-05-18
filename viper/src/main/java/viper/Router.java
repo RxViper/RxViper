@@ -17,10 +17,10 @@
 package viper;
 
 /**
- * ~ ~ ~ ~ Description ~ ~ ~ ~
+ * Contains navigation logic for describing which screens are shown in which order
  *
  * @author Dmitriy Zaitsev
- * @since 2016-Apr-03, 20:15
+ * @since 0.1.0
  */
 public interface Router {
 }
