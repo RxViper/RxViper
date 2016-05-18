@@ -5,6 +5,25 @@ This is a set of classes with a small, extensible API which provides basic abstr
 
 > I copy these classes into all apps I make. I'm tired of doing it. Now it's a library. ©
 
+Download
+--------
+
+Grab via Maven:
+
+```xml
+<dependency>
+    <groupId>rxviper</groupId>
+    <artifactId>rxviper</artifactId>
+    <version>0.7.0</version>
+    <type>pom</type>
+</dependency>
+```
+
+Gradle:
+
+```groovy
+compile 'rxviper:rxviper:0.7.0'
+```
 ## License
 
     Copyright 2016 Dmytro Zaitsev
