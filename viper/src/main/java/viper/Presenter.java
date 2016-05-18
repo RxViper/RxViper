@@ -32,11 +32,14 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   /**
    * Called to surrender control of taken router.
    * <p>
-   * It is expected that this method will be called with the same argument as {@link #takeRouter(R)}. Mismatched
+   * It is expected that this method will be called with the same argument as {@link #takeRouter(Router)}. Mismatched
    * routers are ignored. This is to provide protection in the not uncommon case that dropRouter and takeRouter are
    * called out of order.
    * <p>
    * Calls {@link #onDropRouter} before the reference to the router is cleared.
+   *
+   * @param router
+   *     router is going to be dropped
    *
    * @see #takeRouter(Router)
    * @since 0.1.0
@@ -54,11 +57,14 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   /**
    * Called to surrender control of taken view.
    * <p>
-   * It is expected that this method will be called with the same argument as {@link #takeView(V)}. Mismatched views
-   * are ignored. This is to provide protection in the not uncommon case that dropView and takeView are called out of
-   * order.
+   * It is expected that this method will be called with the same argument as {@link #takeView(ViewCallbacks)}.
+   * Mismatched views are ignored. This is to provide protection in the not uncommon case that dropView and takeView
+   * are called out of order.
    * <p>
    * Calls {@link #onDropView} before the reference to the view is cleared.
+   *
+   * @param view
+   *     view is going to be dropped.
    *
    * @see #takeView(ViewCallbacks)
    * @since 0.1.0
@@ -106,7 +112,7 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
    * <p>
    * As soon as the reference to the router is assigned, it calls {@link #onTakeRouter} callback.
    * <p>
-   * It is expected that {@link #dropRouter(R)} will be called with the same argument when the router is no longer
+   * It is expected that {@link #dropRouter(Router)} will be called with the same argument when the router is no longer
    * active.
    *
    * @param router
@@ -132,7 +138,8 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
    * Called to give this presenter control of a view.
    * <p>
    * As soon as the reference to the view is assigned, it calls {@link #onTakeView} callback.
-   * It is expected that {@link #dropView(V)} will be called with the same argument when the view is no longer active.
+   * It is expected that {@link #dropView(ViewCallbacks)} will be called with the same argument when the view is no
+   * longer active.
    *
    * @param view
    *     view that will be returned from {@link #getView()}.
@@ -157,6 +164,8 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
    * Checks if a router is attached to this presenter. You should always call this method before calling {@link
    * #getRouter} to get the view instance.
    *
+   * @return {@code true} if presenter has attached router
+   *
    * @since 0.7.0
    */
   public final boolean hasRouter() {
@@ -166,6 +175,8 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   /**
    * Checks if a view is attached to this presenter. You should always call this method before calling {@link
    * #getView} to get the view instance.
+   *
+   * @return {@code true} if presenter has attached view
    *
    * @since 0.7.0
    */
@@ -205,7 +216,7 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
    * @param router
    *     router is going to be dropped
    *
-   * @see #dropRouter(R)
+   * @see #dropRouter(Router)
    * @since 0.7.0
    */
   protected void onDropRouter(R router) {
@@ -236,7 +247,7 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
    * @param view
    *     view is going to be dropped
    *
-   * @see #dropView(V)
+   * @see #dropView(ViewCallbacks)
    * @since 0.7.0
    */
   protected void onDropView(final V view) {

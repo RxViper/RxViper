@@ -20,7 +20,6 @@ import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.exceptions.OnErrorNotImplementedException;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Actions;
@@ -47,7 +46,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
    *     the Scheduler that modifies source Observable returned from {@link #createObservable} to notify its Observers
    *     on.
    *
-   * @see #createObservable(Param)
+   * @see #createObservable(Object)
    * @since 0.1.0
    */
   protected Interactor(Scheduler subscribeOn, Scheduler observeOn) {
@@ -66,13 +65,13 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @param subscriber
    *     the Subscriber that will handle emissions and notifications from the Observable
    * @param param
-   *     parameter which will be passed to {@link #createObservable(Param)}.
+   *     parameter which will be passed to {@link #createObservable(Object)}.
    *
    * @throws IllegalStateException
    *     if {@code subscribe} is unable to obtain an {@code OnSubscribe<>} function
    * @throws IllegalArgumentException
    *     if the {@link Subscriber} provided as the argument to {@code subscribe} is {@code null}
-   * @throws OnErrorNotImplementedException
+   * @throws rx.exceptions.OnErrorNotImplementedException
    *     if the {@link Subscriber}'s {@code onError} method is null
    * @throws RuntimeException
    *     if the {@link Subscriber}'s {@code onError} method itself threw a {@code Throwable}
@@ -94,7 +93,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @param subscriber
    *     the Subscriber that will handle emissions and notifications from the Observable
    *
-   * @see #execute(Subscriber, Param)
+   * @see #execute(Subscriber, Object)
    * @since 0.2.0
    */
   public final void execute(Subscriber<? super Result> subscriber) {
@@ -109,9 +108,9 @@ public abstract class Interactor<Param, Result> implements Subscription {
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null
-   * @throws OnErrorNotImplementedException
+   * @throws rx.exceptions.OnErrorNotImplementedException
    *     if the Observable calls {@code onError}
-   * @see #execute(Action1, Param)
+   * @see #execute(Action1, Object)
    * @since 0.4.0
    */
   public final void execute(Action1<? super Result> onNext) {
@@ -124,11 +123,11 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @param onNext
    *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
    * @param param
-   *     parameter which will be passed to {@link #createObservable(Param)}.
+   *     parameter which will be passed to {@link #createObservable(Object)}.
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null
-   * @throws OnErrorNotImplementedException
+   * @throws rx.exceptions.OnErrorNotImplementedException
    *     if the Observable calls {@code onError}
    * @see Observable#subscribe(Action1)
    * @since 0.4.0
@@ -150,7 +149,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null, or if {@code onError} is null
-   * @see #execute(Action1, Param)
+   * @see #execute(Action1, Object)
    * @since 0.4.0
    */
   public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError) {
@@ -166,7 +165,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @param onError
    *     the {@code Action1<Throwable>} you have designed to accept any error notification from the Observable
    * @param param
-   *     parameter which will be passed to {@link #createObservable(Param)}.
+   *     parameter which will be passed to {@link #createObservable(Object)}.
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null, or if {@code onError} is null
@@ -194,7 +193,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null, or if {@code onError} is null, or if {@code onComplete} is null
-   * @see #execute(Action1, Action1, Action0, Param)
+   * @see #execute(Action1, Action1, Action0, Object)
    * @since 0.4.0
    */
   public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError, Action0 onCompleted) {
@@ -212,7 +211,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @param onCompleted
    *     the {@code Action0} you have designed to accept a completion notification from the Observable
    * @param param
-   *     parameter which will be passed to {@link #createObservable(Param)}.
+   *     parameter which will be passed to {@link #createObservable(Object)}.
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null, or if {@code onError} is null, or if {@code onComplete} is null
@@ -254,15 +253,23 @@ public abstract class Interactor<Param, Result> implements Subscription {
 
   /**
    * Provides source Observable that will execute the specified parameter when {@code execute()} method is called.
+   * <p>
+   * It will use schedulers provided in {@link #Interactor(Scheduler, Scheduler)}.
    *
+   * @param param
+   *     optional parameter
+   *
+   * @return source Observable
+   *
+   * @see #Interactor(Scheduler, Scheduler)
    * @see #execute(Subscriber)
-   * @see #execute(Subscriber, Param)
+   * @see #execute(Subscriber, Object)
    * @see #execute(Action1)
-   * @see #execute(Action1, Param)
+   * @see #execute(Action1, Object)
    * @see #execute(Action1, Action1)
-   * @see #execute(Action1, Action1, Param)
+   * @see #execute(Action1, Action1, Object)
    * @see #execute(Action1, Action1, Action0)
-   * @see #execute(Action1, Action1, Action0, Param)
+   * @see #execute(Action1, Action1, Action0, Object)
    * @since 0.1.0
    */
   protected abstract Observable<Result> createObservable(Param param);

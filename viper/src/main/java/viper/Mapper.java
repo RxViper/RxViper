@@ -47,12 +47,22 @@ public abstract class Mapper<From, To> {
   /**
    * Map the provided input object to an appropriate output object.
    *
+   * @param entity
+   *     input object
+   *
+   * @return output object
+   *
    * @since 0.1.0
    */
   public abstract To map(From entity);
 
   /**
    * Map the provided collection of input objects to an appropriate collection of output objects.
+   *
+   * @param entities
+   *     collection of input objects.
+   *
+   * @return collection of output objects.
    *
    * @since 0.1.0
    */
