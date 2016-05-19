@@ -91,13 +91,11 @@ public class PresenterTest {
   @Test public void shouldNotCallOnDropIfViewIsNotAttached() {
     mPresenter.dropView(mView);
     verify(mPresenter, never()).onDropView(mView);
-    verify(mPresenter, never()).onDropView();
   }
 
   @Test public void shouldNotCallOnDropIfRouterIsNotAttached() {
     mPresenter.dropRouter(mRouter);
     verify(mPresenter, never()).onDropRouter(mRouter);
-    verify(mPresenter, never()).onDropRouter();
   }
 
   @Test public void shouldIgnoreOnDropIfViewIsNotTheSame() {
@@ -106,7 +104,6 @@ public class PresenterTest {
     final ViewCallbacks anotherView = mock(ViewCallbacks.class);
     mPresenter.dropView(anotherView);
     verify(mPresenter, never()).onDropView(mView);
-    verify(mPresenter, never()).onDropView();
   }
 
   @Test public void shouldIgnoreOnDropIfRouterIsNotTheSame() {
@@ -115,7 +112,6 @@ public class PresenterTest {
     final Router anotherRouter = mock(Router.class);
     mPresenter.dropRouter(anotherRouter);
     verify(mPresenter, never()).onDropRouter(mRouter);
-    verify(mPresenter, never()).onDropRouter();
   }
 
   @Test public void shouldDropPreviousViewWhenNewViewIsTaken() {
@@ -124,7 +120,6 @@ public class PresenterTest {
     final ViewCallbacks newView = mock(ViewCallbacks.class);
     mPresenter.takeView(newView);
     verify(mPresenter).onDropView(mView);
-    verify(mPresenter).onDropView();
   }
 
   @Test public void shouldDropPreviousRouterWhenNewRouterIsTaken() {
@@ -133,7 +128,6 @@ public class PresenterTest {
     final Router newRouter = mock(Router.class);
     mPresenter.takeRouter(newRouter);
     verify(mPresenter).onDropRouter(mRouter);
-    verify(mPresenter).onDropRouter();
   }
 
   @Test public void shouldCallOnTakeViewAfterViewIsTaken() {
@@ -159,7 +153,6 @@ public class PresenterTest {
     mPresenter.dropView(mView);
 
     final InOrder inOrder = Mockito.inOrder(mPresenter);
-    (inOrder.verify(mPresenter)).onDropView();
     (inOrder.verify(mPresenter)).onDropView(mView);
     (inOrder.verify(mPresenter)).releaseView();
   }
@@ -169,7 +162,6 @@ public class PresenterTest {
     mPresenter.dropRouter(mRouter);
 
     final InOrder inOrder = Mockito.inOrder(mPresenter);
-    (inOrder.verify(mPresenter)).onDropRouter();
     (inOrder.verify(mPresenter)).onDropRouter(mRouter);
     (inOrder.verify(mPresenter)).releaseRouter();
   }
