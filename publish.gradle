@@ -1,9 +1,34 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
-group = PUBLISH_GROUP_ID
-version = PUBLISH_VERSION
+group = POM_GROUP_ID
+version = POM_VERSION
+
+Date buildTimeAndDate = new Date()
+ext {
+  buildTime = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
+  buildDate = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
+}
+
+jar {
+  manifest {
+    attributes(
+        'Built-By': System.properties['user.name'],
+        'Created-By': System.properties['java.version'] + " (" + System.properties['java.vendor'] + " " + System.getProperty("java.vm.version") + ")",
+        'Build-Date': project.buildTime,
+        'Build-Time': project.buildDate,
+        'Specification-Title': POM_ARTIFACT_ID,
+        'Specification-Version': project.version,
+        'Specification-Vendor': POM_SITE_URL,
+        'Implementation-Title': POM_ARTIFACT_ID,
+        'Implementation-Version': POM_VERSION,
+        'Implementation-Vendor': POM_SITE_URL
+    )
+  }
+}
 
 task sourcesJar(type: Jar, dependsOn: classes) {
   classifier = 'sources'
@@ -27,15 +52,15 @@ bintray {
   configurations = ['archives']
   publications = ['MyPublication']
   pkg {
-    repo = 'generic'
-    name = 'RxViper'
-    userOrg = 'RxViper'
-    licenses = ['Apache-2.0']
-    vcsUrl = 'https://github.com/RxViper/RxViper.git'
+    repo = POM_ORGANIZATION
+    name = POM_ORGANIZATION
+    userOrg = POM_GROUP_ID
+    licenses = [POM_LICENSE]
+    vcsUrl = POM_VCS
     version {
-      name = PUBLISH_VERSION
-      desc = ''
-      vcsTag = PUBLISH_VERSION
+      name = POM_VERSION
+      desc = POM_DESCRIPTION
+      vcsTag = POM_VERSION
     }
   }
 }
@@ -44,9 +69,9 @@ publishing {
   publications {
     MyPublication(MavenPublication) {
       from components.java
-      groupId PUBLISH_GROUP_ID
-      artifactId PUBLISH_ARTIFACT_ID
-      version PUBLISH_VERSION
+      groupId POM_GROUP_ID
+      artifactId POM_ARTIFACT_ID
+      version POM_VERSION
     }
   }
 }
