@@ -33,8 +33,11 @@
 * Published on [Bintray](https://bintray.com/rxviper/RxViper/RxViper). 
 
 ##### 0.7.0
-* Updater RxJava version to 1.1.5.
+* Updated RxJava version to 1.1.5.
 * Prevent `Presenter` from taking nullable views and routers.
 * Do not hold strong references to view and router in `Presenter`. (Closes [#18](https://github.com/RxViper/RxViper/issues/18)).
 * Added JavaDoc. (Closes [#19](https://github.com/RxViper/RxViper/issues/19)).
 * Ensure presenter drops the same view and router that were attached. (Closes [#22](https://github.com/RxViper/RxViper/issues/22)).
+
+##### 0.8.0
+* Removed deprecated code.
