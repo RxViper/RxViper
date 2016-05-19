@@ -14,7 +14,7 @@ Grab via Maven:
 <dependency>
     <groupId>rxviper</groupId>
     <artifactId>rxviper</artifactId>
-    <version>0.7.0</version>
+    <version>0.8.0</version>
     <type>pom</type>
 </dependency>
 ```
@@ -22,7 +22,7 @@ Grab via Maven:
 Gradle:
 
 ```groovy
-compile 'rxviper:rxviper:0.7.0'
+compile 'rxviper:rxviper:0.8.0'
 ```
 ## License
 

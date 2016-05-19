@@ -1,0 +1,77 @@
+import java.text.SimpleDateFormat
+
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+group = POM_GROUP_ID
+version = POM_VERSION
+
+Date buildTimeAndDate = new Date()
+ext {
+  buildTime = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
+  buildDate = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
+}
+
+jar {
+  manifest {
+    attributes(
+        'Built-By': System.properties['user.name'],
+        'Created-By': System.properties['java.version'] + " (" + System.properties['java.vendor'] + " " + System.getProperty("java.vm.version") + ")",
+        'Build-Date': project.buildTime,
+        'Build-Time': project.buildDate,
+        'Specification-Title': POM_ARTIFACT_ID,
+        'Specification-Version': project.version,
+        'Specification-Vendor': POM_SITE_URL,
+        'Implementation-Title': POM_ARTIFACT_ID,
+        'Implementation-Version': POM_VERSION,
+        'Implementation-Vendor': POM_SITE_URL
+    )
+  }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+
+artifacts {
+  archives sourcesJar, javadocJar
+}
+
+bintray {
+  dryRun = false // Whether to run this as dry-run, without deploying
+  publish = true // If version should be auto published after an upload
+  user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+  key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+  configurations = ['archives']
+  publications = ['MyPublication']
+  pkg {
+    repo = POM_ORGANIZATION
+    name = POM_ORGANIZATION
+    userOrg = POM_GROUP_ID
+    licenses = [POM_LICENSE]
+    vcsUrl = POM_VCS
+    version {
+      name = POM_VERSION
+      desc = POM_DESCRIPTION
+      vcsTag = POM_VERSION
+    }
+  }
+}
+
+publishing {
+  publications {
+    MyPublication(MavenPublication) {
+      from components.java
+      groupId POM_GROUP_ID
+      artifactId POM_ARTIFACT_ID
+      version POM_VERSION
+    }
+  }
+}
