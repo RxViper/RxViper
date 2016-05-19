@@ -1,29 +1,8 @@
-apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'maven-publish'
+apply plugin: 'java'
+apply from: '../publish.gradle'
 
-android {
-  compileSdkVersion 23
-  buildToolsVersion "23.0.3"
-
-  defaultConfig {
-    minSdkVersion 3
-    targetSdkVersion 23
-    versionCode 1
-    versionName PUBLISH_VERSION
-  }
-  buildTypes {
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-    }
-  }
-  packageBuildConfig false
-}
-
-// don't move it upper. must be before dependencies
-apply from: '../publish_bintray.gradle'
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
