@@ -32,23 +32,21 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   /**
    * Called to surrender control of taken router.
    * <p>
-   * It is expected that this method will be called with the same argument as {@link #takeRouter(Router)}. Mismatched
-   * routers are ignored. This is to provide protection in the not uncommon case that dropRouter and takeRouter are
-   * called out of order.
+   * It is expected that this method will be called with the same argument as {@link #takeRouter}. Mismatched routers
+   * are ignored. This is to provide protection in the not uncommon case that {@code dropRouter} and {@code takeRouter}
+   * are called out of order.
    * <p>
    * Calls {@link #onDropRouter} before the reference to the router is cleared.
    *
    * @param router
    *     router is going to be dropped
    *
-   * @see #takeRouter(Router)
    * @since 0.1.0
    */
   public final void dropRouter(R router) {
     Preconditions.checkNotNull(router, "router");
 
     if (getRouter() == router) {
-      onDropRouter();
       onDropRouter(router);
       releaseRouter();
     }
@@ -57,23 +55,21 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   /**
    * Called to surrender control of taken view.
    * <p>
-   * It is expected that this method will be called with the same argument as {@link #takeView(ViewCallbacks)}.
-   * Mismatched views are ignored. This is to provide protection in the not uncommon case that dropView and takeView
-   * are called out of order.
+   * It is expected that this method will be called with the same argument as {@link #takeView}. Mismatched views are
+   * ignored. This is to provide protection in the not uncommon case that {@code dropView} and {@code takeView} are
+   * called out of order.
    * <p>
    * Calls {@link #onDropView} before the reference to the view is cleared.
    *
    * @param view
    *     view is going to be dropped.
    *
-   * @see #takeView(ViewCallbacks)
    * @since 0.1.0
    */
   public final void dropView(V view) {
     Preconditions.checkNotNull(view, "view");
 
     if (getView() == view) {
-      onDropView();
       onDropView(view);
       releaseView();
     }
@@ -111,9 +107,6 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
    * Called to give this presenter control of a router.
    * <p>
    * As soon as the reference to the router is assigned, it calls {@link #onTakeRouter} callback.
-   * <p>
-   * It is expected that {@link #dropRouter(Router)} will be called with the same argument when the router is no longer
-   * active.
    *
    * @param router
    *     router that will be returned from {@link #getRouter()}.
@@ -138,8 +131,6 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
    * Called to give this presenter control of a view.
    * <p>
    * As soon as the reference to the view is assigned, it calls {@link #onTakeView} callback.
-   * It is expected that {@link #dropView(ViewCallbacks)} will be called with the same argument when the view is no
-   * longer active.
    *
    * @param view
    *     view that will be returned from {@link #getView()}.
@@ -173,8 +164,8 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   }
 
   /**
-   * Checks if a view is attached to this presenter. You should always call this method before calling {@link
-   * #getView} to get the view instance.
+   * Checks if a view is attached to this presenter. You should always call this method before calling {@link #getView}
+   * to get the view instance.
    *
    * @return {@code true} if presenter has attached view
    *
@@ -223,13 +214,6 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   }
 
   /**
-   * @since 0.6.0
-   * @deprecated in favor of {@link #onDropRouter(Router)}
-   */
-  @Deprecated protected void onDropRouter() {
-  }
-
-  /**
    * Called after router is taken.
    *
    * @param router
@@ -251,13 +235,6 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
    * @since 0.7.0
    */
   protected void onDropView(final V view) {
-  }
-
-  /**
-   * @since 0.6.0
-   * @deprecated in favor of {@link #onDropView(ViewCallbacks)}
-   */
-  @Deprecated protected void onDropView() {
   }
 
   /**
