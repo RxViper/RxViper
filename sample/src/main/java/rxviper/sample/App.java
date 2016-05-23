@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,5 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include ':rxviper'
-include ':sample'
+
+package rxviper.sample;
+
+import android.app.Application;
+import rxviper.sample.dagger.AppComponent;
+import rxviper.sample.dagger.DaggerAppComponent;
+
+/**
+ * ~ ~ ~ ~ Description ~ ~ ~ ~
+ *
+ * @author Dmytro Zaitsev
+ * @since 2016-Jun-07, 12:22
+ */
+public class App extends Application {
+  private AppComponent mComponent;
+
+  public AppComponent getComponent() {
+    return mComponent;
+  }
+
+  @Override public void onCreate() {
+    super.onCreate();
+    mComponent = DaggerAppComponent.builder()
+        .build();
+  }
+}

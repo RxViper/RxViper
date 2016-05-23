@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,5 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include ':rxviper'
-include ':sample'
+
+package rxviper.sample.presentation;
+
+/**
+ * ~ ~ ~ ~ Description ~ ~ ~ ~
+ *
+ * @author Dmytro Zaitsev
+ * @since 2016-Jun-07, 11:51
+ */
+public final class CheeseViewModel {
+  private final String  mName;
+  private       boolean isChecked;
+
+  public CheeseViewModel(String name) {
+    mName = name;
+  }
+
+  public String getName() {
+    return mName;
+  }
+
+  public boolean isChecked() {
+    return isChecked;
+  }
+
+  public void setChecked(boolean checked) {
+    isChecked = checked;
+  }
+}

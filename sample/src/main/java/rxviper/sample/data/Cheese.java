@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,5 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include ':rxviper'
-include ':sample'
+
+package rxviper.sample.data;
+
+/**
+ * ~ ~ ~ ~ Description ~ ~ ~ ~
+ *
+ * @author Dmytro Zaitsev
+ * @since 2016-Jun-07, 11:16
+ */
+public class Cheese {
+  private final String mName;
+
+  Cheese(String name) {
+    mName = name;
+  }
+
+  public String getName() {
+    return mName;
+  }
+}

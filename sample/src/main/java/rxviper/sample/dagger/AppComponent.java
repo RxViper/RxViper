@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,5 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include ':rxviper'
-include ':sample'
+
+package rxviper.sample.dagger;
+
+import dagger.Component;
+import javax.inject.Singleton;
+import rxviper.sample.presentation.MainView;
+
+/**
+ * ~ ~ ~ ~ Description ~ ~ ~ ~
+ *
+ * @author Dmytro Zaitsev
+ * @since 2016-Jun-07, 12:21
+ */
+@Singleton
+@Component(modules = AppModule.class)
+public interface AppComponent {
+  void inject(MainView view);
+}

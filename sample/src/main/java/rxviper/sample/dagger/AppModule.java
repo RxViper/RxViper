@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,5 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include ':rxviper'
-include ':sample'
+
+package rxviper.sample.dagger;
+
+import dagger.Module;
+import dagger.Provides;
+import rx.Scheduler;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
+/**
+ * ~ ~ ~ ~ Description ~ ~ ~ ~
+ *
+ * @author Dmytro Zaitsev
+ * @since 2016-Jun-07, 12:24
+ */
+@Module
+class AppModule {
+  @Provides @Job Scheduler provideJobScheduler() {
+    return Schedulers.computation();
+  }
+
+  @Provides @Main Scheduler provideMainScheduler() {
+    return AndroidSchedulers.mainThread();
+  }
+}
