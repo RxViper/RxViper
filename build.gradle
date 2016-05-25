@@ -2,11 +2,13 @@ buildscript {
   apply from: 'gradle/config.gradle'
   repositories {
     jcenter()
+    maven { url "https://plugins.gradle.org/m2/" }
   }
   dependencies {
     classpath gradlePlugins.android
     classpath gradlePlugins.bintray
     classpath gradlePlugins.maven
+    classpath gradlePlugins.license
   }
 }
 
@@ -14,8 +16,14 @@ allprojects {
   repositories {
     jcenter()
   }
+
+  apply from: rootProject.file('gradle/license.gradle')
 }
 
 task clean(type: Delete) {
   delete rootProject.buildDir
+}
+
+task licenseFormatEverything(type: nl.javadude.gradle.plugins.license.License) {
+  source = fileTree(dir: projectDir).include(["**/*.gradle", "**/*.properties", "**/*.xml"])
 }

@@ -1,0 +1,13 @@
+apply plugin: 'com.github.hierynomus.license'
+
+license {
+  header = rootProject.file('HEADER.txt')
+  strictCheck = true
+  ignoreFailures = true
+  mapping {
+    java = 'SLASHSTAR_STYLE'
+    groovy = 'SLASHSTAR_STYLE'
+  }
+  ext.year = Calendar.getInstance().get(Calendar.YEAR)
+  ext.name = POM_DEVELOPER_NAME
+}

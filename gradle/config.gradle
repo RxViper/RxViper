@@ -12,6 +12,7 @@ ext {
       androidPlugin: '2.1.0',
       bintrayPlugin: '1.6',
       mavenPlugin  : '1.3',
+      licensePlugin: '0.12.1',
       rxJava       : '1.1.5',
       junit        : '4.12',
       mockito      : '2.0.53-beta',
@@ -22,6 +23,7 @@ ext {
       android: "com.android.tools.build:gradle:${versions.androidPlugin}",
       bintray: "com.jfrog.bintray.gradle:gradle-bintray-plugin:${versions.bintrayPlugin}",
       maven  : "com.github.dcendents:android-maven-gradle-plugin:${versions.mavenPlugin}",
+      license: "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${versions.licensePlugin}",
   ]
 
   libraries = [
