@@ -19,7 +19,7 @@ package viper;
 /**
  * Displays what it is told to by the {@link Presenter} and relays user input back to the Presenter
  *
- * @author Dmitriy Zaitsev
+ * @author Dmytro Zaitsev
  * @since 0.3.0
  */
 public interface ViewCallbacks {

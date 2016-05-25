@@ -3,7 +3,7 @@ package viper;
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
- * @author Dmitriy Zaitsev
+ * @author Dmytro Zaitsev
  * @since 2016-May-14, 15:26
  */
 final class Preconditions {

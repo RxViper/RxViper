@@ -1,0 +1,91 @@
+import java.text.SimpleDateFormat
+
+apply plugin: 'com.jfrog.bintray'
+
+version = POM_LIBRARY_VERSION
+Date buildTimeAndDate = new Date()
+ext {
+  buildTime = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
+  buildDate = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
+}
+
+def manifestAttributes = [
+    'Built-By'              : System.properties['user.name'],
+    'Created-By'            : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.getProperty("java.vm.version")})",
+    'Build-Date'            : project.buildTime,
+    'Build-Time'            : project.buildDate,
+    'Specification-Title'   : POM_ARTIFACT,
+    'Specification-Version' : project.version,
+    'Specification-Vendor'  : POM_SITE_URL,
+    'Implementation-Title'  : POM_ARTIFACT,
+    'Implementation-Version': POM_LIBRARY_VERSION,
+    'Implementation-Vendor' : POM_SITE_URL
+]
+
+android.libraryVariants.all { variant ->
+  def name = variant.buildType.name
+  if (!name.equals("debug")) {
+    def task = project.tasks.create "jar${name.capitalize()}", Jar
+    task.dependsOn variant.javaCompile
+    task.from variant.javaCompile.destinationDir
+    task.exclude('**/BuildConfig.class')
+    task.manifest { attributes(manifestAttributes) }
+    artifacts.add('archives', task);
+  }
+}
+
+task sourcesJar(type: Jar) {
+  manifest {
+    attributes(manifestAttributes)
+  }
+  from android.sourceSets.main.java.srcDirs
+  classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+  failOnError false
+  source = android.sourceSets.main.java.srcDirs
+  classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  manifest {
+    attributes(manifestAttributes)
+  }
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+
+artifacts {
+  archives javadocJar
+  archives sourcesJar
+}
+
+bintray {
+  dryRun = false // Whether to run this as dry-run, without deploying
+  publish = false // If version should be auto published after an upload
+  user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+  key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+
+  configurations = ['archives']
+  pkg {
+    userOrg = BINTRAY_ORG
+    repo = BINTRAY_REPO
+    name = BINTRAY_NAME
+    desc = POM_LIBRARY_DESCRIPTION
+    websiteUrl = POM_SITE_URL
+    vcsUrl = POM_GIT_URL
+    licenses = ['Apache-2.0']
+    publish = true
+    publicDownloadNumbers = true
+    version {
+      desc = POM_LIBRARY_DESCRIPTION
+      gpg {
+        sign = true // Determines whether to GPG sign the files. The default is false
+        passphrase = project.hasProperty('bintrayGpgPassword') ? project.property('bintrayGpgPassword') :
+            System.getenv('BINTRAY_GPG_PASSWORD')
+        //Optional. The passphrase for GPG signing'
+      }
+    }
+  }
+}

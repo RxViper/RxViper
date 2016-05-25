@@ -30,7 +30,7 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Contains the business logic as specified by a use case
  *
- * @author Dmitriy Zaitsev
+ * @author Dmytro Zaitsev
  * @since 0.1.0
  */
 public abstract class Interactor<Param, Result> implements Subscription {
