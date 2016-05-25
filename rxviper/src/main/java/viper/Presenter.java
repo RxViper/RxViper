@@ -22,7 +22,7 @@ import java.lang.ref.WeakReference;
  * Contains view logic for preparing content for display (as received from the {@link Interactor}) and for reacting to
  * user inputs (by requesting new data from the Interactor).
  *
- * @author Dmitriy Zaitsev
+ * @author Dmytro Zaitsev
  * @since 0.1.0
  */
 public abstract class Presenter<V extends ViewCallbacks, R extends Router> {

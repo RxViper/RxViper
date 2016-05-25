@@ -40,7 +40,7 @@ import java.util.Collection;
  * @param <To>
  *     the type of output objects from map operation. May be the same type as {@code <From>}.
  *
- * @author Dmitriy Zaitsev
+ * @author Dmytro Zaitsev
  * @since 0.1.0
  */
 public abstract class Mapper<From, To> {

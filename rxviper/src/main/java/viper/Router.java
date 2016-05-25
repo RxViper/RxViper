@@ -19,7 +19,7 @@ package viper;
 /**
  * Contains navigation logic for describing which screens are shown in which order
  *
- * @author Dmitriy Zaitsev
+ * @author Dmytro Zaitsev
  * @since 0.1.0
  */
 public interface Router {

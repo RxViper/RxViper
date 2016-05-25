@@ -17,7 +17,7 @@ import static rx.Observable.just;
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
- * @author Dmitriy Zaitsev
+ * @author Dmytro Zaitsev
  * @since 2016-May-14, 13:56
  */
 public class InteractorTest {

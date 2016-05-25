@@ -16,7 +16,7 @@ import static org.mockito.Mockito.verify;
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
- * @author Dmitriy Zaitsev
+ * @author Dmytro Zaitsev
  * @since 2016-May-13, 12:31
  */
 public class PresenterTest {
