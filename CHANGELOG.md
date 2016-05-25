@@ -41,3 +41,6 @@
 
 ##### 0.8.0
 * Removed deprecated code.
+
+##### 0.8.1
+* update JavaDocs.
