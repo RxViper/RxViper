@@ -1,10 +1,12 @@
 buildscript {
+  apply from: 'gradle/config.gradle'
   repositories {
     jcenter()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.1.0'
-    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+    classpath gradlePlugins.android
+    classpath gradlePlugins.bintray
+    classpath gradlePlugins.maven
   }
 }
 
