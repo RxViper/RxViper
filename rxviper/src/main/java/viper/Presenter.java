@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package viper;
 
 import java.lang.ref.WeakReference;
@@ -76,31 +75,27 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   }
 
   /**
-   * Returns the router managed by this presenter, or {@code null} if {@link #takeRouter} has never been called, or
-   * after {@link #dropRouter}.
-   * <p>
-   * You should always call {@link #hasRouter} to check if the router is taken to avoid NullPointerExceptions.
+   * Checks if a router is attached to this presenter. You should always call this method before calling {@link
+   * #getRouter} to get the view instance.
    *
-   * @return {@code null}, if router is not taken, otherwise the concrete router instance.
+   * @return {@code true} if presenter has attached router
    *
-   * @since 0.1.0
+   * @since 0.7.0
    */
-  public final R getRouter() {
-    return mRouterRef == null ? null : mRouterRef.get();
+  public final boolean hasRouter() {
+    return mRouterRef != null && mRouterRef.get() != null;
   }
 
   /**
-   * Returns the view managed by this presenter, or {@code null} if {@link #takeView} has never been called, or after
-   * {@link #dropView}.
-   * <p>
-   * You should always call {@link #hasView} to check if the view is taken to avoid NullPointerExceptions.
+   * Checks if a view is attached to this presenter. You should always call this method before calling {@link #getView}
+   * to get the view instance.
    *
-   * @return {@code null}, if view is not taken, otherwise the concrete view instance.
+   * @return {@code true} if presenter has attached view
    *
-   * @since 0.1.0
+   * @since 0.7.0
    */
-  public final V getView() {
-    return mViewRef == null ? null : mViewRef.get();
+  public final boolean hasView() {
+    return mViewRef != null && mViewRef.get() != null;
   }
 
   /**
@@ -152,53 +147,31 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   }
 
   /**
-   * Checks if a router is attached to this presenter. You should always call this method before calling {@link
-   * #getRouter} to get the view instance.
+   * Returns the router managed by this presenter, or {@code null} if {@link #takeRouter} has never been called, or
+   * after {@link #dropRouter}.
+   * <p>
+   * You should always call {@link #hasRouter} to check if the router is taken to avoid NullPointerExceptions.
    *
-   * @return {@code true} if presenter has attached router
+   * @return {@code null}, if router is not taken, otherwise the concrete router instance.
    *
-   * @since 0.7.0
+   * @since 0.1.0
    */
-  public final boolean hasRouter() {
-    return mRouterRef != null && mRouterRef.get() != null;
+  protected final R getRouter() {
+    return mRouterRef == null ? null : mRouterRef.get();
   }
 
   /**
-   * Checks if a view is attached to this presenter. You should always call this method before calling {@link #getView}
-   * to get the view instance.
+   * Returns the view managed by this presenter, or {@code null} if {@link #takeView} has never been called, or after
+   * {@link #dropView}.
+   * <p>
+   * You should always call {@link #hasView} to check if the view is taken to avoid NullPointerExceptions.
    *
-   * @return {@code true} if presenter has attached view
+   * @return {@code null}, if view is not taken, otherwise the concrete view instance.
    *
-   * @since 0.7.0
+   * @since 0.1.0
    */
-  public final boolean hasView() {
-    return mViewRef != null && mViewRef.get() != null;
-  }
-
-  /** @since 0.7.0 */
-  void releaseView() {
-    if (mViewRef != null) {
-      mViewRef.clear();
-      mViewRef = null;
-    }
-  }
-
-  /** @since 0.7.0 */
-  void assignView(V view) {
-    mViewRef = new WeakReference<>(view);
-  }
-
-  /** @since 0.7.0 */
-  void assignRouter(R router) {
-    mRouterRef = new WeakReference<>(router);
-  }
-
-  /** @since 0.7.0 */
-  void releaseRouter() {
-    if (mRouterRef != null) {
-      mRouterRef.clear();
-      mRouterRef = null;
-    }
+  protected final V getView() {
+    return mViewRef == null ? null : mViewRef.get();
   }
 
   /**
@@ -214,18 +187,6 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   }
 
   /**
-   * Called after router is taken.
-   *
-   * @param router
-   *     router attached to this presenter
-   *
-   * @see #takeRouter(Router)
-   * @since 0.6.0
-   */
-  protected void onTakeRouter(R router) {
-  }
-
-  /**
    * Called before view is dropped.
    *
    * @param view
@@ -238,6 +199,18 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
   }
 
   /**
+   * Called after router is taken.
+   *
+   * @param router
+   *     router attached to this presenter
+   *
+   * @see #takeRouter(Router)
+   * @since 0.6.0
+   */
+  protected void onTakeRouter(R router) {
+  }
+
+  /**
    * Called after view is taken.
    *
    * @param view
@@ -247,5 +220,31 @@ public abstract class Presenter<V extends ViewCallbacks, R extends Router> {
    * @since 0.6.0
    */
   protected void onTakeView(V view) {
+  }
+
+  /** @since 0.7.0 */
+  void assignRouter(R router) {
+    mRouterRef = new WeakReference<>(router);
+  }
+
+  /** @since 0.7.0 */
+  void assignView(V view) {
+    mViewRef = new WeakReference<>(view);
+  }
+
+  /** @since 0.7.0 */
+  void releaseRouter() {
+    if (mRouterRef != null) {
+      mRouterRef.clear();
+      mRouterRef = null;
+    }
+  }
+
+  /** @since 0.7.0 */
+  void releaseView() {
+    if (mViewRef != null) {
+      mViewRef.clear();
+      mViewRef = null;
+    }
   }
 }

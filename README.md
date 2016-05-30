@@ -1,8 +1,7 @@
 [![JitPack](https://jitpack.io/v/RxViper/RxViper.svg)](https://jitpack.io/#RxViper/RxViper)
-[![Bintray](https://api.bintray.com/packages/rxviper/RxViper/RxViper/images/download.svg) ](https://bintray.com/rxviper/RxViper/RxViper/_latestVersion)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RxViper-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/3618)
 
-This is a set of classes with a small, extensible API which provides basic abstractions for building your apps using VIPER architecture.
+This is a micro framework with a small, extensible API which provides basic abstractions for building your apps using VIPER architecture.
 
 > I copy these classes into all apps I make. I'm tired of doing it. Now it's a library. ©
 
@@ -13,17 +12,16 @@ Grab via Maven:
 
 ```xml
 <dependency>
-    <groupId>rxviper</groupId>
+    <groupId>com.dzaitsev.rxviper</groupId>
     <artifactId>rxviper</artifactId>
-    <version>0.8.1</version>
-    <type>pom</type>
+    <version>0.9.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'rxviper:rxviper:0.8.1'
+compile 'com.dzaitsev.rxviper:rxviper:0.9.0'
 ```
 ## License
 
