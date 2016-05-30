@@ -91,6 +91,7 @@ bintray {
     websiteUrl = POM_SITE_URL
     vcsUrl = POM_GIT_URL
     licenses = ['Apache-2.0']
+    labels = ['viper', 'android', 'mvp', 'presenter', 'interactor', 'router', 'view', 'viewcallbacks', 'architecture', 'cleanarchitecture' ,'mapper' ,'entity']
     publish = true
     publicDownloadNumbers = true
     version {
