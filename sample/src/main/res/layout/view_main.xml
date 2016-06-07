@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+
+    Copyright 2016 Dmytro Zaitsev
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<layout>
+
+  <rxviper.sample.presentation.MainView android:id="@+id/activity_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="rxviper.sample.presentation.MainActivity">
+
+    <Button
+      android:id="@+id/btn_load_data_success"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="16dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:text="Get data success"
+      app:layout_constraintLeft_toLeftOf="@+id/activity_main"
+      app:layout_constraintTop_toTopOf="@+id/activity_main"
+      tools:ignore="HardcodedText"
+      tools:layout_constraintLeft_creator="1"
+      tools:layout_constraintTop_creator="1" />
+
+    <Button
+      android:id="@+id/btn_load_data_error"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_marginTop="16dp"
+      android:text="Get data error"
+      app:layout_constraintRight_toRightOf="@+id/activity_main"
+      app:layout_constraintTop_toTopOf="@+id/activity_main"
+      tools:ignore="HardcodedText"
+      tools:layout_constraintRight_creator="1"
+      tools:layout_constraintTop_creator="1" />
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/recyclerView"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintLeft_toLeftOf="@+id/activity_main"
+      app:layout_constraintRight_toRightOf="@+id/activity_main"
+      app:layout_constraintTop_toBottomOf="@+id/btn_load_data_success" />
+  </rxviper.sample.presentation.MainView>
+</layout>

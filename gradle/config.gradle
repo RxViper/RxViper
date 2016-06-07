@@ -24,27 +24,50 @@ ext {
   ]
 
   versions = [
-      androidPlugin: '2.1.0',
-      bintrayPlugin: '1.6',
-      mavenPlugin  : '1.3',
-      licensePlugin: '0.12.1',
-      rxJava       : '1.1.5',
-      junit        : '4.12',
-      mockito      : '2.0.53-beta',
-      truth        : '0.28',
+      // Gradle Plugins
+      androidPlugin    : '2.1.0',
+      bintrayPlugin    : '1.6',
+      mavenPlugin      : '1.3',
+      licensePlugin    : '0.12.1',
+      retrolambdaPlugin: '3.3.0-beta4',
+      aptPlugin        : '1.8',
+      // Java libraries
+      guava            : '19.0',
+      rxJava           : '1.1.5',
+      dagger           : '2.4',
+      junit            : '4.12',
+      mockito          : '2.0.54-beta',
+      truth            : '0.28',
+      // Android libraries
+      rxAndroid        : '1.2.0',
+      support          : '23.4.0',
+      constraintLayout : '1.0.0-alpha2',
   ]
 
   gradlePlugins = [
-      android: "com.android.tools.build:gradle:${versions.androidPlugin}",
-      bintray: "com.jfrog.bintray.gradle:gradle-bintray-plugin:${versions.bintrayPlugin}",
-      maven  : "com.github.dcendents:android-maven-gradle-plugin:${versions.mavenPlugin}",
-      license: "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${versions.licensePlugin}",
+      android    : "com.android.tools.build:gradle:${versions.androidPlugin}",
+      bintray    : "com.jfrog.bintray.gradle:gradle-bintray-plugin:${versions.bintrayPlugin}",
+      maven      : "com.github.dcendents:android-maven-gradle-plugin:${versions.mavenPlugin}",
+      license    : "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${versions.licensePlugin}",
+      retrolambda: "me.tatarka:gradle-retrolambda:${versions.retrolambdaPlugin}",
+      apt        : "com.neenbedankt.gradle.plugins:android-apt:${versions.aptPlugin}",
   ]
 
   libraries = [
-      rxJava : "io.reactivex:rxjava:$versions.rxJava",
-      junit  : "junit:junit:$versions.junit",
-      mockito: "org.mockito:mockito-core:$versions.mockito",
-      truth  : "com.google.truth:truth:$versions.truth",
+      // Java
+      guava           : "com.google.guava:guava:${versions.guava}",
+      rxJava          : "io.reactivex:rxjava:${versions.rxJava}",
+      dagger          : "com.google.dagger:dagger:${versions.dagger}",
+      daggerCompiler  : "com.google.dagger:dagger-compiler:${versions.dagger}",
+      // Android
+      constraintLayout: "com.android.support.constraint:constraint-layout:${versions.constraintLayout}",
+      appCompat       : "com.android.support:appcompat-v7:${versions.support}",
+      design          : "com.android.support:design:${versions.support}",
+      cardView        : "com.android.support:cardview-v7:${versions.support}",
+      rxAndroid       : "io.reactivex:rxandroid:${versions.rxAndroid}",
+      // Test
+      junit           : "junit:junit:${versions.junit}",
+      mockito         : "org.mockito:mockito-core:${versions.mockito}",
+      truth           : "com.google.truth:truth:${versions.truth}",
   ]
 }

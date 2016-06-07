@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,5 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include ':rxviper'
-include ':sample'
+
+package rxviper.sample.presentation;
+
+import java.util.Collection;
+import viper.ViewCallbacks;
+
+/**
+ * ~ ~ ~ ~ Description ~ ~ ~ ~
+ *
+ * @author Dmytro Zaitsev
+ * @since 2016-Jun-07, 10:35
+ */
+
+interface MainViewCallbacks extends ViewCallbacks {
+  void hideProgress();
+
+  void onNewCheeses(Collection<CheeseViewModel> cheeses);
+
+  void showError();
+
+  void showProgress();
+}
