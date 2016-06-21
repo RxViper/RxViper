@@ -24,9 +24,15 @@ package rxviper.sample.data;
  */
 public class Cheese {
   private final String mName;
+  private final long   mId;
 
-  Cheese(String name) {
+  Cheese(String name, long id) {
     mName = name;
+    mId = id;
+  }
+
+  public long getId() {
+    return mId;
   }
 
   public String getName() {

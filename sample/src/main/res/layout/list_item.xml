@@ -55,6 +55,7 @@
       android:layout_marginStart="8dp"
       android:layout_toEndOf="@id/checkBox"
       android:layout_toRightOf="@id/checkBox"
+      android:gravity="center_vertical"
       tools:text="Hello World!"
       android:text="@{model.name}" />
   </RelativeLayout>

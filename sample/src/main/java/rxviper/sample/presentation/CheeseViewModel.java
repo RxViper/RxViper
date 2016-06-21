@@ -24,10 +24,16 @@ package rxviper.sample.presentation;
  */
 public final class CheeseViewModel {
   private final String  mName;
+  private final long    mId;
   private       boolean isChecked;
 
-  public CheeseViewModel(String name) {
+  public CheeseViewModel(String name, long id) {
     mName = name;
+    mId = id;
+  }
+
+  public long getId() {
+    return mId;
   }
 
   public String getName() {
