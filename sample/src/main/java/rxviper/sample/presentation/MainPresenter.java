@@ -16,6 +16,7 @@
 
 package rxviper.sample.presentation;
 
+import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import rxviper.sample.domain.GetCheesesInteractor;
@@ -29,19 +30,23 @@ import viper.Presenter;
  */
 @Singleton
 class MainPresenter extends Presenter<MainViewCallbacks, MainRouter> {
-  private final GetCheesesInteractor mCheesesInteractor;
+  private final GetCheesesInteractor        mCheesesInteractor;
+  private       Collection<CheeseViewModel> mCachedData;
 
   @Inject MainPresenter(GetCheesesInteractor getCheesesInteractor) {
     mCheesesInteractor = getCheesesInteractor;
   }
 
-  void onItemClicked(CheeseViewModel model) {
-    getRouter().navigateToDetails(model);
-  }
-
   @Override protected void onDropView(MainViewCallbacks view) {
     /* The best place to unsubscribe all your interactors */
     mCheesesInteractor.unsubscribe();
+  }
+
+  @Override protected void onTakeView(MainViewCallbacks view) {
+    /* The place where you can set cached data */
+    if (mCachedData != null) {
+      view.onNewCheeses(mCachedData);
+    }
   }
 
   /**
@@ -56,6 +61,7 @@ class MainPresenter extends Presenter<MainViewCallbacks, MainRouter> {
     mCheesesInteractor.execute(
         // onNext
         cheeses -> {
+          mCachedData = cheeses;
           getView().onNewCheeses(cheeses);
           getView().hideProgress();
         },
@@ -66,5 +72,9 @@ class MainPresenter extends Presenter<MainViewCallbacks, MainRouter> {
         },
         // parameter
         amount);
+  }
+
+  void onItemClicked(CheeseViewModel model) {
+    getRouter().navigateToDetails(model);
   }
 }

@@ -19,5 +19,4 @@
   <string name="app_name">RxViperSample</string>
   <string name="loading">Loading...</string>
   <string name="error">Error</string>
-  <string name="success">Success!</string>
 </resources>

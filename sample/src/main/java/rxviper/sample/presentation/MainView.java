@@ -75,8 +75,6 @@ public class MainView extends ConstraintLayout implements MainViewCallbacks {
   @Override public void onNewCheeses(Collection<CheeseViewModel> cheeses) {
     mAdapter.setModels(cheeses);
     mAdapter.notifyDataSetChanged();
-    Toast.makeText(getContext(), R.string.success, Toast.LENGTH_SHORT)
-        .show();
   }
 
   @Override public void showError() {
