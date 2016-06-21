@@ -34,7 +34,7 @@ public class CheeseMapper extends Mapper<Cheese, CheeseViewModel> {
   }
 
   @Override public CheeseViewModel map(Cheese cheese) {
-    final CheeseViewModel model = new CheeseViewModel(cheese.getName());
+    final CheeseViewModel model = new CheeseViewModel(cheese.getName(), cheese.getId());
     model.setChecked(true);
     return model;
   }

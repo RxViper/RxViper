@@ -93,8 +93,10 @@ public class MainView extends ConstraintLayout implements MainViewCallbacks {
   @Override protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     /* The best place to attach the view to presenter */
-    mPresenter.takeView(this);
-    mPresenter.takeRouter(((MainRouter) getContext()));
+    if (mPresenter != null) {
+      mPresenter.takeView(this);
+      mPresenter.takeRouter(((MainRouter) getContext()));
+    }
   }
 
   @Override protected void onDetachedFromWindow() {
@@ -106,12 +108,14 @@ public class MainView extends ConstraintLayout implements MainViewCallbacks {
 
   @Override protected void onFinishInflate() {
     super.onFinishInflate();
-    final ViewMainBinding binding = ViewMainBinding.bind(this);
-    binding.btnLoadDataSuccess.setOnClickListener(v -> mPresenter.fetchCheeses(40));
-    binding.btnLoadDataError.setOnClickListener(v -> mPresenter.fetchCheeses(-1));
-    mAdapter = new CheeseAdapter(mPresenter);
-    binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-    binding.recyclerView.setAdapter(mAdapter);
+    if (!isInEditMode()) {
+      final ViewMainBinding binding = ViewMainBinding.bind(this);
+      binding.btnLoadDataSuccess.setOnClickListener(v -> mPresenter.fetchCheeses(40));
+      binding.btnLoadDataError.setOnClickListener(v -> mPresenter.fetchCheeses(-1));
+      mAdapter = new CheeseAdapter(mPresenter);
+      binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+      binding.recyclerView.setAdapter(mAdapter);
+    }
   }
 
   static class CheeseViewHolder extends RecyclerView.ViewHolder {
@@ -136,6 +140,7 @@ public class MainView extends ConstraintLayout implements MainViewCallbacks {
 
     public CheeseAdapter(MainPresenter presenter) {
       mPresenter = presenter;
+      setHasStableIds(true);
     }
 
     @Override public CheeseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -144,6 +149,11 @@ public class MainView extends ConstraintLayout implements MainViewCallbacks {
 
     @Override public void onBindViewHolder(CheeseViewHolder holder, int position) {
       holder.bind(mModels.get(position));
+    }
+
+    @Override public long getItemId(int position) {
+      return mModels.get(position)
+          .getId();
     }
 
     @Override public int getItemCount() {
