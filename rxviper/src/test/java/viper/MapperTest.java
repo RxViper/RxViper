@@ -47,4 +47,10 @@ public class MapperTest {
     verify(mMapper).map(2);
     verify(mMapper).map(3);
   }
+
+  @Test public void shouldCallMap() {
+    mMapper.call(42);
+
+    verify(mMapper).map(42);
+  }
 }
