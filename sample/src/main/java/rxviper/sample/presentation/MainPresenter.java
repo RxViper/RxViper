@@ -20,7 +20,7 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import rxviper.sample.domain.GetCheesesInteractor;
-import viper.Presenter;
+import viper.ViperPresenter;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -29,7 +29,7 @@ import viper.Presenter;
  * @since 2016-Jun-07, 10:34
  */
 @Singleton
-class MainPresenter extends Presenter<MainViewCallbacks, MainRouter> {
+class MainPresenter extends ViperPresenter<MainViewCallbacks, MainRouter> {
   private final GetCheesesInteractor        mCheesesInteractor;
   private       Collection<CheeseViewModel> mCachedData;
 

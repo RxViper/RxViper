@@ -21,10 +21,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 import rxviper.sample.R;
-import viper.Router;
-import viper.ViewCallbacks;
 
-public class DetailsActivity extends AppCompatActivity implements ViewCallbacks, Router {
+public class DetailsActivity extends AppCompatActivity {
   static final String NAME    = "name";
   static final String CHECKED = "checked";
 
