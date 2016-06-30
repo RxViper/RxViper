@@ -15,14 +15,14 @@ Grab via Maven:
 <dependency>
     <groupId>com.dzaitsev.rxviper</groupId>
     <artifactId>rxviper</artifactId>
-    <version>0.9.0</version>
+    <version>0.10.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'com.dzaitsev.rxviper:rxviper:0.9.0'
+compile 'com.dzaitsev.rxviper:rxviper:0.10.0'
 ```
 ## License
 

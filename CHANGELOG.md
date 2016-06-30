@@ -1,4 +1,8 @@
 ## Changelog
+##### 0.10.0
+* Now we have two types of presenters: simple `Presenter` for just MVP (it manages only View) and `ViperPresenter` for VIPER that additionally manages `Router`. (Closes [#36](https://github.com/RxViper/RxViper/issues/36)).
+* `Mapper` implements `Func1`. (Closes [#37](https://github.com/RxViper/RxViper/issues/37)).
+
 ##### 0.9.0
 * Make `Presenter#getView()` and `Presenter#getRouter()` protected. (Closes [#31](https://github.com/RxViper/RxViper/issues/31)).
 * Change group id `rxviper` -> `com.dzaitsev.rxviper`
