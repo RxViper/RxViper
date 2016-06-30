@@ -17,6 +17,7 @@ package viper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import rx.functions.Func1;
 
 /**
  * Converts entities to basic model objects used by the {@link Interactor}.
@@ -42,7 +43,7 @@ import java.util.Collection;
  * @author Dmytro Zaitsev
  * @since 0.1.0
  */
-public abstract class Mapper<From, To> {
+public abstract class Mapper<From, To> implements Func1<From, To> {
   /**
    * Map the provided input object to an appropriate output object.
    *
@@ -72,5 +73,9 @@ public abstract class Mapper<From, To> {
       result.add(map(from));
     }
     return result;
+  }
+
+  @Override public final To call(From from) {
+    return map(from);
   }
 }
