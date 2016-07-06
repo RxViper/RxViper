@@ -84,7 +84,6 @@ bintray {
 
   configurations = ['archives']
   pkg {
-    userOrg = BINTRAY_ORG
     repo = BINTRAY_REPO
     name = BINTRAY_NAME
     desc = POM_LIBRARY_DESCRIPTION

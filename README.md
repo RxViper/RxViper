@@ -1,5 +1,5 @@
 [![JitPack](https://jitpack.io/v/RxViper/RxViper.svg)](https://jitpack.io/#RxViper/RxViper)
-[![Bintray](https://api.bintray.com/packages/rxviper/RxViper/com.dzaitsev.rxviper/images/download.svg) ](https://bintray.com/rxviper/RxViper/com.dzaitsev.rxviper/_latestVersion)
+[![Download](https://api.bintray.com/packages/dmitriyzaitsev/maven/com.dzaitsev.rxviper/images/download.svg) ](https://bintray.com/dmitriyzaitsev/maven/com.dzaitsev.rxviper/_latestVersion)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RxViper-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/3618)
 
 This is a micro framework with a small, extensible API which provides basic abstractions for building your apps using VIPER architecture.
