@@ -30,6 +30,7 @@ import static java.util.Collections.shuffle;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static rx.Observable.error;
 import static rx.Observable.from;
+import static rx.Observable.just;
 import static rx.Observable.range;
 import static rx.Observable.timer;
 
@@ -170,8 +171,7 @@ public class CheeseStorage {
       return timer.concatWith(error(new RuntimeException("Amount cannot be less than zero. Given amount = " + amount)))
           .map(seconds -> null);
     } else {
-      return from(randomSublist(amount, mRandom)).toList()
-          .zipWith(timer, (cheeses, seconds) -> cheeses);
+      return just(randomSublist(amount, mRandom)).zipWith(timer, (cheeses, seconds) -> cheeses);
     }
   }
 }
