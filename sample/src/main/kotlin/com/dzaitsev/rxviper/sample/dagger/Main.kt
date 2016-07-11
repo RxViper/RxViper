@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-apply plugin: 'kotlin'
 
-dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
-  compile libraries.kotlin
-  compile libraries.rxJava
-  testCompile libraries.junit
-  testCompile libraries.mockito
-  testCompile libraries.truth
-}
+package com.dzaitsev.rxviper.sample.dagger
+
+import javax.inject.Qualifier
+
+/**
+ * ~ ~ ~ ~ Description ~ ~ ~ ~
+ *
+ * @author Dmytro Zaitsev
+ * @since 2016-Jun-07, 12:30
+ */
+@Qualifier
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Main

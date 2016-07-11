@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-apply plugin: 'kotlin'
 
-dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
-  compile libraries.kotlin
-  compile libraries.rxJava
-  testCompile libraries.junit
-  testCompile libraries.mockito
-  testCompile libraries.truth
+package com.dzaitsev.rxviper.sample.dagger
+
+import dagger.Component
+import com.dzaitsev.rxviper.sample.presentation.MainView
+import javax.inject.Singleton
+
+/**
+ * ~ ~ ~ ~ Description ~ ~ ~ ~
+ *
+ * @author Dmytro Zaitsev
+ * @since 2016-Jun-07, 12:21
+ */
+@Singleton
+@Component(modules = arrayOf(AppModule::class))
+interface AppComponent {
+  fun inject(view: MainView)
 }

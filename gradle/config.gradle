@@ -30,7 +30,6 @@ ext {
       mavenPlugin      : '1.4.1',
       licensePlugin    : '0.12.1',
       retrolambdaPlugin: '3.3.1',
-      aptPlugin        : '1.8',
       // Java libraries
       rxJava           : '1.2.1',
       dagger           : '2.7',
@@ -41,6 +40,8 @@ ext {
       rxAndroid        : '1.2.1',
       support          : '25.0.0',
       constraintLayout : '1.0.0-alpha7',
+      // Kotlin
+      kotlin           : '1.0.6'
   ]
 
   gradlePlugins = [
@@ -49,23 +50,26 @@ ext {
       maven      : "com.github.dcendents:android-maven-gradle-plugin:${versions.mavenPlugin}",
       license    : "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${versions.licensePlugin}",
       retrolambda: "me.tatarka:gradle-retrolambda:${versions.retrolambdaPlugin}",
-      apt        : "com.neenbedankt.gradle.plugins:android-apt:${versions.aptPlugin}",
+      kotlin     : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
   ]
 
   libraries = [
       // Java
-      rxJava          : "io.reactivex:rxjava:${versions.rxJava}",
-      dagger          : "com.google.dagger:dagger:${versions.dagger}",
-      daggerCompiler  : "com.google.dagger:dagger-compiler:${versions.dagger}",
+      rxJava             : "io.reactivex:rxjava:${versions.rxJava}",
+      dagger             : "com.google.dagger:dagger:${versions.dagger}",
+      daggerCompiler     : "com.google.dagger:dagger-compiler:${versions.dagger}",
       // Android
-      constraintLayout: "com.android.support.constraint:constraint-layout:${versions.constraintLayout}",
-      appCompat       : "com.android.support:appcompat-v7:${versions.support}",
-      design          : "com.android.support:design:${versions.support}",
-      cardView        : "com.android.support:cardview-v7:${versions.support}",
-      rxAndroid       : "io.reactivex:rxandroid:${versions.rxAndroid}",
+      constraintLayout   : "com.android.support.constraint:constraint-layout:${versions.constraintLayout}",
+      appCompat          : "com.android.support:appcompat-v7:${versions.support}",
+      design             : "com.android.support:design:${versions.support}",
+      cardView           : "com.android.support:cardview-v7:${versions.support}",
+      rxAndroid          : "io.reactivex:rxandroid:${versions.rxAndroid}",
+      dataBindingCompiler: "com.android.databinding:compiler:${versions.androidPlugin}",
       // Test
-      junit           : "junit:junit:${versions.junit}",
-      mockito         : "org.mockito:mockito-core:${versions.mockito}",
-      truth           : "com.google.truth:truth:${versions.truth}",
+      junit              : "junit:junit:${versions.junit}",
+      mockito            : "org.mockito:mockito-core:${versions.mockito}",
+      truth              : "com.google.truth:truth:${versions.truth}",
+      // Kotlin
+      kotlin             : "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}",
   ]
 }

@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper;
+package com.dzaitsev.rxviper.sample.domain
+
+import com.dzaitsev.rxviper.sample.data.Cheese
+import com.dzaitsev.rxviper.sample.presentation.CheeseViewModel
+import com.dzaitsev.rxviper.Mapper
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Nov-20, 14:16
+ * @since 2016-Jun-07, 11:18
  */
-final class TestViewCallbacksImpl implements TestViewCallbacks {
-  @Override
-  public void doJob() {
-    // no op
+@Singleton
+class CheeseMapper @Inject internal constructor() : Mapper<Cheese, CheeseViewModel>() {
+  override fun map(cheese: Cheese): CheeseViewModel = CheeseViewModel(name = cheese.name, id = cheese.id, type = cheese.type.name).apply {
+    with(this) { isChecked = true }
   }
 }

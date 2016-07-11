@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-apply plugin: 'kotlin'
 
-dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
-  compile libraries.kotlin
-  compile libraries.rxJava
-  testCompile libraries.junit
-  testCompile libraries.mockito
-  testCompile libraries.truth
+package com.dzaitsev.rxviper.sample.presentation
+
+import com.dzaitsev.rxviper.Router
+
+/**
+ * ~ ~ ~ ~ Description ~ ~ ~ ~
+ *
+ * @author Dmytro Zaitsev
+ * @since 2016-Jun-07, 14:39
+ */
+internal interface MainRouter : Router {
+  fun navigateToDetails(model: CheeseViewModel)
 }

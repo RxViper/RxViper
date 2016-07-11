@@ -14,17 +14,27 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper;
+package com.dzaitsev.rxviper.sample.dagger
+
+import android.content.res.Resources
+import com.dzaitsev.rxviper.sample.App
+import dagger.Module
+import dagger.Provides
+import rx.Scheduler
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Nov-20, 14:16
+ * @since 2016-Jun-07, 12:24
  */
-final class TestViewCallbacksImpl implements TestViewCallbacks {
-  @Override
-  public void doJob() {
-    // no op
-  }
+@Module
+internal class AppModule(private val app: App) {
+  @Provides fun provideResources(): Resources = app.resources
+
+  @Provides @Job fun provideJobScheduler(): Scheduler = Schedulers.computation()
+
+  @Provides @Main fun provideMainScheduler(): Scheduler = AndroidSchedulers.mainThread()
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-apply plugin: 'kotlin'
 
-dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
-  compile libraries.kotlin
-  compile libraries.rxJava
-  testCompile libraries.junit
-  testCompile libraries.mockito
-  testCompile libraries.truth
+package com.dzaitsev.rxviper.sample
+
+import android.app.Application
+import com.dzaitsev.rxviper.sample.dagger.AppComponent
+import com.dzaitsev.rxviper.sample.dagger.AppModule
+import com.dzaitsev.rxviper.sample.dagger.DaggerAppComponent
+
+/**
+ * ~ ~ ~ ~ Description ~ ~ ~ ~
+ *
+ * @author Dmytro Zaitsev
+ * @since 2016-Jun-07, 12:22
+ */
+class App : Application() {
+  lateinit var component: AppComponent
+    private set
+
+  override fun onCreate() {
+    super.onCreate()
+    component = DaggerAppComponent.builder().appModule(AppModule(this)).build()
+  }
 }
