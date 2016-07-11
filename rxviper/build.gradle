@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
@@ -24,6 +25,10 @@ android {
     minSdkVersion androidConfig.minSdkVersion
     targetSdkVersion androidConfig.targetSdkVersion
   }
+  sourceSets {
+    main.java.srcDirs += ['src/main/kotlin']
+    test.java.srcDirs += ['src/test/kotlin']
+  }
 }
 
 apply from: '../gradle/bintray.gradle'
@@ -31,6 +36,7 @@ apply from: '../gradle/maven.gradle'
 
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile libraries.kotlin
   compile libraries.rxJava
   testCompile libraries.junit
   testCompile libraries.mockito

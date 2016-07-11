@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import nl.javadude.gradle.plugins.license.License
+
 buildscript {
   apply from: 'gradle/config.gradle'
   repositories {
@@ -24,14 +27,14 @@ buildscript {
     classpath gradlePlugins.bintray
     classpath gradlePlugins.maven
     classpath gradlePlugins.license
-    classpath gradlePlugins.apt
-    classpath gradlePlugins.retrolambda
+    classpath gradlePlugins.kotlin
   }
 }
 
 allprojects {
   repositories {
     jcenter()
+    mavenCentral()
   }
 
   apply from: rootProject.file('gradle/license.gradle')
@@ -41,6 +44,6 @@ task clean(type: Delete) {
   delete rootProject.buildDir
 }
 
-task licenseFormatEverything(type: nl.javadude.gradle.plugins.license.License) {
+task licenseFormatEverything(type: License) {
   source = fileTree(dir: projectDir).include(["**/*.gradle", "**/*.properties", "**/*.xml"])
 }
