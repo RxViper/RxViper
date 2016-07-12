@@ -29,10 +29,15 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Contains the business logic as specified by a use case
  *
+ * @param <RequestModel>
+ *     the type of request message
+ * @param <ResponseModel>
+ *     the type of response message
+ *
  * @author Dmytro Zaitsev
  * @since 0.1.0
  */
-public abstract class Interactor<Param, Result> implements Subscription {
+public abstract class Interactor<RequestModel, ResponseModel> implements Subscription {
   private final Scheduler             mSubscribeOn;
   private final Scheduler             mObserveOn;
   private final CompositeSubscription mSubscription;
@@ -63,7 +68,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
    *
    * @param subscriber
    *     the Subscriber that will handle emissions and notifications from the Observable
-   * @param param
+   * @param requestModel
    *     parameter which will be passed to {@link #createObservable(Object)}.
    *
    * @throws IllegalStateException
@@ -77,10 +82,10 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @see Observable#subscribe(Subscriber)
    * @since 0.1.0
    */
-  public final void execute(Subscriber<? super Result> subscriber, Param param) {
+  public final void execute(Subscriber<? super ResponseModel> subscriber, RequestModel requestModel) {
     Preconditions.checkNotNull(subscriber, "subscriber");
 
-    mSubscription.add(createObservable(param).subscribeOn(mSubscribeOn)
+    mSubscription.add(createObservable(requestModel).subscribeOn(mSubscribeOn)
         .observeOn(mObserveOn)
         .subscribe(subscriber));
   }
@@ -92,10 +97,10 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @param subscriber
    *     the Subscriber that will handle emissions and notifications from the Observable
    *
-   * @see #execute(Subscriber, Object)
+   * @see #execute(Subscriber, RequestModel)
    * @since 0.2.0
    */
-  public final void execute(Subscriber<? super Result> subscriber) {
+  public final void execute(Subscriber<? super ResponseModel> subscriber) {
     execute(subscriber, null);
   }
 
@@ -112,8 +117,8 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @see #execute(Action1, Object)
    * @since 0.4.0
    */
-  public final void execute(Action1<? super Result> onNext) {
-    execute(onNext, (Param) null);
+  public final void execute(Action1<? super ResponseModel> onNext) {
+    execute(onNext, (RequestModel) null);
   }
 
   /**
@@ -121,8 +126,8 @@ public abstract class Interactor<Param, Result> implements Subscription {
    *
    * @param onNext
    *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
-   * @param param
-   *     parameter which will be passed to {@link #createObservable(Object)}.
+   * @param requestModel
+   *     parameter which will be passed to {@link #createObservable(RequestModel)}.
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null
@@ -131,10 +136,11 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @see Observable#subscribe(Action1)
    * @since 0.4.0
    */
-  public final void execute(Action1<? super Result> onNext, Param param) {
+  public final void execute(Action1<? super ResponseModel> onNext, RequestModel requestModel) {
     Preconditions.checkNotNull(onNext, "onNext");
 
-    execute(new ActionSubscriber<>(onNext, InternalObservableUtils.ERROR_NOT_IMPLEMENTED, Actions.empty()), param);
+    execute(new ActionSubscriber<>(onNext, InternalObservableUtils.ERROR_NOT_IMPLEMENTED, Actions.empty()),
+        requestModel);
   }
 
   /**
@@ -151,8 +157,8 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @see #execute(Action1, Object)
    * @since 0.4.0
    */
-  public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError) {
-    execute(onNext, onError, (Param) null);
+  public final void execute(Action1<? super ResponseModel> onNext, Action1<Throwable> onError) {
+    execute(onNext, onError, (RequestModel) null);
   }
 
   /**
@@ -163,7 +169,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
    *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
    * @param onError
    *     the {@code Action1<Throwable>} you have designed to accept any error notification from the Observable
-   * @param param
+   * @param requestModel
    *     parameter which will be passed to {@link #createObservable(Object)}.
    *
    * @throws IllegalArgumentException
@@ -171,11 +177,12 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @see Observable#subscribe(Action1, Action1)
    * @since 0.4.0
    */
-  public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError, Param param) {
+  public final void execute(Action1<? super ResponseModel> onNext, Action1<Throwable> onError,
+      RequestModel requestModel) {
     Preconditions.checkNotNull(onNext, "onNext");
     Preconditions.checkNotNull(onError, "onError");
 
-    execute(new ActionSubscriber<>(onNext, onError, Actions.empty()), param);
+    execute(new ActionSubscriber<>(onNext, onError, Actions.empty()), requestModel);
   }
 
   /**
@@ -195,7 +202,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @see #execute(Action1, Action1, Action0, Object)
    * @since 0.4.0
    */
-  public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError, Action0 onCompleted) {
+  public final void execute(Action1<? super ResponseModel> onNext, Action1<Throwable> onError, Action0 onCompleted) {
     execute(onNext, onError, onCompleted, null);
   }
 
@@ -209,7 +216,7 @@ public abstract class Interactor<Param, Result> implements Subscription {
    *     the {@code Action1<Throwable>} you have designed to accept any error notification from the Observable
    * @param onCompleted
    *     the {@code Action0} you have designed to accept a completion notification from the Observable
-   * @param param
+   * @param requestModel
    *     parameter which will be passed to {@link #createObservable(Object)}.
    *
    * @throws IllegalArgumentException
@@ -217,13 +224,13 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @see Observable#subscribe(Action1, Action1, Action0)
    * @since 0.4.0
    */
-  public final void execute(Action1<? super Result> onNext, Action1<Throwable> onError, Action0 onCompleted,
-      Param param) {
+  public final void execute(Action1<? super ResponseModel> onNext, Action1<Throwable> onError, Action0 onCompleted,
+      RequestModel requestModel) {
     Preconditions.checkNotNull(onNext, "onNext");
     Preconditions.checkNotNull(onError, "onError");
     Preconditions.checkNotNull(onCompleted, "onCompleted");
 
-    execute(new ActionSubscriber<>(onNext, onError, onCompleted), param);
+    execute(new ActionSubscriber<>(onNext, onError, onCompleted), requestModel);
   }
 
   /**
@@ -255,8 +262,8 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * <p>
    * It will use schedulers provided in {@link #Interactor(Scheduler, Scheduler)}.
    *
-   * @param param
-   *     optional parameter
+   * @param requestModel
+   *     request message to a replier system which receives and processes the request
    *
    * @return source Observable
    *
@@ -271,5 +278,5 @@ public abstract class Interactor<Param, Result> implements Subscription {
    * @see #execute(Action1, Action1, Action0, Object)
    * @since 0.1.0
    */
-  protected abstract Observable<Result> createObservable(Param param);
+  protected abstract Observable<ResponseModel> createObservable(RequestModel requestModel);
 }
