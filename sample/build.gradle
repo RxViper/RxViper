@@ -22,7 +22,7 @@ android {
   buildToolsVersion androidConfig.buildToolsVersion
 
   defaultConfig {
-    applicationId "rxviper.sample"
+    applicationId "com.dzaitsev.rxviper.sample"
     minSdkVersion 14
     targetSdkVersion androidConfig.targetSdkVersion
     versionCode androidConfig.versionCode

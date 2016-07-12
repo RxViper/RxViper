@@ -16,7 +16,7 @@
     limitations under the License.
 
 -->
-<manifest package="rxviper.sample"
+<manifest package="com.dzaitsev.rxviper.sample"
   xmlns:android="http://schemas.android.com/apk/res/android">
 
   <application
@@ -33,7 +33,7 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name=".presentation.DetailsActivity"></activity>
+    <activity android:name=".presentation.DetailsActivity"/>
   </application>
 
 </manifest>

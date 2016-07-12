@@ -21,4 +21,4 @@
   android:layout_height="match_parent"
   android:gravity="center"
   android:textSize="50sp"
-  tools:context="rxviper.sample.presentation.DetailsActivity" />
+  tools:context="com.dzaitsev.rxviper.sample.presentation.DetailsActivity" />

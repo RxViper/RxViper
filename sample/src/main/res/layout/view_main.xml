@@ -17,13 +17,13 @@
 -->
 <layout>
 
-  <rxviper.sample.presentation.MainView android:id="@+id/activity_main"
+  <com.dzaitsev.rxviper.sample.presentation.MainView android:id="@+id/activity_main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="rxviper.sample.presentation.MainActivity">
+    tools:context="com.dzaitsev.rxviper.sample.presentation.MainActivity">
 
     <Button
       android:id="@+id/btn_load_data_success"
@@ -61,5 +61,5 @@
       app:layout_constraintRight_toRightOf="@+id/activity_main"
       app:layout_constraintTop_toBottomOf="@+id/btn_load_data_success"
       tools:listitem="@layout/list_item" />
-  </rxviper.sample.presentation.MainView>
+  </com.dzaitsev.rxviper.sample.presentation.MainView>
 </layout>

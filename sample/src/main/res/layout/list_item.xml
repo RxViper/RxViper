@@ -20,7 +20,7 @@
 
     <variable
       name="model"
-      type="rxviper.sample.presentation.CheeseViewModel" />
+      type="com.dzaitsev.rxviper.sample.presentation.CheeseViewModel" />
   </data>
 
   <RelativeLayout android:id="@+id/constraintLayout"
