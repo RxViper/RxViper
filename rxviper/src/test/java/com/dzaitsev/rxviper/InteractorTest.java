@@ -27,7 +27,6 @@ import rx.schedulers.Schedulers;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static rx.Observable.just;
 
 /**
@@ -37,13 +36,11 @@ import static rx.Observable.just;
  * @since 2016-May-14, 13:56
  */
 public class InteractorTest {
-
   private static final int    PARAM  = 1;
-  private static final String RESULT = "1";
-  private Interactor<Integer, String> mInteractor;
+  private Interactor<Integer, String> spyInteractor;
 
   @Before public void setUp() {
-    mInteractor = spy(new Interactor<Integer, String>(Schedulers.immediate(), Schedulers.immediate()) {
+    spyInteractor = spy(new Interactor<Integer, String>(Schedulers.immediate(), Schedulers.immediate()) {
       @Override protected Observable<String> createObservable(final Integer integer) {
         return just(String.valueOf(integer));
       }
@@ -51,7 +48,7 @@ public class InteractorTest {
   }
 
   @Test public void shouldCreateObservableSubscriber() {
-    mInteractor.execute(new Subscriber<String>() {
+    spyInteractor.execute(new Subscriber<String>() {
       @Override public void onCompleted() {
       }
 
@@ -61,12 +58,11 @@ public class InteractorTest {
       @Override public void onNext(final String s) {
       }
     });
-    verify(mInteractor).createObservable(null);
+    verify(spyInteractor).createObservable(null);
   }
 
   @Test public void shouldCreateObservableSubscriberParam() {
-    when(mInteractor.createObservable(PARAM)).thenReturn(just(RESULT));
-    mInteractor.execute(new Subscriber<String>() {
+    spyInteractor.execute(new Subscriber<String>() {
       @Override public void onCompleted() {
       }
 
@@ -76,39 +72,38 @@ public class InteractorTest {
       @Override public void onNext(final String s) {
       }
     }, PARAM);
-    verify(mInteractor).createObservable(PARAM);
+    verify(spyInteractor).createObservable(PARAM);
   }
 
   @Test public void shouldCreateObservableOnNext() {
-    mInteractor.execute(new Action1<String>() {
+    spyInteractor.execute(new Action1<String>() {
       @Override public void call(final String s) {
       }
     });
-    verify(mInteractor).createObservable(null);
+    verify(spyInteractor).createObservable(null);
   }
 
   @Test public void shouldCreateObservableOnNextParam() {
-    when(mInteractor.createObservable(PARAM)).thenReturn(just(RESULT));
-    mInteractor.execute(new Action1<String>() {
+    spyInteractor.execute(new Action1<String>() {
       @Override public void call(final String s) {
       }
     }, PARAM);
-    verify(mInteractor).createObservable(PARAM);
+    verify(spyInteractor).createObservable(PARAM);
   }
 
   @Test public void shouldCreateObservableOnNextOnError() {
-    mInteractor.execute(new Action1<String>() {
+    spyInteractor.execute(new Action1<String>() {
       @Override public void call(final String s) {
       }
     }, new Action1<Throwable>() {
       @Override public void call(final Throwable t) {
       }
     });
-    verify(mInteractor).createObservable(null);
+    verify(spyInteractor).createObservable(null);
   }
 
   @Test public void shouldCreateObservableOnNextOnErrorOnComplete() {
-    mInteractor.execute(new Action1<String>() {
+    spyInteractor.execute(new Action1<String>() {
       @Override public void call(final String s) {
       }
     }, new Action1<Throwable>() {
@@ -118,24 +113,22 @@ public class InteractorTest {
       @Override public void call() {
       }
     });
-    verify(mInteractor).createObservable(null);
+    verify(spyInteractor).createObservable(null);
   }
 
   @Test public void shouldCreateObservableOnNextOnErrorParam() {
-    when(mInteractor.createObservable(PARAM)).thenReturn(just(RESULT));
-    mInteractor.execute(new Action1<String>() {
+    spyInteractor.execute(new Action1<String>() {
       @Override public void call(final String s) {
       }
     }, new Action1<Throwable>() {
       @Override public void call(final Throwable t) {
       }
     }, PARAM);
-    verify(mInteractor).createObservable(PARAM);
+    verify(spyInteractor).createObservable(PARAM);
   }
 
   @Test public void shouldCreateObservableOnNextOnErrorOnCompleteParam() {
-    when(mInteractor.createObservable(PARAM)).thenReturn(just(RESULT));
-    mInteractor.execute(new Action1<String>() {
+    spyInteractor.execute(new Action1<String>() {
       @Override public void call(final String s) {
       }
     }, new Action1<Throwable>() {
@@ -145,48 +138,48 @@ public class InteractorTest {
       @Override public void call() {
       }
     }, PARAM);
-    verify(mInteractor).createObservable(PARAM);
+    verify(spyInteractor).createObservable(PARAM);
   }
 
   @Test public void shouldBeUnSubscribedOnStart() {
-    assertThat(mInteractor.isUnsubscribed()).isTrue();
+    assertThat(spyInteractor.isUnsubscribed()).isTrue();
   }
 
   @Test public void shouldUnsubscribe() {
-    mInteractor.unsubscribe();
-    assertThat(mInteractor.isUnsubscribed()).isTrue();
-    mInteractor.unsubscribe();
-    assertThat(mInteractor.isUnsubscribed()).isTrue();
+    spyInteractor.unsubscribe();
+    assertThat(spyInteractor.isUnsubscribed()).isTrue();
+    spyInteractor.unsubscribe();
+    assertThat(spyInteractor.isUnsubscribed()).isTrue();
   }
 
   @Test(expected = IllegalArgumentException.class) //
   public void subscriberShouldNotBeNull() {
     //noinspection unchecked
-    mInteractor.execute((Subscriber) null);
+    spyInteractor.execute((Subscriber) null);
   }
 
   @Test(expected = IllegalArgumentException.class) //
   public void subscriberParamShouldNotBeNull() {
     //noinspection unchecked
-    mInteractor.execute((Subscriber) null, PARAM);
+    spyInteractor.execute((Subscriber) null, PARAM);
   }
 
   @Test(expected = IllegalArgumentException.class) //
   public void onNextShouldNotBeNull() {
     //noinspection unchecked
-    mInteractor.execute((Action1) null);
+    spyInteractor.execute((Action1) null);
   }
 
   @Test(expected = IllegalArgumentException.class) //
   public void onNextParamShouldNotBeNull() {
     //noinspection unchecked
-    mInteractor.execute((Action1) null, PARAM);
+    spyInteractor.execute((Action1) null, PARAM);
   }
 
   @Test(expected = IllegalArgumentException.class) //
   public void onErrorShouldNotBeNull() {
     //noinspection unchecked
-    mInteractor.execute(new Action1<String>() {
+    spyInteractor.execute(new Action1<String>() {
       @Override public void call(final String s) {
       }
     }, (Action1) null);
@@ -194,7 +187,7 @@ public class InteractorTest {
 
   @Test(expected = IllegalArgumentException.class) //
   public void onErrorParamShouldNotBeNull() {
-    mInteractor.execute(new Action1<String>() {
+    spyInteractor.execute(new Action1<String>() {
       @Override public void call(final String s) {
       }
     }, null, PARAM);
@@ -202,7 +195,7 @@ public class InteractorTest {
 
   @Test(expected = IllegalArgumentException.class) //
   public void onCompleteShouldNotBeNull() {
-    mInteractor.execute(new Action1<String>() {
+    spyInteractor.execute(new Action1<String>() {
       @Override public void call(final String s) {
       }
     }, new Action1<Throwable>() {
@@ -213,7 +206,7 @@ public class InteractorTest {
 
   @Test(expected = IllegalArgumentException.class) //
   public void onCompleteParamShouldNotBeNull() {
-    mInteractor.execute(new Action1<String>() {
+    spyInteractor.execute(new Action1<String>() {
       @Override public void call(final String s) {
       }
     }, new Action1<Throwable>() {

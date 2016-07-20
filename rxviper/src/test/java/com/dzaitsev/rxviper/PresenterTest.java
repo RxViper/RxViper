@@ -20,11 +20,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -36,89 +36,89 @@ import static org.mockito.Mockito.verify;
  * @since 2016-May-13, 12:31
  */
 public class PresenterTest {
-  @Mock ViewCallbacks            mView;
-  @Spy  Presenter<ViewCallbacks> mPresenter;
+  @Mock ViewCallbacks            dummyView;
+  @Spy  Presenter<ViewCallbacks> spyPresenter;
 
   @Before public void setUp() {
     MockitoAnnotations.initMocks(this);
   }
 
   @Test public void shouldNotHaveView() {
-    assertThat(mPresenter.getView()).isNull();
-    assertThat(mPresenter.hasView()).isFalse();
+    assertThat(spyPresenter.getView()).isNull();
+    assertThat(spyPresenter.hasView()).isFalse();
   }
 
   @Test public void shouldTakeView() {
-    mPresenter.takeView(mView);
-    assertThat(mPresenter.getView()).isEqualTo(mView);
-    assertThat(mPresenter.hasView()).isTrue();
+    spyPresenter.takeView(dummyView);
+    assertThat(spyPresenter.getView()).isEqualTo(dummyView);
+    assertThat(spyPresenter.hasView()).isTrue();
   }
 
   @Test public void shouldDropView() {
-    mPresenter.takeView(mView);
+    spyPresenter.takeView(dummyView);
 
-    mPresenter.dropView(mView);
-    assertThat(mPresenter.getView()).isNull();
-    assertThat(mPresenter.hasView()).isFalse();
+    spyPresenter.dropView(dummyView);
+    assertThat(spyPresenter.getView()).isNull();
+    assertThat(spyPresenter.hasView()).isFalse();
   }
 
   @Test public void shouldCallOnTakeView() {
-    mPresenter.takeView(mView);
-    verify(mPresenter).onTakeView(mView);
+    spyPresenter.takeView(dummyView);
+    verify(spyPresenter).onTakeView(dummyView);
   }
 
   @Test public void shouldCallOnTakeViewOncePerView() {
-    mPresenter.takeView(mView);
-    mPresenter.takeView(mView);
-    verify(mPresenter).onTakeView(mView);
+    spyPresenter.takeView(dummyView);
+    spyPresenter.takeView(dummyView);
+    verify(spyPresenter).onTakeView(dummyView);
   }
 
   @Test public void shouldNotCallOnDropIfViewIsNotAttached() {
-    mPresenter.dropView(mView);
-    verify(mPresenter, never()).onDropView(mView);
+    spyPresenter.dropView(dummyView);
+    verify(spyPresenter, never()).onDropView(dummyView);
   }
 
   @Test public void shouldIgnoreOnDropIfViewIsNotTheSame() {
-    mPresenter.takeView(mView);
+    spyPresenter.takeView(dummyView);
 
     final ViewCallbacks anotherView = mock(ViewCallbacks.class);
-    mPresenter.dropView(anotherView);
-    verify(mPresenter, never()).onDropView(mView);
+    spyPresenter.dropView(anotherView);
+    verify(spyPresenter, never()).onDropView(dummyView);
   }
 
   @Test public void shouldDropPreviousViewWhenNewViewIsTaken() {
-    mPresenter.takeView(mView);
+    spyPresenter.takeView(dummyView);
 
     final ViewCallbacks newView = mock(ViewCallbacks.class);
-    mPresenter.takeView(newView);
-    verify(mPresenter).onDropView(mView);
+    spyPresenter.takeView(newView);
+    verify(spyPresenter).onDropView(dummyView);
   }
 
   @Test public void shouldCallOnTakeViewAfterViewIsTaken() {
-    mPresenter.takeView(mView);
-    mPresenter.dropView(mView);
+    spyPresenter.takeView(dummyView);
+    spyPresenter.dropView(dummyView);
 
-    final InOrder inOrder = Mockito.inOrder(mPresenter);
-    (inOrder.verify(mPresenter)).assignView(mView);
-    (inOrder.verify(mPresenter)).onTakeView(mView);
+    final InOrder inOrder = inOrder(spyPresenter);
+    (inOrder.verify(spyPresenter)).assignView(dummyView);
+    (inOrder.verify(spyPresenter)).onTakeView(dummyView);
   }
 
   @Test public void shouldCallOnDropViewBeforeViewIsDropped() {
-    mPresenter.takeView(mView);
-    mPresenter.dropView(mView);
+    spyPresenter.takeView(dummyView);
+    spyPresenter.dropView(dummyView);
 
-    final InOrder inOrder = Mockito.inOrder(mPresenter);
-    (inOrder.verify(mPresenter)).onDropView(mView);
-    (inOrder.verify(mPresenter)).releaseView();
+    final InOrder inOrder = inOrder(spyPresenter);
+    (inOrder.verify(spyPresenter)).onDropView(dummyView);
+    (inOrder.verify(spyPresenter)).releaseView();
   }
 
   @Test(expected = IllegalArgumentException.class) //
   public void takenViewShouldNotBeNull() {
-    mPresenter.takeView(null);
+    spyPresenter.takeView(null);
   }
 
   @Test(expected = IllegalArgumentException.class) //
   public void droppedViewShouldNotBeNull() {
-    mPresenter.dropView(null);
+    spyPresenter.dropView(null);
   }
 }

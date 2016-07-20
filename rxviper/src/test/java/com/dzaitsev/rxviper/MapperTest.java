@@ -31,10 +31,10 @@ import static org.mockito.Mockito.verify;
  */
 public class MapperTest {
 
-  private Mapper<Integer, String> mMapper;
+  private Mapper<Integer, String> spyMapper;
 
   @Before public void setUp() {
-    mMapper = spy(new Mapper<Integer, String>() {
+    spyMapper = spy(new Mapper<Integer, String>() {
       @Override public String map(final Integer entity) {
         return String.valueOf(entity);
       }
@@ -42,16 +42,16 @@ public class MapperTest {
   }
 
   @Test public void shouldCallOverloadedMethod() {
-    mMapper.map(asList(1, 2, 3));
+    spyMapper.map(asList(1, 2, 3));
 
-    verify(mMapper).map(1);
-    verify(mMapper).map(2);
-    verify(mMapper).map(3);
+    verify(spyMapper).map(1);
+    verify(spyMapper).map(2);
+    verify(spyMapper).map(3);
   }
 
   @Test public void shouldCallMap() {
-    mMapper.call(42);
+    spyMapper.call(42);
 
-    verify(mMapper).map(42);
+    verify(spyMapper).map(42);
   }
 }

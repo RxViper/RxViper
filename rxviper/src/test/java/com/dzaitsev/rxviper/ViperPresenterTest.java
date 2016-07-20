@@ -20,11 +20,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -36,89 +36,89 @@ import static org.mockito.Mockito.verify;
  * @since 2016-Jun-30, 11:01
  */
 public class ViperPresenterTest {
-  @Mock Router                                mRouter;
-  @Spy  ViperPresenter<ViewCallbacks, Router> mPresenter;
+  @Mock Router                                dummyRouter;
+  @Spy  ViperPresenter<ViewCallbacks, Router> spyViperPresenter;
 
   @Before public void setUp() {
     MockitoAnnotations.initMocks(this);
   }
 
   @Test public void shouldNotHaveRouter() {
-    assertThat(mPresenter.getRouter()).isNull();
-    assertThat(mPresenter.hasRouter()).isFalse();
+    assertThat(spyViperPresenter.getRouter()).isNull();
+    assertThat(spyViperPresenter.hasRouter()).isFalse();
   }
 
   @Test public void shouldTakeRouter() {
-    mPresenter.takeRouter(mRouter);
-    assertThat(mPresenter.getRouter()).isEqualTo(mRouter);
-    assertThat(mPresenter.hasRouter()).isTrue();
+    spyViperPresenter.takeRouter(dummyRouter);
+    assertThat(spyViperPresenter.getRouter()).isEqualTo(dummyRouter);
+    assertThat(spyViperPresenter.hasRouter()).isTrue();
   }
 
   @Test public void shouldDropRouter() {
-    mPresenter.takeRouter(mRouter);
+    spyViperPresenter.takeRouter(dummyRouter);
 
-    mPresenter.dropRouter(mRouter);
-    assertThat(mPresenter.getRouter()).isNull();
-    assertThat(mPresenter.hasRouter()).isFalse();
+    spyViperPresenter.dropRouter(dummyRouter);
+    assertThat(spyViperPresenter.getRouter()).isNull();
+    assertThat(spyViperPresenter.hasRouter()).isFalse();
   }
 
   @Test public void shouldCallOnTakeRouter() {
-    mPresenter.takeRouter(mRouter);
-    verify(mPresenter).onTakeRouter(mRouter);
+    spyViperPresenter.takeRouter(dummyRouter);
+    verify(spyViperPresenter).onTakeRouter(dummyRouter);
   }
 
   @Test public void shouldCallOnTakeRouterOncePerView() {
-    mPresenter.takeRouter(mRouter);
-    mPresenter.takeRouter(mRouter);
-    verify(mPresenter).onTakeRouter(mRouter);
+    spyViperPresenter.takeRouter(dummyRouter);
+    spyViperPresenter.takeRouter(dummyRouter);
+    verify(spyViperPresenter).onTakeRouter(dummyRouter);
   }
 
   @Test public void shouldNotCallOnDropIfRouterIsNotAttached() {
-    mPresenter.dropRouter(mRouter);
-    verify(mPresenter, never()).onDropRouter(mRouter);
+    spyViperPresenter.dropRouter(dummyRouter);
+    verify(spyViperPresenter, never()).onDropRouter(dummyRouter);
   }
 
   @Test public void shouldIgnoreOnDropIfRouterIsNotTheSame() {
-    mPresenter.takeRouter(mRouter);
+    spyViperPresenter.takeRouter(dummyRouter);
 
     final Router anotherRouter = mock(Router.class);
-    mPresenter.dropRouter(anotherRouter);
-    verify(mPresenter, never()).onDropRouter(mRouter);
+    spyViperPresenter.dropRouter(anotherRouter);
+    verify(spyViperPresenter, never()).onDropRouter(dummyRouter);
   }
 
   @Test public void shouldDropPreviousRouterWhenNewRouterIsTaken() {
-    mPresenter.takeRouter(mRouter);
+    spyViperPresenter.takeRouter(dummyRouter);
 
     final Router newRouter = mock(Router.class);
-    mPresenter.takeRouter(newRouter);
-    verify(mPresenter).onDropRouter(mRouter);
+    spyViperPresenter.takeRouter(newRouter);
+    verify(spyViperPresenter).onDropRouter(dummyRouter);
   }
 
   @Test public void shouldCallOnTakeRouterAfterRouterIsTaken() {
-    mPresenter.takeRouter(mRouter);
-    mPresenter.dropRouter(mRouter);
+    spyViperPresenter.takeRouter(dummyRouter);
+    spyViperPresenter.dropRouter(dummyRouter);
 
-    final InOrder inOrder = Mockito.inOrder(mPresenter);
-    (inOrder.verify(mPresenter)).assignRouter(mRouter);
-    (inOrder.verify(mPresenter)).onTakeRouter(mRouter);
+    final InOrder inOrder = inOrder(spyViperPresenter);
+    (inOrder.verify(spyViperPresenter)).assignRouter(dummyRouter);
+    (inOrder.verify(spyViperPresenter)).onTakeRouter(dummyRouter);
   }
 
   @Test public void shouldCallOnDropRouterBeforeRouterIsDropped() {
-    mPresenter.takeRouter(mRouter);
-    mPresenter.dropRouter(mRouter);
+    spyViperPresenter.takeRouter(dummyRouter);
+    spyViperPresenter.dropRouter(dummyRouter);
 
-    final InOrder inOrder = Mockito.inOrder(mPresenter);
-    (inOrder.verify(mPresenter)).onDropRouter(mRouter);
-    (inOrder.verify(mPresenter)).releaseRouter();
+    final InOrder inOrder = inOrder(spyViperPresenter);
+    (inOrder.verify(spyViperPresenter)).onDropRouter(dummyRouter);
+    (inOrder.verify(spyViperPresenter)).releaseRouter();
   }
 
   @Test(expected = IllegalArgumentException.class) //
   public void takenRouterShouldNotBeNull() {
-    mPresenter.takeRouter(null);
+    spyViperPresenter.takeRouter(null);
   }
 
   @Test(expected = IllegalArgumentException.class) //
   public void droppedRouterShouldNotBeNull() {
-    mPresenter.dropRouter(null);
+    spyViperPresenter.dropRouter(null);
   }
 }
