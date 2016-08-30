@@ -25,23 +25,23 @@ ext {
 
   versions = [
       // Gradle Plugins
-      androidPlugin    : '2.2.0-alpha5',
-      bintrayPlugin    : '1.7',
-      mavenPlugin      : '1.3',
+      androidPlugin    : '2.2.0-beta3',
+      bintrayPlugin    : '1.7.1',
+      mavenPlugin      : '1.4.1',
       licensePlugin    : '0.12.1',
       retrolambdaPlugin: '3.3.0-beta4',
       aptPlugin        : '1.8',
       // Java libraries
       guava            : '19.0',
-      rxJava           : '1.1.6',
-      dagger           : '2.5',
+      rxJava           : '1.1.9',
+      dagger           : '2.6.1',
       junit            : '4.12',
-      mockito          : '2.0.76-beta',
+      mockito          : '2.0.111-beta',
       truth            : '0.28',
       // Android libraries
       rxAndroid        : '1.2.1',
-      support          : '24.0.0',
-      constraintLayout : '1.0.0-alpha4',
+      support          : '24.2.0',
+      constraintLayout : '1.0.0-alpha7',
   ]
 
   gradlePlugins = [
