@@ -16,7 +16,7 @@
 
 package com.dzaitsev.rxviper.sample.presentation;
 
-import com.dzaitsev.rxviper.ViewCallbacks;
+import com.dzaitsev.viper.ViewCallbacks;
 import java.util.Collection;
 
 /**

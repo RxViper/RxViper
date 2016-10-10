@@ -16,7 +16,7 @@
 
 package com.dzaitsev.rxviper.sample.presentation;
 
-import com.dzaitsev.rxviper.ViperPresenter;
+import com.dzaitsev.viper.ViperPresenter;
 import com.dzaitsev.rxviper.sample.domain.GetCheesesInteractor;
 import java.util.Collection;
 import javax.inject.Inject;

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include ':viper'
-include ':viper-rx'
-include ':sample'
+
+package com.dzaitsev.viper;
+
+/**
+ * Displays what it is told to by the {@link Presenter} and relays user input back to the Presenter
+ *
+ * @author Dmytro Zaitsev
+ * @since 0.3.0
+ */
+public interface ViewCallbacks {
+}

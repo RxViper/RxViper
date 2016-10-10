@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include ':viper'
-include ':viper-rx'
-include ':sample'
+
+package com.dzaitsev.viper;
+
+/**
+ * ~ ~ ~ ~ Description ~ ~ ~ ~
+ *
+ * @author Dmytro Zaitsev
+ * @since 2016-May-14, 15:26
+ */
+final class Preconditions {
+  static <T> void requireNotNull(T arg) {
+    if (arg == null) {
+      throw new IllegalArgumentException("Argument cannot be null!");
+    }
+  }
+}

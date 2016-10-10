@@ -16,7 +16,7 @@
 
 package com.dzaitsev.rxviper.sample.presentation;
 
-import com.dzaitsev.rxviper.Router;
+import com.dzaitsev.viper.Router;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~

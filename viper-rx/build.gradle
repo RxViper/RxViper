@@ -13,39 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.android.library'
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
   buildToolsVersion androidConfig.buildToolsVersion
+  packageBuildConfig false
+  enforceUniquePackageName false
 
   defaultConfig {
-    applicationId "com.dzaitsev.rxviper.sample"
     minSdkVersion androidConfig.minSdkVersion
     targetSdkVersion androidConfig.targetSdkVersion
-    versionCode androidConfig.versionCode
-    versionName androidConfig.versionName
-  }
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
-  dataBinding {
-    enabled true
   }
 }
 
+apply from: '../gradle/bintray.gradle'
+apply from: '../gradle/maven.gradle'
+
 dependencies {
-  apt libraries.daggerCompiler
   compile fileTree(dir: 'libs', include: ['*.jar'])
-  compile project(':viper-rx')
-  compile libraries.rxAndroid
-  compile libraries.dagger
-  compile libraries.appCompat
-  compile libraries.design
-  compile libraries.cardView
-  compile libraries.constraintLayout
+  compile project(':viper')
+  compile libraries.rxJava
   testCompile libraries.junit
+  testCompile libraries.mockito
+  testCompile libraries.truth
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include ':viper'
-include ':viper-rx'
-include ':sample'
+apply plugin: 'com.android.library'
+
+android {
+  compileSdkVersion androidConfig.compileSdkVersion
+  buildToolsVersion androidConfig.buildToolsVersion
+  packageBuildConfig false
+
+  defaultConfig {
+    minSdkVersion androidConfig.minSdkVersion
+    targetSdkVersion androidConfig.targetSdkVersion
+  }
+}
+
+apply from: '../gradle/bintray.gradle'
+apply from: '../gradle/maven.gradle'
+
+dependencies {
+  testCompile libraries.junit
+  testCompile libraries.mockito
+  testCompile libraries.truth
+}

@@ -16,11 +16,11 @@
 
 package com.dzaitsev.rxviper.sample.domain;
 
-import com.dzaitsev.rxviper.Interactor;
 import com.dzaitsev.rxviper.sample.dagger.Job;
 import com.dzaitsev.rxviper.sample.dagger.Main;
 import com.dzaitsev.rxviper.sample.data.CheeseStorage;
 import com.dzaitsev.rxviper.sample.presentation.CheeseViewModel;
+import com.dzaitsev.viper.RxInteractor;
 import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -34,7 +34,7 @@ import rx.Scheduler;
  * @since 2016-Jun-07, 10:32
  */
 @Singleton
-public class GetCheesesInteractor extends Interactor<Integer, Collection<CheeseViewModel>> {
+public class GetCheesesInteractor extends RxInteractor<Integer, Collection<CheeseViewModel>> {
   private final CheeseStorage mStorage;
   private final CheeseMapper  mMapper;
 
@@ -48,5 +48,9 @@ public class GetCheesesInteractor extends Interactor<Integer, Collection<CheeseV
   @Override protected Observable<Collection<CheeseViewModel>> createObservable(Integer amount) {
     return mStorage.getCheeses(amount)
         .map(mMapper::map);
+  }
+
+  @Override protected Collection<CheeseViewModel> getData(Integer integer) {
+    return null;
   }
 }

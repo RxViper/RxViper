@@ -16,7 +16,7 @@
 
 package com.dzaitsev.rxviper.sample.domain;
 
-import com.dzaitsev.rxviper.Mapper;
+import com.dzaitsev.viper.Mapper;
 import com.dzaitsev.rxviper.sample.data.Cheese;
 import com.dzaitsev.rxviper.sample.presentation.CheeseViewModel;
 import javax.inject.Inject;
