@@ -36,7 +36,7 @@ ext {
       rxJava           : '1.1.9',
       dagger           : '2.6.1',
       junit            : '4.12',
-      mockito          : '2.0.111-beta',
+      mockito          : '2.2.0',
       truth            : '0.28',
       // Android libraries
       rxAndroid        : '1.2.1',

@@ -126,12 +126,12 @@ public abstract class Presenter<V extends ViewCallbacks> {
   }
 
   /** @since 0.7.0 */
-  void assignView(V view) {
+  final void assignView(V view) {
     mViewRef = new WeakReference<>(view);
   }
 
   /** @since 0.7.0 */
-  void releaseView() {
+  final void releaseView() {
     if (mViewRef != null) {
       mViewRef.clear();
       mViewRef = null;

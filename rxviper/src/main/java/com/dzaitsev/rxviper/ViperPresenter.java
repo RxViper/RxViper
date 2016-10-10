@@ -128,12 +128,12 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
   }
 
   /** @since 0.7.0 */
-  void assignRouter(R router) {
+  final void assignRouter(R router) {
     mRouterRef = new WeakReference<>(router);
   }
 
   /** @since 0.7.0 */
-  void releaseRouter() {
+  final void releaseRouter() {
     if (mRouterRef != null) {
       mRouterRef.clear();
       mRouterRef = null;
