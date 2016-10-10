@@ -67,7 +67,7 @@ public abstract class Mapper<From, To> implements Func1<From, To> {
    *
    * @since 0.1.0
    */
-  public final Collection<To> map(Collection<From> entities) {
+  public Collection<To> map(Collection<From> entities) {
     final Collection<To> result = new ArrayList<>(entities.size());
     //noinspection Convert2streamapi
     for (From from : entities) {
