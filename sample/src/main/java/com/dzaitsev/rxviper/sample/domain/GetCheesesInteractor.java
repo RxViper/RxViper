@@ -46,7 +46,7 @@ public class GetCheesesInteractor extends Interactor<Integer, Collection<CheeseV
   }
 
   @Override protected Observable<Collection<CheeseViewModel>> createObservable(Integer amount) {
-    return mStorage.getCheeses(amount)
+    return mStorage.getCheese(amount)
         .map(mMapper::map);
   }
 }

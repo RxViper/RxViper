@@ -16,6 +16,7 @@
 
 package com.dzaitsev.rxviper.sample.data;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -144,14 +145,14 @@ public class CheeseStorage {
       "Zanetti Grana Padano", "Zanetti Parmigiano Reggiano"
   };
 
-  private static List<Cheese> CHEESE = from(CHEESE_NAMES).zipWith(from(range(0, CHEESE_NAMES.length - 1).toList()
+  private static final List<Cheese> CHEESE = from(CHEESE_NAMES).zipWith(from(range(0, CHEESE_NAMES.length - 1).toList()
       .toBlocking()
       .first()), (Func2<String, Integer, Cheese>) Cheese::new)
       .toList()
       .toBlocking()
       .first();
 
-  private final Random mRandom = new Random(nanoTime());
+  private final SecureRandom mRandom = new SecureRandom();
 
   @Inject CheeseStorage() {
   }
@@ -165,13 +166,15 @@ public class CheeseStorage {
   /**
    * Emulates long operation
    */
-  public Observable<List<Cheese>> getCheeses(int amount) {
+  public Observable<List<Cheese>> getCheese(int amount) {
     final Observable<Long> timer = timer(mRandom.nextInt(2) + 1, SECONDS);
+    final Observable<List<Cheese>> result;
     if (amount < 0) {
-      return timer.concatWith(error(new RuntimeException("Amount cannot be less than zero. Given amount = " + amount)))
+      result = timer.concatWith(error(new RuntimeException("Amount cannot be less than zero. Given amount = " + amount)))
           .map(seconds -> null);
     } else {
-      return just(randomSublist(amount, mRandom)).zipWith(timer, (cheeses, seconds) -> cheeses);
+      result = just(randomSublist(amount, mRandom)).zipWith(timer, (cheeses, seconds) -> cheeses);
     }
+    return result;
   }
 }

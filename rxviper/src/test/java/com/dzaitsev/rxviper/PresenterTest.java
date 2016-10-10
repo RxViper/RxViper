@@ -16,12 +16,13 @@
 
 package com.dzaitsev.rxviper;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.inOrder;
@@ -39,46 +40,85 @@ public class PresenterTest {
   @Mock ViewCallbacks            dummyView;
   @Spy  Presenter<ViewCallbacks> spyPresenter;
 
-  @Before public void setUp() {
+  @BeforeMethod public final void setUp() {
+    System.out.println("PresenterTest.setUp");
     MockitoAnnotations.initMocks(this);
   }
 
-  @Test public void shouldNotHaveView() {
+  @AfterMethod public final void tearDown() {
+    System.out.println("PresenterTest.tearDown");
+    dummyView = null;
+    spyPresenter = null;
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class, dependsOnMethods = "shouldNotHaveView") //
+  public final void takenViewShouldNotBeNull() {
+    System.out.println("PresenterTest.takenViewShouldNotBeNull");
+    spyPresenter.takeView(null);
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class) //
+  public final void droppedViewShouldNotBeNull() {
+    System.out.println("PresenterTest.droppedViewShouldNotBeNull");
+    spyPresenter.dropView(null);
+  }
+
+  @Test public final void shouldNotHaveView() {
+    System.out.println("PresenterTest.shouldNotHaveView");
     assertThat(spyPresenter.getView()).isNull();
     assertThat(spyPresenter.hasView()).isFalse();
   }
 
-  @Test public void shouldTakeView() {
+  @Test(dependsOnMethods = { "shouldNotHaveView", "takenViewShouldNotBeNull" }) //
+  public final void shouldTakeView() {
+    System.out.println("PresenterTest.shouldTakeView");
     spyPresenter.takeView(dummyView);
     assertThat(spyPresenter.getView()).isEqualTo(dummyView);
     assertThat(spyPresenter.hasView()).isTrue();
   }
 
-  @Test public void shouldDropView() {
+  @Test(dependsOnMethods = { "shouldTakeView", "droppedViewShouldNotBeNull" }) //
+  public final void shouldDropView() {
+    System.out.println("PresenterTest.shouldDropView");
     spyPresenter.takeView(dummyView);
-
     spyPresenter.dropView(dummyView);
     assertThat(spyPresenter.getView()).isNull();
     assertThat(spyPresenter.hasView()).isFalse();
   }
 
-  @Test public void shouldCallOnTakeView() {
+  @Test(dependsOnMethods = "shouldTakeView") //
+  public final void shouldCallOnTakeView() {
+    System.out.println("PresenterTest.shouldCallOnTakeView");
     spyPresenter.takeView(dummyView);
     verify(spyPresenter).onTakeView(dummyView);
   }
 
-  @Test public void shouldCallOnTakeViewOncePerView() {
+  @Test(dependsOnMethods = { "shouldTakeView", "shouldDropView" }) //
+  public final void shouldCallOnDropView() {
+    System.out.println("PresenterTest.shouldCallOnDropView");
+    spyPresenter.takeView(dummyView);
+    spyPresenter.dropView(dummyView);
+    verify(spyPresenter).onDropView(dummyView);
+  }
+
+  @Test(dependsOnMethods = "shouldTakeView") //
+  public final void shouldCallOnTakeViewOncePerView() {
+    System.out.println("PresenterTest.shouldCallOnTakeViewOncePerView");
     spyPresenter.takeView(dummyView);
     spyPresenter.takeView(dummyView);
     verify(spyPresenter).onTakeView(dummyView);
   }
 
-  @Test public void shouldNotCallOnDropIfViewIsNotAttached() {
+  @Test(dependsOnMethods = "shouldDropView") //
+  public final void shouldNotCallOnDropIfViewIsNotAttached() {
+    System.out.println("PresenterTest.shouldNotCallOnDropIfViewIsNotAttached");
     spyPresenter.dropView(dummyView);
     verify(spyPresenter, never()).onDropView(dummyView);
   }
 
-  @Test public void shouldIgnoreOnDropIfViewIsNotTheSame() {
+  @Test(dependsOnMethods = { "shouldTakeView", "shouldDropView" }) //
+  public final void shouldIgnoreOnDropIfViewIsNotTheSame() {
+    System.out.println("PresenterTest.shouldIgnoreOnDropIfViewIsNotTheSame");
     spyPresenter.takeView(dummyView);
 
     final ViewCallbacks anotherView = mock(ViewCallbacks.class);
@@ -86,7 +126,9 @@ public class PresenterTest {
     verify(spyPresenter, never()).onDropView(dummyView);
   }
 
-  @Test public void shouldDropPreviousViewWhenNewViewIsTaken() {
+  @Test(dependsOnMethods = "shouldTakeView") //
+  public final void shouldDropPreviousViewWhenNewViewIsTaken() {
+    System.out.println("PresenterTest.shouldDropPreviousViewWhenNewViewIsTaken");
     spyPresenter.takeView(dummyView);
 
     final ViewCallbacks newView = mock(ViewCallbacks.class);
@@ -94,7 +136,9 @@ public class PresenterTest {
     verify(spyPresenter).onDropView(dummyView);
   }
 
-  @Test public void shouldCallOnTakeViewAfterViewIsTaken() {
+  @Test(dependsOnMethods = { "shouldCallOnTakeView", "shouldDropView" }) //
+  public final void shouldCallOnTakeViewAfterViewIsTaken() {
+    System.out.println("PresenterTest.shouldCallOnTakeViewAfterViewIsTaken");
     spyPresenter.takeView(dummyView);
     spyPresenter.dropView(dummyView);
 
@@ -103,22 +147,14 @@ public class PresenterTest {
     (inOrder.verify(spyPresenter)).onTakeView(dummyView);
   }
 
-  @Test public void shouldCallOnDropViewBeforeViewIsDropped() {
+  @Test(dependsOnMethods = { "shouldTakeView", "shouldDropView" }) //
+  public final void shouldCallOnDropViewBeforeViewIsDropped() {
+    System.out.println("PresenterTest.shouldCallOnDropViewBeforeViewIsDropped");
     spyPresenter.takeView(dummyView);
     spyPresenter.dropView(dummyView);
 
     final InOrder inOrder = inOrder(spyPresenter);
     (inOrder.verify(spyPresenter)).onDropView(dummyView);
     (inOrder.verify(spyPresenter)).releaseView();
-  }
-
-  @Test(expected = IllegalArgumentException.class) //
-  public void takenViewShouldNotBeNull() {
-    spyPresenter.takeView(null);
-  }
-
-  @Test(expected = IllegalArgumentException.class) //
-  public void droppedViewShouldNotBeNull() {
-    spyPresenter.dropView(null);
   }
 }

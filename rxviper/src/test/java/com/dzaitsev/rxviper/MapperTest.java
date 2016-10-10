@@ -16,8 +16,8 @@
 
 package com.dzaitsev.rxviper;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.spy;
@@ -30,10 +30,9 @@ import static org.mockito.Mockito.verify;
  * @since 2016-May-14, 13:32
  */
 public class MapperTest {
-
   private Mapper<Integer, String> spyMapper;
 
-  @Before public void setUp() {
+  @BeforeClass public final void setUp() {
     spyMapper = spy(new Mapper<Integer, String>() {
       @Override public String map(final Integer entity) {
         return String.valueOf(entity);
@@ -41,7 +40,7 @@ public class MapperTest {
     });
   }
 
-  @Test public void shouldCallOverloadedMethod() {
+  @Test public final void shouldCallOverloadedMethod() {
     spyMapper.map(asList(1, 2, 3));
 
     verify(spyMapper).map(1);
@@ -49,7 +48,7 @@ public class MapperTest {
     verify(spyMapper).map(3);
   }
 
-  @Test public void shouldCallMap() {
+  @Test public final void shouldCallMap() {
     spyMapper.call(42);
 
     verify(spyMapper).map(42);

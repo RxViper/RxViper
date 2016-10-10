@@ -48,5 +48,5 @@ dependencies {
   compile libraries.design
   compile libraries.cardView
   compile libraries.constraintLayout
-  testCompile libraries.junit
+  testCompile libraries.testNg
 }
