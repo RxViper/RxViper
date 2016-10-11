@@ -18,13 +18,11 @@ package com.dzaitsev.rxviper;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -35,26 +33,30 @@ import static org.mockito.Mockito.verify;
  * @author Dmytro Zaitsev
  * @since 2016-May-13, 12:31
  */
-public class PresenterTest {
+public final class PresenterTest {
   @Mock ViewCallbacks            dummyView;
   @Spy  Presenter<ViewCallbacks> spyPresenter;
 
-  @Before public void setUp() {
+  @Before
+  public void setUp() {
     MockitoAnnotations.initMocks(this);
   }
 
-  @Test public void shouldNotHaveView() {
+  @Test
+  public void shouldNotHaveView() {
     assertThat(spyPresenter.getView()).isNull();
     assertThat(spyPresenter.hasView()).isFalse();
   }
 
-  @Test public void shouldTakeView() {
+  @Test
+  public void shouldTakeView() {
     spyPresenter.takeView(dummyView);
     assertThat(spyPresenter.getView()).isEqualTo(dummyView);
     assertThat(spyPresenter.hasView()).isTrue();
   }
 
-  @Test public void shouldDropView() {
+  @Test
+  public void shouldDropView() {
     spyPresenter.takeView(dummyView);
 
     spyPresenter.dropView(dummyView);
@@ -62,23 +64,27 @@ public class PresenterTest {
     assertThat(spyPresenter.hasView()).isFalse();
   }
 
-  @Test public void shouldCallOnTakeView() {
+  @Test
+  public void shouldCallOnTakeView() {
     spyPresenter.takeView(dummyView);
     verify(spyPresenter).onTakeView(dummyView);
   }
 
-  @Test public void shouldCallOnTakeViewOncePerView() {
+  @Test
+  public void shouldCallOnTakeViewOncePerView() {
     spyPresenter.takeView(dummyView);
     spyPresenter.takeView(dummyView);
     verify(spyPresenter).onTakeView(dummyView);
   }
 
-  @Test public void shouldNotCallOnDropIfViewIsNotAttached() {
+  @Test
+  public void shouldNotCallOnDropIfViewIsNotAttached() {
     spyPresenter.dropView(dummyView);
     verify(spyPresenter, never()).onDropView(dummyView);
   }
 
-  @Test public void shouldIgnoreOnDropIfViewIsNotTheSame() {
+  @Test
+  public void shouldIgnoreOnDropIfViewIsNotTheSame() {
     spyPresenter.takeView(dummyView);
 
     final ViewCallbacks anotherView = mock(ViewCallbacks.class);
@@ -86,7 +92,8 @@ public class PresenterTest {
     verify(spyPresenter, never()).onDropView(dummyView);
   }
 
-  @Test public void shouldDropPreviousViewWhenNewViewIsTaken() {
+  @Test
+  public void shouldDropPreviousViewWhenNewViewIsTaken() {
     spyPresenter.takeView(dummyView);
 
     final ViewCallbacks newView = mock(ViewCallbacks.class);
@@ -94,22 +101,17 @@ public class PresenterTest {
     verify(spyPresenter).onDropView(dummyView);
   }
 
-  @Test public void shouldCallOnTakeViewAfterViewIsTaken() {
+  @Test
+  public void shouldCallOnTakeViewAfterViewIsTaken() {
+    spyPresenter = new TestPresenter();
     spyPresenter.takeView(dummyView);
-    spyPresenter.dropView(dummyView);
-
-    final InOrder inOrder = inOrder(spyPresenter);
-    (inOrder.verify(spyPresenter)).assignView(dummyView);
-    (inOrder.verify(spyPresenter)).onTakeView(dummyView);
   }
 
-  @Test public void shouldCallOnDropViewBeforeViewIsDropped() {
+  @Test
+  public void shouldCallOnDropViewBeforeViewIsDropped() {
+    spyPresenter = new TestPresenter();
     spyPresenter.takeView(dummyView);
     spyPresenter.dropView(dummyView);
-
-    final InOrder inOrder = inOrder(spyPresenter);
-    (inOrder.verify(spyPresenter)).onDropView(dummyView);
-    (inOrder.verify(spyPresenter)).releaseView();
   }
 
   @Test(expected = IllegalArgumentException.class) //
@@ -120,5 +122,22 @@ public class PresenterTest {
   @Test(expected = IllegalArgumentException.class) //
   public void droppedViewShouldNotBeNull() {
     spyPresenter.dropView(null);
+  }
+
+  private static class TestPresenter extends Presenter<ViewCallbacks> {
+    @Override
+    protected void onDropView(ViewCallbacks view) {
+      assertThatViewIsSet();
+    }
+
+    @Override
+    protected void onTakeView(ViewCallbacks view) {
+      assertThatViewIsSet();
+    }
+
+    private void assertThatViewIsSet() {
+      assertThat(hasView()).isTrue();
+      assertThat(getView()).isNotNull();
+    }
   }
 }

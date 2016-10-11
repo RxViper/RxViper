@@ -19,8 +19,8 @@ package com.dzaitsev.rxviper;
 import java.lang.ref.WeakReference;
 
 /**
- * Contains view logic for preparing content for display (as received from the {@link Interactor}) and for reacting to
- * user inputs (by requesting new data from the Interactor).
+ * Contains view logic for preparing content for display (as received from the {@link Interactor}) and for reacting to user inputs (by
+ * requesting new data from the Interactor).
  * <p>
  * Contains additional routing logic for switching screens.
  *
@@ -28,14 +28,13 @@ import java.lang.ref.WeakReference;
  * @since 0.10.0
  */
 public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> extends Presenter<V> {
-  private WeakReference<R> mRouterRef;
+  private WeakReference<R> routerRef;
 
   /**
    * Called to surrender control of taken router.
    * <p>
-   * It is expected that this method will be called with the same argument as {@link #takeRouter}. Mismatched routers
-   * are ignored. This is to provide protection in the not uncommon case that {@code dropRouter} and {@code takeRouter}
-   * are called out of order.
+   * It is expected that this method will be called with the same argument as {@link #takeRouter}. Mismatched routers are ignored. This
+   * is to provide protection in the not uncommon case that {@code dropRouter} and {@code takeRouter} are called out of order.
    * <p>
    * Calls {@link #onDropRouter} before the reference to the router is cleared.
    *
@@ -45,24 +44,24 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.1.0
    */
   public final void dropRouter(R router) {
-    Preconditions.checkNotNull(router, "router");
+    Preconditions.requireNotNull(router);
 
     if (getRouter() == router) {
       onDropRouter(router);
-      releaseRouter();
+      routerRef.clear();
     }
   }
 
   /**
-   * Checks if a router is attached to this presenter. You should always call this method before calling {@link
-   * #getRouter} to get the router instance.
+   * Checks if a router is attached to this presenter. You should always call this method before calling {@link #getRouter} to get the
+   * router instance.
    *
    * @return {@code true} if presenter has attached router
    *
    * @since 0.7.0
    */
   public final boolean hasRouter() {
-    return mRouterRef != null && mRouterRef.get() != null;
+    return routerRef != null && routerRef.get() != null;
   }
 
   /**
@@ -77,30 +76,30 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.1.0
    */
   public final void takeRouter(R router) {
-    Preconditions.checkNotNull(router, "router");
+    Preconditions.requireNotNull(router);
 
     final R currentRouter = getRouter();
     if (currentRouter != router) {
       if (currentRouter != null) {
         dropRouter(currentRouter);
       }
-      assignRouter(router);
+      routerRef = new WeakReference<>(router);
       onTakeRouter(router);
     }
   }
 
   /**
-   * Returns the router managed by this presenter, or {@code null} if {@link #takeRouter} has never been called, or
-   * after {@link #dropRouter}.
+   * Returns the router managed by this presenter, or {@code null} if {@link #takeRouter} has never been called, or after
+   * {@link #dropRouter}.
    * <p>
-   * You should always call {@link #hasRouter} to check if the router is taken to avoid NullPointerExceptions.
+   * You should always call {@link #hasRouter} to check if the router is taken to avoid {@code NullPointerException}s.
    *
    * @return {@code null}, if router is not taken, otherwise the concrete router instance.
    *
    * @since 0.1.0
    */
   protected final R getRouter() {
-    return mRouterRef == null ? null : mRouterRef.get();
+    return routerRef == null ? null : routerRef.get();
   }
 
   /**
@@ -125,18 +124,5 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.6.0
    */
   protected void onTakeRouter(R router) {
-  }
-
-  /** @since 0.7.0 */
-  final void assignRouter(R router) {
-    mRouterRef = new WeakReference<>(router);
-  }
-
-  /** @since 0.7.0 */
-  final void releaseRouter() {
-    if (mRouterRef != null) {
-      mRouterRef.clear();
-      mRouterRef = null;
-    }
   }
 }

@@ -39,33 +39,30 @@ import rx.subscriptions.CompositeSubscription;
  * @since 0.1.0
  */
 public abstract class Interactor<RequestModel, ResponseModel> implements Subscription {
-  private final Scheduler             mSubscribeOn;
-  private final Scheduler             mObserveOn;
-  private final CompositeSubscription mSubscription;
+  private final Scheduler             subscribeScheduler;
+  private final Scheduler             observeScheduler;
+  private final CompositeSubscription subscriptions;
 
   /**
-   * @param subscribeOn
-   *     the Scheduler that modifies source Observable returned from {@link #createObservable} to perform its emissions
-   *     on.
-   * @param observeOn
-   *     the Scheduler that modifies source Observable returned from {@link #createObservable} to notify its Observers
-   *     on.
+   * @param subscribeScheduler
+   *     the Scheduler that modifies source Observable returned from {@link #createObservable} to perform its emissions on.
+   * @param observeScheduler
+   *     the Scheduler that modifies source Observable returned from {@link #createObservable} to notify its Observers on.
    *
-   * @see #createObservable(Object)
    * @since 0.1.0
    */
-  protected Interactor(Scheduler subscribeOn, Scheduler observeOn) {
-    Preconditions.checkNotNull(subscribeOn, "subscribeOn");
-    Preconditions.checkNotNull(observeOn, "observeOn");
+  protected Interactor(Scheduler subscribeScheduler, Scheduler observeScheduler) {
+    Preconditions.requireNotNull(subscribeScheduler);
+    Preconditions.requireNotNull(observeScheduler);
 
-    mSubscribeOn = subscribeOn;
-    mObserveOn = observeOn;
-    mSubscription = new CompositeSubscription();
+    this.subscribeScheduler = subscribeScheduler;
+    this.observeScheduler = observeScheduler;
+    subscriptions = new CompositeSubscription();
   }
 
   /**
-   * Subscribes to an Observable and provides a Subscriber that implements functions to handle the items the Observable
-   * emits and any error or completion notification it issues.
+   * Subscribes to an Observable and provides a Subscriber that implements functions to handle the items the Observable emits and any
+   * error or completion notification it issues.
    *
    * @param subscriber
    *     the Subscriber that will handle emissions and notifications from the Observable
@@ -84,16 +81,16 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @since 0.1.0
    */
   public final void execute(Subscriber<? super ResponseModel> subscriber, RequestModel requestModel) {
-    Preconditions.checkNotNull(subscriber, "subscriber");
+    Preconditions.requireNotNull(subscriber);
 
-    mSubscription.add(createObservable(requestModel).subscribeOn(mSubscribeOn)
-        .observeOn(mObserveOn)
+    subscriptions.add(createObservable(requestModel).subscribeOn(subscribeScheduler)
+        .observeOn(observeScheduler)
         .subscribe(subscriber));
   }
 
   /**
-   * Subscribes to an Observable and provides a Subscriber that implements functions to handle the items the Observable
-   * emits and any error or completion notification it issues.
+   * Subscribes to an Observable and provides a Subscriber that implements functions to handle the items the Observable emits and any
+   * error or completion notification it issues.
    *
    * @param subscriber
    *     the Subscriber that will handle emissions and notifications from the Observable
@@ -138,15 +135,13 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @since 0.4.0
    */
   public final void execute(Action1<? super ResponseModel> onNext, RequestModel requestModel) {
-    Preconditions.checkNotNull(onNext, "onNext");
+    Preconditions.requireNotNull(onNext);
 
-    execute(new ActionSubscriber<>(onNext, InternalObservableUtils.ERROR_NOT_IMPLEMENTED, Actions.empty()),
-        requestModel);
+    execute(new ActionSubscriber<>(onNext, InternalObservableUtils.ERROR_NOT_IMPLEMENTED, Actions.empty()), requestModel);
   }
 
   /**
-   * Subscribes to an Observable and provides callbacks to handle the items it emits and any error notification it
-   * issues.
+   * Subscribes to an Observable and provides callbacks to handle the items it emits and any error notification it issues.
    *
    * @param onNext
    *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
@@ -163,8 +158,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
   }
 
   /**
-   * Subscribes to an Observable and provides callbacks to handle the items it emits and any error notification it
-   * issues.
+   * Subscribes to an Observable and provides callbacks to handle the items it emits and any error notification it issues.
    *
    * @param onNext
    *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
@@ -178,23 +172,20 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @see Observable#subscribe(Action1, Action1)
    * @since 0.4.0
    */
-  public final void execute(Action1<? super ResponseModel> onNext, Action1<Throwable> onError,
-      RequestModel requestModel) {
-    Preconditions.checkNotNull(onNext, "onNext");
-    Preconditions.checkNotNull(onError, "onError");
+  public final void execute(Action1<? super ResponseModel> onNext, Action1<Throwable> onError, RequestModel requestModel) {
+    Preconditions.requireNotNull(onNext);
+    Preconditions.requireNotNull(onError);
 
     execute(new ActionSubscriber<>(onNext, onError, Actions.empty()), requestModel);
   }
 
   /**
-   * Subscribes to an Observable and provides callbacks to handle the items it emits and any error or completion
-   * notification it issues.
+   * Subscribes to an Observable and provides callbacks to handle the items it emits and any error or completion notification it issues.
    *
    * @param onNext
    *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
    * @param onError
-   *     the {@code Action1<Throwable>} you have designed to accept any error notification from the
-   *     Observable
+   *     the {@code Action1<Throwable>} you have designed to accept any error notification from the Observable
    * @param onCompleted
    *     the {@code Action0} you have designed to accept a completion notification from the Observable
    *
@@ -208,8 +199,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
   }
 
   /**
-   * Subscribes to an Observable and provides callbacks to handle the items it emits and any error or completion
-   * notification it issues.
+   * Subscribes to an Observable and provides callbacks to handle the items it emits and any error or completion notification it issues.
    *
    * @param onNext
    *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
@@ -227,9 +217,9 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    */
   public final void execute(Action1<? super ResponseModel> onNext, Action1<Throwable> onError, Action0 onCompleted,
       RequestModel requestModel) {
-    Preconditions.checkNotNull(onNext, "onNext");
-    Preconditions.checkNotNull(onError, "onError");
-    Preconditions.checkNotNull(onCompleted, "onCompleted");
+    Preconditions.requireNotNull(onNext);
+    Preconditions.requireNotNull(onError);
+    Preconditions.requireNotNull(onCompleted);
 
     execute(new ActionSubscriber<>(onNext, onError, onCompleted), requestModel);
   }
@@ -237,14 +227,15 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
   /**
    * Stops the receipt of notifications on the {@link Subscriber}s that were registered.
    * <p>
-   * This allows unregistering executed {@link Subscriber}s before they have finished receiving all events (i.e. before
-   * onCompleted is called).
+   * This allows unregistering executed {@link Subscriber}s before they have finished receiving all events (i.e. before onCompleted is
+   * called).
    *
    * @since 0.1.0
    */
-  @Override public final void unsubscribe() {
+  @Override
+  public final void unsubscribe() {
     // call clear() instead of unsubscribe() to be able to manage new subscriptions
-    mSubscription.clear();
+    subscriptions.clear();
   }
 
   /**
@@ -254,8 +245,9 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    *
    * @since 0.4.0
    */
-  @Override public final boolean isUnsubscribed() {
-    return !mSubscription.hasSubscriptions();
+  @Override
+  public final boolean isUnsubscribed() {
+    return !subscriptions.hasSubscriptions();
   }
 
   /**
@@ -268,7 +260,6 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    *
    * @return source Observable
    *
-   * @see #Interactor(Scheduler, Scheduler)
    * @see #execute(Subscriber)
    * @see #execute(Subscriber, Object)
    * @see #execute(Action1)
