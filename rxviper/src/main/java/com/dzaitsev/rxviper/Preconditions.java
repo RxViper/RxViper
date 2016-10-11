@@ -23,9 +23,13 @@ package com.dzaitsev.rxviper;
  * @since 2016-May-14, 15:26
  */
 final class Preconditions {
-  static <T> void checkNotNull(T arg, String name) {
+  private Preconditions() {
+    throw new UnsupportedOperationException();
+  }
+
+  static <T> void requireNotNull(T arg) {
     if (arg == null) {
-      throw new IllegalArgumentException(name + " can not be null");
+      throw new IllegalArgumentException("Argument can not be null");
     }
   }
 }

@@ -29,19 +29,22 @@ import static org.mockito.Mockito.verify;
  * @author Dmytro Zaitsev
  * @since 2016-May-14, 13:32
  */
-public class MapperTest {
+public final class MapperTest {
 
   private Mapper<Integer, String> spyMapper;
 
-  @Before public void setUp() {
+  @Before
+  public void setUp() {
     spyMapper = spy(new Mapper<Integer, String>() {
-      @Override public String map(final Integer entity) {
+      @Override
+      public String map(final Integer entity) {
         return String.valueOf(entity);
       }
     });
   }
 
-  @Test public void shouldCallOverloadedMethod() {
+  @Test
+  public void shouldCallOverloadedMethod() {
     spyMapper.map(asList(1, 2, 3));
 
     verify(spyMapper).map(1);
@@ -49,7 +52,8 @@ public class MapperTest {
     verify(spyMapper).map(3);
   }
 
-  @Test public void shouldCallMap() {
+  @Test
+  public void shouldCallMap() {
     spyMapper.call(42);
 
     verify(spyMapper).map(42);
