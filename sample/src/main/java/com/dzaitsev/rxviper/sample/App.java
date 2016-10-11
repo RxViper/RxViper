@@ -18,6 +18,7 @@ package com.dzaitsev.rxviper.sample;
 
 import android.app.Application;
 import com.dzaitsev.rxviper.sample.dagger.AppComponent;
+import com.dzaitsev.rxviper.sample.dagger.AppModule;
 import com.dzaitsev.rxviper.sample.dagger.DaggerAppComponent;
 
 /**
@@ -26,16 +27,17 @@ import com.dzaitsev.rxviper.sample.dagger.DaggerAppComponent;
  * @author Dmytro Zaitsev
  * @since 2016-Jun-07, 12:22
  */
-public class App extends Application {
-  private AppComponent mComponent;
+public final class App extends Application {
+  private AppComponent component;
 
   public AppComponent getComponent() {
-    return mComponent;
+    return component;
   }
 
   @Override public void onCreate() {
     super.onCreate();
-    mComponent = DaggerAppComponent.builder()
+    component = DaggerAppComponent.builder()
+        .appModule(new AppModule(this))
         .build();
   }
 }

@@ -22,20 +22,26 @@ package com.dzaitsev.rxviper.sample.data;
  * @author Dmytro Zaitsev
  * @since 2016-Jun-07, 11:16
  */
-public class Cheese {
-  private final String mName;
-  private final long   mId;
+public final class Cheese {
+  private final String     name;
+  private final long       id;
+  private final CheeseType type;
 
-  Cheese(String name, long id) {
-    mName = name;
-    mId = id;
+  Cheese(String name, long id, CheeseType type) {
+    this.name = name;
+    this.id = id;
+    this.type = type;
   }
 
   public long getId() {
-    return mId;
+    return id;
   }
 
   public String getName() {
-    return mName;
+    return name;
+  }
+
+  public CheeseType getType() {
+    return type;
   }
 }

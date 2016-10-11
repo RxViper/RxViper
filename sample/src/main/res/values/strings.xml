@@ -17,6 +17,616 @@
 -->
 <resources>
   <string name="app_name">RxViperSample</string>
-  <string name="loading">Loading...</string>
+  <string name="loading">Loading…</string>
   <string name="error">Error</string>
+
+  <string-array name="hard_cheeses">
+    <item>Abbaye du Mont des Cats</item>
+    <item>Abertam</item>
+    <item>Ackawi</item>
+    <item>Acorn</item>
+    <item>Allgauer Emmentaler</item>
+    <item>Anejo Enchilado</item>
+    <item>Anthoriro</item>
+    <item>Ardi Gasna</item>
+    <item>Asiago</item>
+    <item>Balaton</item>
+    <item>Barry’s Bay Cheddar</item>
+    <item>Basing</item>
+    <item>Bavarian Bergkase</item>
+    <item>Beauvoorde</item>
+    <item>Berkswell</item>
+    <item>Blue</item>
+    <item>Boeren Leidenkaas</item>
+    <item>Bra</item>
+    <item>Buffalo</item>
+    <item>Cabrales</item>
+    <item>Caerphilly</item>
+    <item>Cairnsmore</item>
+    <item>Canestrato</item>
+    <item>Castellano</item>
+    <item>Castelleno</item>
+    <item>Castelmagno</item>
+    <item>Castigliano</item>
+    <item>Comte</item>
+    <item>Coolea</item>
+    <item>Coquetdale</item>
+    <item>Corleggy</item>
+    <item>Cotherstone</item>
+    <item>Cotija</item>
+    <item>Coverdale</item>
+    <item>Crayeux de Roncq</item>
+    <item>Crottin de Chavignol</item>
+    <item>Curworthy</item>
+    <item>Cwmtawe Pecorino</item>
+    <item>Denhany Dorset Drum</item>
+    <item>Derby</item>
+    <item>Doolin</item>
+    <item>Dorset Blue Vinney</item>
+    <item>Double Worcester</item>
+    <item>Dry Jack</item>
+    <item>Duddleswell</item>
+    <item>Dunlop</item>
+    <item>Duroblando</item>
+    <item>Dutch Mimolette (Commissiekaas)</item>
+    <item>Emmental</item>
+    <item>Etorki</item>
+    <item>Evora De L’Alentejo</item>
+    <item>Finlandia Swiss</item>
+    <item>Fiore Sardo</item>
+    <item>Folded cheese with mint</item>
+    <item>Four Herb Gouda</item>
+    <item>Fourme de Montbrison</item>
+    <item>Fribourgeois</item>
+    <item>Friesekaas</item>
+    <item>Friesian</item>
+    <item>Fromage a Raclette</item>
+    <item>Frying Cheese</item>
+    <item>Gabriel</item>
+    <item>Gammelost</item>
+    <item>Gaperon a l’Ail</item>
+    <item>Garrotxa</item>
+    <item>Gornyaltajski</item>
+    <item>Gospel Green</item>
+    <item>Gowrie</item>
+    <item>Grafton Village Cheddar</item>
+    <item>Grana</item>
+    <item>Grana Padano</item>
+    <item>Graviera</item>
+    <item>Gruyere</item>
+    <item>Halloumi</item>
+    <item>Halloumy (Australian)</item>
+    <item>Haloumi-Style Cheese</item>
+    <item>Heidi Gruyere</item>
+    <item>Herriot Farmhouse</item>
+    <item>Iberico</item>
+    <item>Idaho Goatster</item>
+    <item>Idiazabal</item>
+    <item>Isle of Mull</item>
+    <item>Jarlsberg</item>
+    <item>Jindi Brie</item>
+    <item>Kadchgall</item>
+    <item>Kefalotyri</item>
+    <item>Laguiole</item>
+    <item>Lairobell</item>
+    <item>Lancashire</item>
+    <item>Laruns</item>
+    <item>Lavistown</item>
+    <item>Leafield</item>
+    <item>Leicester</item>
+    <item>Leyden</item>
+    <item>Lincolnshire Poacher</item>
+    <item>Llanboidy</item>
+    <item>Llanglofan Farmhouse</item>
+    <item>Loch Arthur Farmhouse</item>
+    <item>Longhorn</item>
+    <item>Lou Palou</item>
+    <item>Mahon</item>
+    <item>Malvern</item>
+    <item>Manchego</item>
+    <item>Manur</item>
+    <item>Marble Cheddar</item>
+    <item>Menallack Farmhouse</item>
+    <item>Mihalic Peynir</item>
+    <item>Montasio</item>
+    <item>Monterey Jack Dry</item>
+    <item>Northumberland</item>
+    <item>Orkney Extra Mature Cheddar</item>
+    <item>Oschtjepka</item>
+    <item>Parmesan (Parmigiano)</item>
+    <item>Parmigiano Reggiano</item>
+    <item>Pecorino</item>
+    <item>Pecorino Romano</item>
+    <item>Penbryn</item>
+    <item>Piora</item>
+    <item>Plymouth Cheese</item>
+    <item>Pressato</item>
+    <item>Pyengana Cheddar</item>
+    <item>Queso del Tietar</item>
+    <item>Queso Iberico</item>
+    <item>Queso Majorero</item>
+    <item>Queso Para Frier</item>
+    <item>Raclette</item>
+    <item>Ragusano</item>
+    <item>Reggianito</item>
+    <item>Remedou</item>
+    <item>Ricotta Salata</item>
+    <item>Romano</item>
+    <item>Roncal</item>
+    <item>Saanenkaese</item>
+    <item>Sainte Maure</item>
+    <item>Salers</item>
+    <item>Sancerre</item>
+    <item>Sap Sago</item>
+    <item>Sardo</item>
+    <item>Sardo Egyptian</item>
+    <item>Sbrinz</item>
+    <item>Schabzieger</item>
+    <item>Serat</item>
+    <item>Seriously Strong Cheddar</item>
+    <item>Shelburne Cheddar</item>
+    <item>Shropshire Blue</item>
+    <item>Smoked Gouda</item>
+    <item>Spenwood</item>
+    <item>Sraffordshire Organic</item>
+    <item>Stinking Bishop</item>
+    <item>Swaledale</item>
+    <item>Swiss</item>
+    <item>Syrian (Armenian String)</item>
+    <item>Tala</item>
+    <item>Teifi</item>
+    <item>Tillamook Cheddar</item>
+    <item>Tomme d’Abondance</item>
+    <item>Tyn Grug</item>
+    <item>Tyning</item>
+    <item>Ubriaco</item>
+    <item>Wellington</item>
+    <item>Wensleydale</item>
+    <item>White Stilton</item>
+    <item>Xynotyro</item>
+    <item>Yarg Cornish</item>
+    <item>Zamorano</item>
+    <item>Zanetti Grana Padano</item>
+    <item>Zanetti Parmigiano Reggiano</item>
+  </string-array>
+  <string-array name="semi_hard_cheeses">
+    <item>Abbaye de Belloc</item>
+    <item>Abondance</item>
+    <item>Airedale</item>
+    <item>Alverca</item>
+    <item>Appenzell</item>
+    <item>Aragon</item>
+    <item>Ardrahan</item>
+    <item>Aubisque Pyrenees</item>
+    <item>Beaufort</item>
+    <item>Bierkase</item>
+    <item>Blarney</item>
+    <item>Bleu de Septmoncel</item>
+    <item>Braudostur</item>
+    <item>Brick</item>
+    <item>Canadian Cheddar</item>
+    <item>Cantal</item>
+    <item>Chaumes</item>
+    <item>Cheddar</item>
+    <item>Cheshire</item>
+    <item>Chevres</item>
+    <item>Chontaleno</item>
+    <item>Cojack</item>
+    <item>Colby-Jack</item>
+    <item>Crowley</item>
+    <item>Devon Blue</item>
+    <item>Devon Garland</item>
+    <item>Double Gloucester</item>
+    <item>Edam</item>
+    <item>Edelpilz</item>
+    <item>Esbareich</item>
+    <item>Esrom</item>
+    <item>Filetta</item>
+    <item>Fontal</item>
+    <item>Fourme d’ Ambert</item>
+    <item>Friesla</item>
+    <item>Fynbo</item>
+    <item>Geitost</item>
+    <item>Gjetost</item>
+    <item>Gloucester</item>
+    <item>Gouda</item>
+    <item>Goutu</item>
+    <item>Grabetto</item>
+    <item>Graddost</item>
+    <item>Greve</item>
+    <item>Herrgardsost</item>
+    <item>Herve</item>
+    <item>Juustoleipa</item>
+    <item>Kikorangi</item>
+    <item>Leerdammer</item>
+    <item>Maasdam</item>
+    <item>Mamirolle</item>
+    <item>Maribo</item>
+    <item>Matocq</item>
+    <item>Meira</item>
+    <item>Menonita</item>
+    <item>Meyer Vintage Gouda</item>
+    <item>Mimolette</item>
+    <item>Mixte</item>
+    <item>Molbo</item>
+    <item>Mondseer</item>
+    <item>Monterey Jack</item>
+    <item>Murol</item>
+    <item>Nokkelost</item>
+    <item>Orla</item>
+    <item>Ossau Fermier</item>
+    <item>Ossau-Iraty</item>
+    <item>Oszczypek</item>
+    <item>Passendale</item>
+    <item>Penamellera</item>
+    <item>Petit Pardou</item>
+    <item>Podhalanski</item>
+    <item>Port-Salut</item>
+    <item>Prastost</item>
+    <item>Provolone</item>
+    <item>Provolone (Australian)</item>
+    <item>Rabacal</item>
+    <item>Ridder</item>
+    <item>Roquefort</item>
+    <item>Royalp Tilsit</item>
+    <item>Saaland Pfarr</item>
+    <item>Sage Derby</item>
+    <item>Saint-Paulin</item>
+    <item>Samso</item>
+    <item>San Simon</item>
+    <item>Schloss</item>
+    <item>Siraz</item>
+    <item>Stilton</item>
+    <item>String</item>
+    <item>Sveciaost</item>
+    <item>Sweet Style Swiss</item>
+    <item>Tasmania Highland Chevre Log</item>
+    <item>Testouri</item>
+    <item>Tete de Moine</item>
+    <item>Tibet</item>
+    <item>Tilsit</item>
+    <item>Toma</item>
+    <item>Tomme de Romans</item>
+    <item>Tommes</item>
+    <item>Toscanello</item>
+    <item>Touree de L’Aubier</item>
+    <item>Tourmalet</item>
+    <item>Trappe (Veritable)</item>
+    <item>Turunmaa</item>
+    <item>Vasterbottenost</item>
+    <item>Waimata Farmhouse Blue</item>
+    <item>Yorkshire Blue</item>
+  </string-array>
+
+  <string-array name="semi_soft_cheeses">
+    <item>Adelost</item>
+    <item>Airag</item>
+    <item>Aisy Cendre</item>
+    <item>American Cheese</item>
+    <item>Ami du Chambertin</item>
+    <item>Aromes au Gene de Marc</item>
+    <item>Asadero</item>
+    <item>Autun</item>
+    <item>Baby Swiss</item>
+    <item>Beenleigh Blue</item>
+    <item>Bel Paese</item>
+    <item>Bergere Bleue</item>
+    <item>Beyaz Peynir</item>
+    <item>Bishop Kennedy</item>
+    <item>Bocconcini (Australian)</item>
+    <item>Boulette d’Avesnes</item>
+    <item>Brillat-Savarin</item>
+    <item>Brin</item>
+    <item>Bruder Basil</item>
+    <item>Butterkase</item>
+    <item>Calenzana</item>
+    <item>Casciotta di Urbino</item>
+    <item>Celtic Promise</item>
+    <item>Charolais</item>
+    <item>Chevrotin des Aravis</item>
+    <item>Colby</item>
+    <item>Cougar Gold</item>
+    <item>Cream Havarti</item>
+    <item>Croghan</item>
+    <item>Curd</item>
+    <item>Danbo</item>
+    <item>Danish Fontina</item>
+    <item>Dauphin</item>
+    <item>Durrus</item>
+    <item>Feta (Australian)</item>
+    <item>Folded</item>
+    <item>Fontina Val d’Aosta</item>
+    <item>Fresh Jack</item>
+    <item>Fromage de Montagne de Savoie</item>
+    <item>Gubbeen</item>
+    <item>Havarti</item>
+    <item>Hipi Iti</item>
+    <item>Hushallsost</item>
+    <item>Il Boschetto al Tartufo</item>
+    <item>King River Gold</item>
+    <item>Lajta</item>
+    <item>Langres</item>
+    <item>Lappi</item>
+    <item>Le Brin</item>
+    <item>Le Fium Orbo</item>
+    <item>Livarot</item>
+    <item>Loddiswell Avondale</item>
+    <item>Maroilles</item>
+    <item>Milleens</item>
+    <item>Monastery Cheeses</item>
+    <item>Morbier</item>
+    <item>Morbier Cru de Montagne</item>
+    <item>Mozzarella (Australian)</item>
+    <item>Neufchatel (Australian)</item>
+    <item>Oaxaca</item>
+    <item>Paneer</item>
+    <item>Pasteurized Processed</item>
+    <item>Pave d’Auge</item>
+    <item>Pepper jack</item>
+    <item>Picos de Europa</item>
+    <item>Pinconning</item>
+    <item>Polkolbin</item>
+    <item>Pont l’Eveque</item>
+    <item>Port Nicholson</item>
+    <item>Quartirolo Lombardo</item>
+    <item>Queso Blanco con Frutas —Pina y Mango</item>
+    <item>Raschera</item>
+    <item>Reblochon</item>
+    <item>Rocamadour</item>
+    <item>Rollot</item>
+    <item>Rubens</item>
+    <item>Saint-Nectaire</item>
+    <item>Sonoma Jack</item>
+    <item>Sottocenare al Tartufo</item>
+    <item>Sourire Lozerien</item>
+    <item>Taleggio</item>
+    <item>Tamie</item>
+    <item>Tetilla</item>
+    <item>Tomme de Chevre</item>
+    <item>Tomme de Savoie</item>
+    <item>Tronchon</item>
+    <item>Ulloa</item>
+    <item>Waterloo</item>
+    <item>Wigmore</item>
+  </string-array>
+
+  <string-array name="soft_cheeses">
+    <item>Ambert</item>
+    <item>Anneau du Vic-Bilh</item>
+    <item>Avaxtskyr</item>
+    <item>Babybel</item>
+    <item>Baguette Laonnaise</item>
+    <item>Bakers</item>
+    <item>Baladi</item>
+    <item>Bandal</item>
+    <item>Banon</item>
+    <item>Basket Cheese</item>
+    <item>Bath Cheese</item>
+    <item>Beer Cheese</item>
+    <item>Bergader</item>
+    <item>Bleu d’Auvergne</item>
+    <item>Bleu de Gex</item>
+    <item>Bleu de Laqueuille</item>
+    <item>Bleu Des Causses</item>
+    <item>Blue Castello</item>
+    <item>Bonchester</item>
+    <item>Bosworth</item>
+    <item>Bougon</item>
+    <item>Boursault</item>
+    <item>Boursin</item>
+    <item>Bouyssou</item>
+    <item>Breakfast Cheese</item>
+    <item>Brebis du Lavort</item>
+    <item>Brebis du Lochois</item>
+    <item>Brebis du Puyfaucon</item>
+    <item>Bresse Bleu</item>
+    <item>Brie</item>
+    <item>Brie de Meaux</item>
+    <item>Brie de Melun</item>
+    <item>Brin d’ Amour</item>
+    <item>Brin d’Amour</item>
+    <item>Brinza (Burduf Brinza)</item>
+    <item>Briquette de Brebis</item>
+    <item>Broccio</item>
+    <item>Broccio Demi-Affine</item>
+    <item>Brousse du Rove</item>
+    <item>Brusselae Kaas (Fromage de Bruxelles)</item>
+    <item>Bryndza</item>
+    <item>Buchette d’Anjou</item>
+    <item>Butte</item>
+    <item>Button (Innes)</item>
+    <item>Buxton Blue</item>
+    <item>Cabecou</item>
+    <item>Caboc</item>
+    <item>Cachaille</item>
+    <item>Caciocavallo</item>
+    <item>Caciotta</item>
+    <item>Camembert de Normandie</item>
+    <item>Caprice des Dieux</item>
+    <item>Capricorn Goat</item>
+    <item>Caravane</item>
+    <item>Carre de l’Est</item>
+    <item>Cashel Blue</item>
+    <item>Castelo Branco</item>
+    <item>Cathelain</item>
+    <item>Cendre d’Olivet</item>
+    <item>Cerney</item>
+    <item>Chabichou</item>
+    <item>Chabichou du Poitou</item>
+    <item>Chabis de Gatine</item>
+    <item>Chaource</item>
+    <item>Civray</item>
+    <item>Coeur de Camembert au Calvados</item>
+    <item>Coeur de Chevre</item>
+    <item>Cold Pack</item>
+    <item>Cooleney</item>
+    <item>Cornish Pepper</item>
+    <item>Cottage Cheese</item>
+    <item>Cottage Cheese (Australian)</item>
+    <item>Coulommiers</item>
+    <item>Cream Cheese</item>
+    <item>Crema Agria</item>
+    <item>Crema Mexicana</item>
+    <item>Creme Fraiche</item>
+    <item>Crottin du Chavignol</item>
+    <item>Cuajada</item>
+    <item>Cure Nantais</item>
+    <item>Daralagjazsky</item>
+    <item>Delice des Fiouves</item>
+    <item>Dessertnyj Belyj</item>
+    <item>Dolcelatte</item>
+    <item>Doppelrhamstufel</item>
+    <item>Dreux a la Feuille</item>
+    <item>Dunbarra</item>
+    <item>Emlett</item>
+    <item>Evansdale Farmhouse Brie</item>
+    <item>Explorateur</item>
+    <item>Farmer</item>
+    <item>Feta</item>
+    <item>Figue</item>
+    <item>Fin-de-Siecle</item>
+    <item>Finn</item>
+    <item>Fleur du Maquis</item>
+    <item>Flor de Guia</item>
+    <item>Flower Marie</item>
+    <item>Fondant de Brebis</item>
+    <item>Fontainebleau</item>
+    <item>Fougerus</item>
+    <item>Fourme de Haute Loire</item>
+    <item>Fresh Mozzarella</item>
+    <item>Fresh Ricotta</item>
+    <item>Frinault</item>
+    <item>Fromage Corse</item>
+    <item>Fromage Frais</item>
+    <item>Fruit Cream Cheese</item>
+    <item>Galette du Paludier</item>
+    <item>Galette Lyonnaise</item>
+    <item>Gastanberra</item>
+    <item>Golden Cross</item>
+    <item>Gorgonzola</item>
+    <item>Grand Vatel</item>
+    <item>Grataron d’ Areches</item>
+    <item>Gratte-Paille</item>
+    <item>Greuilh</item>
+    <item>Gris de Lille</item>
+    <item>Guerbigny</item>
+    <item>Hereford Hop</item>
+    <item>Humboldt Fog</item>
+    <item>Jubilee Blue</item>
+    <item>Kenafa</item>
+    <item>Kernhem</item>
+    <item>Kervella Affine</item>
+    <item>King Island Cape Wickham Brie</item>
+    <item>Klosterkaese</item>
+    <item>Kugelkase</item>
+    <item>L’Aveyronnais</item>
+    <item>L’Ecir de l’Aubrac</item>
+    <item>La Taupiniere</item>
+    <item>La Vache Qui Rit</item>
+    <item>Le Lacandou</item>
+    <item>Le Roule</item>
+    <item>Lebbene</item>
+    <item>Limburger</item>
+    <item>Lingot Saint Bousquet d’Orb</item>
+    <item>Little Rydings</item>
+    <item>Lyonnais</item>
+    <item>Macconais</item>
+    <item>Mahoe Aged Gouda</item>
+    <item>Maredsous</item>
+    <item>Margotin</item>
+    <item>Mascarpone</item>
+    <item>Mascarpone (Australian)</item>
+    <item>Mascarpone Torta</item>
+    <item>Metton (Cancoillotte)</item>
+    <item>Mine-Gabhar</item>
+    <item>Mothais a la Feuille</item>
+    <item>Mozzarella</item>
+    <item>Mozzarella di Bufala</item>
+    <item>Mozzarella Fresh, in water</item>
+    <item>Mozzarella Rolls</item>
+    <item>Munster</item>
+    <item>Mycella</item>
+    <item>Myzithra</item>
+    <item>Nantais</item>
+    <item>Neufchatel</item>
+    <item>Niolo</item>
+    <item>Olivet au Foin</item>
+    <item>Olivet Cendre</item>
+    <item>P’tit Berrichon</item>
+    <item>Palet de Babligny</item>
+    <item>Panela</item>
+    <item>Pannerone</item>
+    <item>Pant ys Gawn</item>
+    <item>Pate de Fromage</item>
+    <item>Patefine Fort</item>
+    <item>Pave d’Affinois</item>
+    <item>Pave de Chirac</item>
+    <item>Peekskill Pyramid</item>
+    <item>Pelardon des Cevennes</item>
+    <item>Pelardon des Corbieres</item>
+    <item>Pencarreg</item>
+    <item>Petit-Suisse</item>
+    <item>Picodon de Chevre</item>
+    <item>Pithtviers au Foin</item>
+    <item>Plateau de Herve</item>
+    <item>Poivre d’Ane</item>
+    <item>Pouligny-Saint-Pierre</item>
+    <item>Pourly</item>
+    <item>Prince-Jean</item>
+    <item>Provel</item>
+    <item>Pyramide</item>
+    <item>Quark</item>
+    <item>Quark (Australian)</item>
+    <item>Quatre-Vents</item>
+    <item>Quercy Petit</item>
+    <item>Queso Blanco</item>
+    <item>Queso de Murcia</item>
+    <item>Queso del Montsec</item>
+    <item>Queso Fresco</item>
+    <item>Queso Fresco (Adobera)</item>
+    <item>Queso Jalapeno</item>
+    <item>Queso Quesadilla</item>
+    <item>Regal de la Dombes</item>
+    <item>Requeson</item>
+    <item>Richelieu</item>
+    <item>Ricotta</item>
+    <item>Ricotta (Australian)</item>
+    <item>Rigotte</item>
+    <item>Romans Part Dieu</item>
+    <item>Rouleau De Beaulieu</item>
+    <item>Rustinu</item>
+    <item>Saga</item>
+    <item>Saint-Marcellin</item>
+    <item>Scamorza</item>
+    <item>Selles sur Cher</item>
+    <item>Selva</item>
+    <item>Serra da Estrela</item>
+    <item>Sharpam</item>
+    <item>Sirene</item>
+    <item>Somerset Brie</item>
+    <item>Soumaintrain</item>
+    <item>Sussex Slipcote</item>
+    <item>Taupiniere</item>
+    <item>Telemea</item>
+    <item>Texas Goat Cheese</item>
+    <item>Timboon Brie</item>
+    <item>Tomme des Chouans</item>
+    <item>Torta del Casar</item>
+    <item>Trois Cornes De Vendee</item>
+    <item>Truffe</item>
+    <item>Tupi</item>
+    <item>Tymsboro</item>
+    <item>Vacherin-Fribourgeois</item>
+    <item>Valencay</item>
+    <item>Venaco</item>
+    <item>Vendomois</item>
+    <item>Vieux Corse</item>
+    <item>Vignotte</item>
+    <item>Vulscombe</item>
+    <item>Washed Rind Cheese (Australian)</item>
+    <item>Weichkaese</item>
+    <item>Whitestone Farmhouse</item>
+    <item>Woodside Cabecou</item>
+    <item>Yarra Valley Pyramid</item>
+  </string-array>
 </resources>

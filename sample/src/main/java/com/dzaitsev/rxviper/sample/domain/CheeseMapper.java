@@ -29,12 +29,12 @@ import javax.inject.Singleton;
  * @since 2016-Jun-07, 11:18
  */
 @Singleton
-public class CheeseMapper extends Mapper<Cheese, CheeseViewModel> {
+public final class CheeseMapper extends Mapper<Cheese, CheeseViewModel> {
   @Inject CheeseMapper() {
   }
 
   @Override public CheeseViewModel map(Cheese cheese) {
-    final CheeseViewModel model = new CheeseViewModel(cheese.getName(), cheese.getId());
+    final CheeseViewModel model = new CheeseViewModel(cheese.getName(), cheese.getId(), cheese.getType().name());
     model.setChecked(true);
     return model;
   }

@@ -39,10 +39,10 @@ import javax.inject.Inject;
  * @author Dmytro Zaitsev
  * @since 2016-Jun-07, 12:33
  */
-public class MainView extends ConstraintLayout implements MainViewCallbacks {
-  @Inject MainPresenter  mPresenter;
-  private ProgressDialog mProgressDialog;
-  private CheeseAdapter  mAdapter;
+public final class MainView extends ConstraintLayout implements MainViewCallbacks {
+  @Inject MainPresenter  presenter;
+  private ProgressDialog progressDialog;
+  private CheeseAdapter  adapter;
 
   public MainView(Context context) {
     this(context, null);
@@ -58,23 +58,23 @@ public class MainView extends ConstraintLayout implements MainViewCallbacks {
       ((App) context.getApplicationContext()).getComponent()
           .inject(this);
 
-      mProgressDialog = new ProgressDialog(context);
-      mProgressDialog.setIndeterminate(true);
-      mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-      mProgressDialog.setCancelable(false);
-      mProgressDialog.setMessage(getResources().getString(R.string.loading));
+      progressDialog = new ProgressDialog(context);
+      progressDialog.setIndeterminate(true);
+      progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+      progressDialog.setCancelable(false);
+      progressDialog.setMessage(getResources().getString(R.string.loading));
     }
   }
 
   @Override public void hideProgress() {
-    if (mProgressDialog.isShowing()) {
-      mProgressDialog.dismiss();
+    if (progressDialog.isShowing()) {
+      progressDialog.dismiss();
     }
   }
 
   @Override public void onNewCheeses(Collection<CheeseViewModel> cheeses) {
-    mAdapter.setModels(cheeses);
-    mAdapter.notifyDataSetChanged();
+    adapter.setModels(cheeses);
+    adapter.notifyDataSetChanged();
   }
 
   @Override public void showError() {
@@ -83,24 +83,24 @@ public class MainView extends ConstraintLayout implements MainViewCallbacks {
   }
 
   @Override public void showProgress() {
-    if (!mProgressDialog.isShowing()) {
-      mProgressDialog.show();
+    if (!progressDialog.isShowing()) {
+      progressDialog.show();
     }
   }
 
   @Override protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     /* The best place to attach the view to presenter */
-    if (mPresenter != null) {
-      mPresenter.takeView(this);
-      mPresenter.takeRouter(((MainRouter) getContext()));
+    if (presenter != null) {
+      presenter.takeView(this);
+      presenter.takeRouter((MainRouter) getContext());
     }
   }
 
   @Override protected void onDetachedFromWindow() {
     /* The best place to detach the view from presenter */
-    mPresenter.dropView(this);
-    mPresenter.dropRouter(((MainRouter) getContext()));
+    presenter.dropView(this);
+    presenter.dropRouter((MainRouter) getContext());
     super.onDetachedFromWindow();
   }
 
@@ -108,59 +108,59 @@ public class MainView extends ConstraintLayout implements MainViewCallbacks {
     super.onFinishInflate();
     if (!isInEditMode()) {
       final ViewMainBinding binding = ViewMainBinding.bind(this);
-      binding.btnLoadDataSuccess.setOnClickListener(v -> mPresenter.fetchCheeses(40));
-      binding.btnLoadDataError.setOnClickListener(v -> mPresenter.fetchCheeses(-1));
-      mAdapter = new CheeseAdapter(mPresenter);
+      binding.btnLoadDataSuccess.setOnClickListener(v -> presenter.fetchCheeses(40));
+      binding.btnLoadDataError.setOnClickListener(v -> presenter.fetchCheeses(-1));
+      adapter = new CheeseAdapter(presenter);
       binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-      binding.recyclerView.setAdapter(mAdapter);
+      binding.recyclerView.setAdapter(adapter);
     }
   }
 
-  static class CheeseViewHolder extends RecyclerView.ViewHolder {
-    private final ListItemBinding mBinding;
+  static final class CheeseViewHolder extends RecyclerView.ViewHolder {
+    private final ListItemBinding binding;
 
     CheeseViewHolder(ListItemBinding binding, MainPresenter presenter) {
       super(binding.getRoot());
-      mBinding = binding;
-      mBinding.getRoot()
-          .setOnClickListener(v -> presenter.onItemClicked(mBinding.getModel()));
+      this.binding = binding;
+      this.binding.getRoot()
+          .setOnClickListener(v -> presenter.onItemClicked(this.binding.getModel()));
     }
 
     void bind(CheeseViewModel model) {
-      mBinding.setModel(model);
+      binding.setModel(model);
     }
   }
 
   @SuppressWarnings("WeakerAccess")
-  static class CheeseAdapter extends RecyclerView.Adapter<CheeseViewHolder> {
-    private final ArrayList<CheeseViewModel> mModels = new ArrayList<>();
-    private final MainPresenter mPresenter;
+  static final class CheeseAdapter extends RecyclerView.Adapter<CheeseViewHolder> {
+    private final ArrayList<CheeseViewModel> models = new ArrayList<>();
+    private final MainPresenter presenter;
 
-    public CheeseAdapter(MainPresenter presenter) {
-      mPresenter = presenter;
+    CheeseAdapter(MainPresenter presenter) {
+      this.presenter = presenter;
       setHasStableIds(true);
     }
 
     @Override public CheeseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      return new CheeseViewHolder(ListItemBinding.inflate(LayoutInflater.from(parent.getContext())), mPresenter);
+      return new CheeseViewHolder(ListItemBinding.inflate(LayoutInflater.from(parent.getContext())), presenter);
     }
 
     @Override public void onBindViewHolder(CheeseViewHolder holder, int position) {
-      holder.bind(mModels.get(position));
+      holder.bind(models.get(position));
     }
 
     @Override public long getItemId(int position) {
-      return mModels.get(position)
+      return models.get(position)
           .getId();
     }
 
     @Override public int getItemCount() {
-      return mModels.size();
+      return models.size();
     }
 
     void setModels(Collection<CheeseViewModel> models) {
-      mModels.clear();
-      mModels.addAll(models);
+      this.models.clear();
+      this.models.addAll(models);
     }
   }
 }

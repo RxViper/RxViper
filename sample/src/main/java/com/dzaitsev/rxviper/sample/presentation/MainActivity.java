@@ -21,12 +21,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.dzaitsev.rxviper.sample.R;
 
-public class MainActivity extends AppCompatActivity implements MainRouter {
+public final class MainActivity extends AppCompatActivity implements MainRouter {
 
   @Override public void navigateToDetails(CheeseViewModel model) {
     final Intent intent = new Intent(this, DetailsActivity.class);
     intent.putExtra(DetailsActivity.NAME, model.getName());
     intent.putExtra(DetailsActivity.CHECKED, model.isChecked());
+    intent.putExtra(DetailsActivity.TYPE, model.getType());
     startActivity(intent);
   }
 

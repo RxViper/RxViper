@@ -23,21 +23,23 @@ package com.dzaitsev.rxviper.sample.presentation;
  * @since 2016-Jun-07, 11:51
  */
 public final class CheeseViewModel {
-  private final String  mName;
-  private final long    mId;
+  private final String  name;
+  private final long    id;
+  private final String  type;
   private       boolean isChecked;
 
-  public CheeseViewModel(String name, long id) {
-    mName = name;
-    mId = id;
+  public CheeseViewModel(String name, long id, String type) {
+    this.name = name;
+    this.id = id;
+    this.type = type;
   }
 
   public long getId() {
-    return mId;
+    return id;
   }
 
   public String getName() {
-    return mName;
+    return name;
   }
 
   public boolean isChecked() {
@@ -46,5 +48,9 @@ public final class CheeseViewModel {
 
   public void setChecked(boolean checked) {
     isChecked = checked;
+  }
+
+  public String getType() {
+    return type;
   }
 }

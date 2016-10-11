@@ -29,52 +29,60 @@ import javax.inject.Singleton;
  * @since 2016-Jun-07, 10:34
  */
 @Singleton
-class MainPresenter extends ViperPresenter<MainViewCallbacks, MainRouter> {
-  private final GetCheesesInteractor        mCheesesInteractor;
-  private       Collection<CheeseViewModel> mCachedData;
+final class MainPresenter extends ViperPresenter<MainViewCallbacks, MainRouter> {
+  private final GetCheesesInteractor        interactor;
+  private       Collection<CheeseViewModel> cachedData;
 
   @Inject MainPresenter(GetCheesesInteractor getCheesesInteractor) {
-    mCheesesInteractor = getCheesesInteractor;
+    interactor = getCheesesInteractor;
   }
 
   @Override protected void onDropView(MainViewCallbacks view) {
     /* The best place to unsubscribe all your interactors */
-    mCheesesInteractor.unsubscribe();
+    interactor.unsubscribe();
   }
 
   @Override protected void onTakeView(MainViewCallbacks view) {
     /* The place where you can set cached data */
-    if (mCachedData != null) {
-      view.onNewCheeses(mCachedData);
+    if (cachedData != null) {
+      view.onNewCheeses(cachedData);
     }
   }
 
   /**
-   * @param amount
-   *     amount of items you want to get
+   * @param count
+   *     count of items you want to get
    *
    * @throws RuntimeException
    *     if amount < 0
    */
-  void fetchCheeses(int amount) {
-    getView().showProgress();
-    mCheesesInteractor.execute(
+  void fetchCheeses(int count) {
+    if (hasView()) {
+      getView().showProgress();
+    }
+    interactor.execute(
         // onNext
         cheeses -> {
-          mCachedData = cheeses;
-          getView().onNewCheeses(cheeses);
-          getView().hideProgress();
+          cachedData = cheeses;
+          if (hasView()) {
+            getView().onNewCheeses(cheeses);
+            getView().hideProgress();
+          }
         },
         // onError
         throwable -> {
-          getView().showError();
-          getView().hideProgress();
+          if (hasView()) {
+            getView().showError();
+            getView().hideProgress();
+          }
         },
         // parameter
-        amount);
+        count);
   }
 
   void onItemClicked(CheeseViewModel model) {
-    getRouter().navigateToDetails(model);
+    if (hasRouter()) {
+      getRouter().navigateToDetails(model);
+    }
   }
 }

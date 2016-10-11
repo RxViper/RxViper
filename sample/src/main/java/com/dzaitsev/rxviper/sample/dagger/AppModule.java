@@ -16,6 +16,8 @@
 
 package com.dzaitsev.rxviper.sample.dagger;
 
+import android.app.Application;
+import android.content.res.Resources;
 import dagger.Module;
 import dagger.Provides;
 import rx.Scheduler;
@@ -29,7 +31,17 @@ import rx.schedulers.Schedulers;
  * @since 2016-Jun-07, 12:24
  */
 @Module
-class AppModule {
+public final class AppModule {
+  private final Application app;
+
+  public AppModule(Application app) {
+    this.app = app;
+  }
+
+  @Provides Resources provideResources() {
+    return app.getResources();
+  }
+
   @Provides @Job Scheduler provideJobScheduler() {
     return Schedulers.computation();
   }

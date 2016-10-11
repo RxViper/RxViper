@@ -34,19 +34,19 @@ import rx.Scheduler;
  * @since 2016-Jun-07, 10:32
  */
 @Singleton
-public class GetCheesesInteractor extends Interactor<Integer, Collection<CheeseViewModel>> {
-  private final CheeseStorage mStorage;
-  private final CheeseMapper  mMapper;
+public final class GetCheesesInteractor extends Interactor<Integer, Collection<CheeseViewModel>> {
+  private final CheeseStorage storage;
+  private final CheeseMapper  mapper;
 
-  @Inject protected GetCheesesInteractor(@Job Scheduler subscribeOn, @Main Scheduler observeOn, CheeseStorage storage,
+  @Inject GetCheesesInteractor(@Job Scheduler subscribeOn, @Main Scheduler observeOn, CheeseStorage storage,
       CheeseMapper mapper) {
     super(subscribeOn, observeOn);
-    mStorage = storage;
-    mMapper = mapper;
+    this.storage = storage;
+    this.mapper = mapper;
   }
 
   @Override protected Observable<Collection<CheeseViewModel>> createObservable(Integer amount) {
-    return mStorage.getCheeses(amount)
-        .map(mMapper::map);
+    return storage.getCheeses(amount)
+        .map(mapper::map);
   }
 }
