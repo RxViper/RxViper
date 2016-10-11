@@ -23,8 +23,8 @@ import rx.functions.Func1;
 /**
  * Converts entities to basic model objects used by the {@link Interactor}.
  * <p>
- * Given an input object maps to an appropriate output object. A mapper may variously provide a mapping between types,
- * object instances or keys and values or any other form of transformation upon the input.
+ * Given an input object maps to an appropriate output object. A mapper may variously provide a mapping between types, object instances
+ * or keys and values or any other form of transformation upon the input.
  * <p>
  * All mapper implementations are expected to:
  * <ul>
@@ -32,8 +32,8 @@ import rx.functions.Func1;
  * <li>Equivalent input objects should map to equivalent output objects.</li>
  * <li>The mapper should not modify the input object in any way that would change the mapping.</li>
  * <li>
- * When used for aggregate operations upon many elements mappers should not assume that the {@link #map} operation will
- * be called upon elements in any specific order.</li>
+ * When used for aggregate operations upon many elements mappers should not assume that the {@link #map} operation will be called upon
+ * elements in any specific order.</li>
  * </ul>
  *
  * @param <From>
@@ -45,17 +45,13 @@ import rx.functions.Func1;
  * @since 0.1.0
  */
 public abstract class Mapper<From, To> implements Func1<From, To> {
-  /**
-   * Map the provided input object to an appropriate output object.
-   *
-   * @param entity
-   *     input object
-   *
-   * @return output object
-   *
-   * @since 0.1.0
+  /*
+   * @since 0.10.0
    */
-  public abstract To map(From entity);
+  @Override
+  public final To call(From from) {
+    return map(from);
+  }
 
   /**
    * Map the provided collection of input objects to an appropriate collection of output objects.
@@ -76,7 +72,15 @@ public abstract class Mapper<From, To> implements Func1<From, To> {
     return result;
   }
 
-  @Override public final To call(From from) {
-    return map(from);
-  }
+  /**
+   * Map the provided input object to an appropriate output object.
+   *
+   * @param entity
+   *     input object
+   *
+   * @return output object
+   *
+   * @since 0.1.0
+   */
+  public abstract To map(From entity);
 }
