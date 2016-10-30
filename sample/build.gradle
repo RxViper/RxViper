@@ -23,7 +23,7 @@ android {
 
   defaultConfig {
     applicationId "com.dzaitsev.rxviper.sample"
-    minSdkVersion 14
+    minSdkVersion androidConfig.minSdkVersion
     targetSdkVersion androidConfig.targetSdkVersion
     versionCode androidConfig.versionCode
     versionName androidConfig.versionName
@@ -38,7 +38,6 @@ android {
 }
 
 dependencies {
-  apt libraries.guava
   apt libraries.daggerCompiler
   compile fileTree(dir: 'libs', include: ['*.jar'])
   compile project(':rxviper')
