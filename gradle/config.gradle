@@ -15,32 +15,31 @@
  */
 ext {
   androidConfig = [
-      compileSdkVersion: 23,
-      buildToolsVersion: '23.0.3',
-      minSdkVersion    : 3,
-      targetSdkVersion : 23,
+      compileSdkVersion: 24,
+      buildToolsVersion: '24.0.3',
+      minSdkVersion    : 9,
+      targetSdkVersion : 24,
       versionCode      : 12,
       versionName      : POM_LIBRARY_VERSION,
   ]
 
   versions = [
       // Gradle Plugins
-      androidPlugin    : '2.2.0-beta3',
-      bintrayPlugin    : '1.7.1',
+      androidPlugin    : '2.2.2',
+      bintrayPlugin    : '1.7.2',
       mavenPlugin      : '1.4.1',
       licensePlugin    : '0.12.1',
-      retrolambdaPlugin: '3.3.0-beta4',
+      retrolambdaPlugin: '3.3.1',
       aptPlugin        : '1.8',
       // Java libraries
-      guava            : '19.0',
-      rxJava           : '1.1.9',
-      dagger           : '2.6.1',
+      rxJava           : '1.2.1',
+      dagger           : '2.7',
       junit            : '4.12',
-      mockito          : '2.2.0',
-      truth            : '0.28',
+      mockito          : '2.2.3', // don't update to 2.2.4/2.2.9 because code coverage decreases
+      truth            : '0.30',
       // Android libraries
       rxAndroid        : '1.2.1',
-      support          : '24.2.0',
+      support          : '25.0.0',
       constraintLayout : '1.0.0-alpha7',
   ]
 
@@ -55,7 +54,6 @@ ext {
 
   libraries = [
       // Java
-      guava           : "com.google.guava:guava:${versions.guava}",
       rxJava          : "io.reactivex:rxjava:${versions.rxJava}",
       dagger          : "com.google.dagger:dagger:${versions.dagger}",
       daggerCompiler  : "com.google.dagger:dagger-compiler:${versions.dagger}",
