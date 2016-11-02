@@ -54,7 +54,7 @@ public final class MapperTest {
 
   @Test
   public void shouldCallMap() {
-    spyMapper.call(42);
+    spyMapper.apply(42);
 
     verify(spyMapper).map(42);
   }
