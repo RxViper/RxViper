@@ -56,14 +56,14 @@ public final class MapperTest {
 
   @Test
   public void shouldCallMap() {
-    mapper.call(42);
+    mapper.apply(42);
 
     verify(mapper).map(42);
   }
 
   @Test
-  public void callShouldNotRespectNulls() {
-    checkIllegalArgumentException(() -> mapper.call(null));
+  public void applyShouldNotRespectNulls() {
+    checkIllegalArgumentException(() -> mapper.apply(null));
   }
 
   @Test

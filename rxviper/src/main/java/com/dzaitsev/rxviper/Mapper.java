@@ -16,10 +16,10 @@
 
 package com.dzaitsev.rxviper;
 
+import io.reactivex.functions.Function;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.annotation.Nonnull;
-import rx.functions.Func1;
 
 import static com.dzaitsev.rxviper.RxViper.requireNotNull;
 
@@ -45,10 +45,10 @@ import static com.dzaitsev.rxviper.RxViper.requireNotNull;
  * @author Dmytro Zaitsev
  * @since 0.1.0
  */
-public abstract class Mapper<From, To> implements Func1<From, To> {
+public abstract class Mapper<From, To> implements Function<From, To> {
   /* @since 0.10.0 */
   @Override
-  public final To call(@Nonnull From from) {
+  public final To apply(@Nonnull From from) {
     requireNotNull(from);
     return map(from);
   }
