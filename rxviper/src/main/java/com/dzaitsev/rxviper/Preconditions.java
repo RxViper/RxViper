@@ -24,12 +24,13 @@ package com.dzaitsev.rxviper;
  */
 final class Preconditions {
   private Preconditions() {
-    throw new UnsupportedOperationException();
+    throw new AssertionError("No instances please!");
   }
 
-  static <T> void requireNotNull(T arg) {
+  static <T> T requireNotNull(T arg) {
     if (arg == null) {
       throw new IllegalArgumentException("Argument can not be null");
     }
+    return arg;
   }
 }
