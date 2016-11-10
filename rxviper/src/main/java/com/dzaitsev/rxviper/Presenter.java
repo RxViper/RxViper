@@ -29,6 +29,28 @@ public abstract class Presenter<V extends ViewCallbacks> {
   private WeakReference<V> viewRef;
 
   /**
+   * Creates a presenter with pre-attached view.
+   * <p>
+   * Doesn't call {@link #onTakeView} callback.
+   *
+   * @param view
+   *     view that will be returned from {@link #getView()}.
+   *
+   * @since 0.11.0
+   */
+  protected Presenter(V view) {
+    Preconditions.requireNotNull(view);
+    viewRef = new WeakReference<>(view);
+  }
+
+  /**
+   * Creates a presenter without pre-attached view.
+   *
+   * @since 0.11.0
+   */
+  protected Presenter() {}
+
+  /**
    * Called to surrender control of taken view.
    * <p>
    * It is expected that this method will be called with the same argument as {@link #takeView}. Mismatched views are ignored. This is

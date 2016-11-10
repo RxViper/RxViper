@@ -17,7 +17,9 @@
 package com.dzaitsev.rxviper;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -34,12 +36,35 @@ import static org.mockito.Mockito.verify;
  * @since 2016-Jun-30, 11:01
  */
 public final class ViperPresenterTest {
+  @Rule public final ExpectedException thrown = ExpectedException.none();
   @Mock Router             dummyRouter;
   @Spy  TestViperPresenter spyViperPresenter;
 
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
+  }
+
+  @Test
+  public void constructorRouterShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
+    new TestViperPresenter(null);
+  }
+
+  @Test
+  public void constructorViewShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
+    new TestViperPresenter(null, dummyRouter);
+  }
+
+  @Test
+  public void constructorShouldSetRouter() {
+    new TestViperPresenter(dummyRouter);
+  }
+
+  @Test
+  public void constructorShouldSetViewAndRouter() {
+    new TestViperPresenter(mock(ViewCallbacks.class), dummyRouter);
   }
 
   @Test
@@ -114,17 +139,33 @@ public final class ViperPresenterTest {
     spyViperPresenter.dropRouter(dummyRouter);
   }
 
-  @Test(expected = IllegalArgumentException.class) //
+  @Test
   public void takenRouterShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     spyViperPresenter.takeRouter(null);
   }
 
-  @Test(expected = IllegalArgumentException.class) //
+  @Test
   public void droppedRouterShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     spyViperPresenter.dropRouter(null);
   }
 
   private static class TestViperPresenter extends ViperPresenter<ViewCallbacks, Router> {
+    TestViperPresenter(ViewCallbacks view, Router router) {
+      super(view, router);
+      assertThatRouterIsSet();
+      assertThat(hasView()).isTrue();
+      assertThat(getView()).isNotNull();
+    }
+
+    TestViperPresenter(Router router) {
+      super(router);
+      assertThatRouterIsSet();
+    }
+
+    TestViperPresenter() {}
+
     @Override
     protected void onDropRouter(Router router) {
       assertThatRouterIsSet();

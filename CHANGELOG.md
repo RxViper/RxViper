@@ -1,5 +1,8 @@
 ## Changelog
 ##### 0.10.0
+* Added constructors for `Presenter` and `ViperPresenter`. (Closes [#41]).
+
+##### 0.10.0
 * Now we have two types of presenters: simple `Presenter` for just MVP (it manages only View) and `ViperPresenter` for VIPER that additionally manages `Router`. (Closes [#36]).
 * `Mapper` implements `Func1`. (Closes [#37]).
 
@@ -70,3 +73,4 @@
 [#31]: https://github.com/RxViper/RxViper/issues/31
 [#36]: https://github.com/RxViper/RxViper/issues/36
 [#37]: https://github.com/RxViper/RxViper/issues/37
+[#41]: https://github.com/RxViper/RxViper/issues/41
