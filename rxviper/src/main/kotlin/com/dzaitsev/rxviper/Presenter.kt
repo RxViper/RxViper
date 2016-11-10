@@ -40,6 +40,13 @@ abstract class Presenter<V : ViewCallbacks> {
 
   private var viewRef: WeakReference<V>? = null
 
+  protected constructor(view: V) {
+    requireNotNull(view)
+    viewRef = WeakReference(view)
+  }
+
+  protected constructor()
+
   /**
    * Called to surrender control of taken view.
    *

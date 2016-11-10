@@ -28,9 +28,19 @@ internal class TestMapper : Mapper<Int, String>() {
   override fun map(entity: Int): String = entity.toString()
 }
 
-internal class TestPresenter(private val dummy: Boolean) : Presenter<ViewCallbacks>() {
+internal class TestPresenter : Presenter<ViewCallbacks> {
   internal val protectedView: ViewCallbacks?
     get() = view
+
+  private var dummy: Boolean = true
+
+  internal constructor(dummy: Boolean) {
+    this.dummy = dummy
+  }
+
+  internal constructor(view: ViewCallbacks) : super(view)
+
+  internal constructor() : super()
 
   public override fun onDropView(view: ViewCallbacks) {
     assertThatViewIsSet()
@@ -48,9 +58,21 @@ internal class TestPresenter(private val dummy: Boolean) : Presenter<ViewCallbac
   }
 }
 
-internal class TestViperPresenter(private val dummy: Boolean) : ViperPresenter<ViewCallbacks, Router>() {
+internal class TestViperPresenter : ViperPresenter<ViewCallbacks, Router> {
   internal val protectedRouter: Router?
     get() = router
+
+  private var dummy: Boolean = true
+
+  internal constructor(dummy: Boolean) {
+    this.dummy = dummy
+  }
+
+  internal constructor(view: ViewCallbacks, router: Router) : super(view, router)
+
+  internal constructor(router: Router) : super(router)
+
+  internal constructor() : super()
 
   public override fun onDropRouter(router: Router) {
     assertThatRouterIsSet()

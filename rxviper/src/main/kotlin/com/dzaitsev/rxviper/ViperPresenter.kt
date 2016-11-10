@@ -27,7 +27,7 @@ import java.lang.ref.WeakReference
  * @author Dmytro Zaitsev
  * @since 0.10.0
  */
-abstract class ViperPresenter<V : ViewCallbacks, R : Router> : Presenter<V>() {
+abstract class ViperPresenter<V : ViewCallbacks, R : Router> : Presenter<V> {
   /**
    * Returns the router managed by this presenter, or `null` if [takeRouter] has never been called, or after [dropRouter].
    *
@@ -41,6 +41,18 @@ abstract class ViperPresenter<V : ViewCallbacks, R : Router> : Presenter<V>() {
     get() = routerRef?.get()
 
   private var routerRef: WeakReference<R>? = null
+
+  protected constructor(view: V, router: R) : super(view) {
+    requireNotNull(router)
+    routerRef = WeakReference(router)
+  }
+
+  protected constructor(router: R) {
+    requireNotNull(router)
+    routerRef = WeakReference(router)
+  }
+
+  protected constructor()
 
   /**
    * Called to surrender control of taken router.
