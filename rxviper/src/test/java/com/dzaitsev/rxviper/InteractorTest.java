@@ -17,7 +17,9 @@
 package com.dzaitsev.rxviper;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action0;
@@ -43,6 +45,8 @@ public final class InteractorTest {
   private static final Action1<Throwable> ON_ERROR     = Actions.empty();
   private static final Action0            ON_COMPLETED = Actions.empty();
   private static final Subscriber<String> SUBSCRIBER   = new ActionSubscriber<>(ON_NEXT, ON_ERROR, ON_COMPLETED);
+
+  @Rule public final ExpectedException thrown = ExpectedException.none();
 
   private Interactor<Integer, String> spyInteractor;
 
@@ -117,53 +121,62 @@ public final class InteractorTest {
     assertThat(spyInteractor.isUnsubscribed()).isTrue();
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void subscriberShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     //noinspection unchecked
     spyInteractor.execute((Subscriber) null);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void subscriberParamShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     //noinspection unchecked
     spyInteractor.execute((Subscriber) null, PARAM);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void onNextShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     //noinspection unchecked
     spyInteractor.execute((Action1) null);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void onNextParamShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     //noinspection unchecked
     spyInteractor.execute((Action1) null, PARAM);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void onErrorShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     //noinspection unchecked
     spyInteractor.execute(ON_NEXT, (Action1) null);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void onErrorParamShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     spyInteractor.execute(ON_NEXT, null, PARAM);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void onCompletedShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     spyInteractor.execute(ON_NEXT, ON_ERROR, (Action0) null);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void onCompletedParamShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     spyInteractor.execute(ON_NEXT, ON_ERROR, null, PARAM);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void subscribeOnShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     new Interactor<Object, Object>(null, Schedulers.immediate()) {
       @Override
       protected Observable<Object> createObservable(final Object o) {
@@ -172,8 +185,9 @@ public final class InteractorTest {
     };
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void observeOnOnShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     new Interactor<Object, Object>(null, Schedulers.immediate()) {
       @Override
       protected Observable<Object> createObservable(final Object o) {

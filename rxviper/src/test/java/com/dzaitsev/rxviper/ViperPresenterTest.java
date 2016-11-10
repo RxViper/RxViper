@@ -20,13 +20,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -37,148 +35,131 @@ import static org.mockito.Mockito.verify;
  */
 public final class ViperPresenterTest {
   @Rule public final ExpectedException thrown = ExpectedException.none();
-  @Mock Router             dummyRouter;
-  @Spy  TestViperPresenter spyViperPresenter;
+  private Router                                    router;
+  private BaseViperPresenter<ViewCallbacks, Router> viperPresenter;
 
   @Before
   public void setUp() {
-    MockitoAnnotations.initMocks(this);
-  }
-
-  @Test
-  public void constructorRouterShouldNotBeNull() {
-    thrown.expect(IllegalArgumentException.class);
-    new TestViperPresenter(null);
-  }
-
-  @Test
-  public void constructorViewShouldNotBeNull() {
-    thrown.expect(IllegalArgumentException.class);
-    new TestViperPresenter(null, dummyRouter);
-  }
-
-  @Test
-  public void constructorShouldSetRouter() {
-    new TestViperPresenter(dummyRouter);
-  }
-
-  @Test
-  public void constructorShouldSetViewAndRouter() {
-    new TestViperPresenter(mock(ViewCallbacks.class), dummyRouter);
+    router = mock(Router.class);
+    viperPresenter = spy(new BaseViperPresenter<>());
   }
 
   @Test
   public void shouldNotHaveRouter() {
-    assertThat(spyViperPresenter.getRouter()).isNull();
-    assertThat(spyViperPresenter.hasRouter()).isFalse();
+    assertThat(viperPresenter.getRouter()).isNull();
+    assertThat(viperPresenter.hasRouter()).isFalse();
   }
 
   @Test
   public void shouldTakeRouter() {
-    spyViperPresenter.takeRouter(dummyRouter);
-    assertThat(spyViperPresenter.getRouter()).isEqualTo(dummyRouter);
-    assertThat(spyViperPresenter.hasRouter()).isTrue();
+    viperPresenter.takeRouter(router);
+    assertThat(viperPresenter.getRouter()).isEqualTo(router);
+    assertThat(viperPresenter.hasRouter()).isTrue();
   }
 
   @Test
   public void shouldDropRouter() {
-    spyViperPresenter.takeRouter(dummyRouter);
+    viperPresenter.takeRouter(router);
 
-    spyViperPresenter.dropRouter(dummyRouter);
-    assertThat(spyViperPresenter.getRouter()).isNull();
-    assertThat(spyViperPresenter.hasRouter()).isFalse();
+    viperPresenter.dropRouter(router);
+    assertThat(viperPresenter.getRouter()).isNull();
+    assertThat(viperPresenter.hasRouter()).isFalse();
   }
 
   @Test
   public void shouldCallOnTakeRouter() {
-    spyViperPresenter.takeRouter(dummyRouter);
-    verify(spyViperPresenter).onTakeRouter(dummyRouter);
+    viperPresenter.takeRouter(router);
+    verify(viperPresenter).onTakeRouter(router);
   }
 
   @Test
-  public void shouldCallOnTakeRouterOncePerView() {
-    spyViperPresenter.takeRouter(dummyRouter);
-    spyViperPresenter.takeRouter(dummyRouter);
-    verify(spyViperPresenter).onTakeRouter(dummyRouter);
+  public void shouldCallOnTakeRouterOncePerRouter() {
+    viperPresenter.takeRouter(router);
+    viperPresenter.takeRouter(router);
+    verify(viperPresenter).onTakeRouter(router);
   }
 
   @Test
   public void shouldNotCallOnDropIfRouterIsNotAttached() {
-    spyViperPresenter.dropRouter(dummyRouter);
-    verify(spyViperPresenter, never()).onDropRouter(dummyRouter);
+    viperPresenter.dropRouter(router);
+    verify(viperPresenter, never()).onDropRouter(router);
   }
 
   @Test
   public void shouldIgnoreOnDropIfRouterIsNotTheSame() {
-    spyViperPresenter.takeRouter(dummyRouter);
+    viperPresenter.takeRouter(router);
 
     final Router anotherRouter = mock(Router.class);
-    spyViperPresenter.dropRouter(anotherRouter);
-    verify(spyViperPresenter, never()).onDropRouter(dummyRouter);
+    viperPresenter.dropRouter(anotherRouter);
+    verify(viperPresenter, never()).onDropRouter(router);
   }
 
   @Test
   public void shouldDropPreviousRouterWhenNewRouterIsTaken() {
-    spyViperPresenter.takeRouter(dummyRouter);
+    viperPresenter.takeRouter(router);
 
     final Router newRouter = mock(Router.class);
-    spyViperPresenter.takeRouter(newRouter);
-    verify(spyViperPresenter).onDropRouter(dummyRouter);
+    viperPresenter.takeRouter(newRouter);
+    verify(viperPresenter).onDropRouter(router);
   }
 
   @Test
   public void shouldCallOnTakeRouterAfterRouterIsTaken() {
-    spyViperPresenter = new TestViperPresenter();
-    spyViperPresenter.takeRouter(dummyRouter);
+    viperPresenter.dummy = false;
+    viperPresenter.takeRouter(router);
   }
 
   @Test
   public void shouldCallOnDropRouterBeforeRouterIsDropped() {
-    spyViperPresenter = new TestViperPresenter();
-    spyViperPresenter.takeRouter(dummyRouter);
-    spyViperPresenter.dropRouter(dummyRouter);
+    viperPresenter.dummy = false;
+    viperPresenter.takeRouter(router);
+    viperPresenter.dropRouter(router);
   }
 
   @Test
   public void takenRouterShouldNotBeNull() {
     thrown.expect(IllegalArgumentException.class);
-    spyViperPresenter.takeRouter(null);
+    viperPresenter.takeRouter(null);
   }
 
   @Test
   public void droppedRouterShouldNotBeNull() {
     thrown.expect(IllegalArgumentException.class);
-    spyViperPresenter.dropRouter(null);
+    viperPresenter.dropRouter(null);
   }
 
-  private static class TestViperPresenter extends ViperPresenter<ViewCallbacks, Router> {
-    TestViperPresenter(ViewCallbacks view, Router router) {
-      super(view, router);
-      assertThatRouterIsSet();
-      assertThat(hasView()).isTrue();
-      assertThat(getView()).isNotNull();
+  @Test
+  public void shouldBePresenter() {
+    assertThat(viperPresenter).isInstanceOf(Presenter.class);
+  }
+
+  @Test
+  public void constructorArgsShouldNotBeNull() {
+    check(() -> new BaseViperPresenter<>((Router) null), true);
+    check(() -> new BaseViperPresenter<>((ViewCallbacks) null), true);
+    check(() -> new BaseViperPresenter<>(null, router), true);
+    check(() -> new BaseViperPresenter<>(mock(ViewCallbacks.class), null), true);
+  }
+
+  @Test
+  public void constructorShouldSetArgs() {
+    check(() -> new BaseViperPresenter<>(router), false);
+    check(() -> new BaseViperPresenter<>(mock(ViewCallbacks.class)), false);
+    check(() -> new BaseViperPresenter<>(mock(ViewCallbacks.class), router), false);
+  }
+
+  private static void check(Runnable r, boolean shouldThrow) {
+    boolean thrown;
+    try {
+      thrown = false;
+      r.run();
+    } catch (IllegalArgumentException e) {
+      thrown = true;
     }
-
-    TestViperPresenter(Router router) {
-      super(router);
-      assertThatRouterIsSet();
-    }
-
-    TestViperPresenter() {}
-
-    @Override
-    protected void onDropRouter(Router router) {
-      assertThatRouterIsSet();
-    }
-
-    @Override
-    protected void onTakeRouter(Router router) {
-      assertThatRouterIsSet();
-    }
-
-    private void assertThatRouterIsSet() {
-      assertThat(hasRouter()).isTrue();
-      assertThat(getRouter()).isNotNull();
+    if (shouldThrow) {
+      assertThat(thrown).isTrue();
+    } else {
+      assertThat(thrown).isFalse();
     }
   }
 }

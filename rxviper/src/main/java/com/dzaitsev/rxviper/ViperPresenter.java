@@ -58,6 +58,20 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    *
    * @since 0.11.0
    */
+  protected ViperPresenter(V view) {
+    super(view);
+  }
+
+  /**
+   * Creates a presenter with pre-attached router.
+   * <p>
+   * Doesn't call {@link #onTakeRouter} callback.
+   *
+   * @param router
+   *     router that will be returned from {@link #getRouter()}.
+   *
+   * @since 0.11.0
+   */
   protected ViperPresenter(R router) {
     Preconditions.requireNotNull(router);
     routerRef = new WeakReference<>(router);
