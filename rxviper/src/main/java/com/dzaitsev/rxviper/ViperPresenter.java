@@ -31,6 +31,46 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
   private WeakReference<R> routerRef;
 
   /**
+   * Creates a presenter with pre-attached view and router.
+   * <p>
+   * Doesn't call {@link #onTakeView} and {@link #onTakeRouter} callbacks.
+   *
+   * @param view
+   *     view that will be returned from {@link #getView()}.
+   * @param router
+   *     router that will be returned from {@link #getRouter()}.
+   *
+   * @since 0.11.0
+   */
+  protected ViperPresenter(V view, R router) {
+    super(view);
+    Preconditions.requireNotNull(router);
+    routerRef = new WeakReference<>(router);
+  }
+
+  /**
+   * Creates a presenter with pre-attached router.
+   * <p>
+   * Doesn't call {@link #onTakeRouter} callback.
+   *
+   * @param router
+   *     router that will be returned from {@link #getRouter()}.
+   *
+   * @since 0.11.0
+   */
+  protected ViperPresenter(R router) {
+    Preconditions.requireNotNull(router);
+    routerRef = new WeakReference<>(router);
+  }
+
+  /**
+   * Creates a presenter without pre-attached view and router.
+   *
+   * @since 0.11.0
+   */
+  protected ViperPresenter() {}
+
+  /**
    * Called to surrender control of taken router.
    * <p>
    * It is expected that this method will be called with the same argument as {@link #takeRouter}. Mismatched routers are ignored. This

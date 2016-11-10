@@ -17,7 +17,9 @@
 package com.dzaitsev.rxviper;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -34,12 +36,24 @@ import static org.mockito.Mockito.verify;
  * @since 2016-May-13, 12:31
  */
 public final class PresenterTest {
+  @Rule public final ExpectedException thrown = ExpectedException.none();
   @Mock ViewCallbacks            dummyView;
   @Spy  Presenter<ViewCallbacks> spyPresenter;
 
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
+  }
+
+  @Test
+  public void constructorViewShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
+    new TestPresenter(null);
+  }
+
+  @Test
+  public void constructorShouldSetView() {
+    new TestPresenter(dummyView);
   }
 
   @Test
@@ -114,17 +128,26 @@ public final class PresenterTest {
     spyPresenter.dropView(dummyView);
   }
 
-  @Test(expected = IllegalArgumentException.class) //
+  @Test
   public void takenViewShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     spyPresenter.takeView(null);
   }
 
-  @Test(expected = IllegalArgumentException.class) //
+  @Test
   public void droppedViewShouldNotBeNull() {
+    thrown.expect(IllegalArgumentException.class);
     spyPresenter.dropView(null);
   }
 
   private static class TestPresenter extends Presenter<ViewCallbacks> {
+    TestPresenter(ViewCallbacks dummyView) {
+      super(dummyView);
+      assertThatViewIsSet();
+    }
+
+    TestPresenter() {}
+
     @Override
     protected void onDropView(ViewCallbacks view) {
       assertThatViewIsSet();
