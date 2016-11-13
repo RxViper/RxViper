@@ -16,6 +16,7 @@
 
 package com.dzaitsev.rxviper;
 
+import java.lang.reflect.Proxy;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,131 +36,147 @@ import static org.mockito.Mockito.verify;
  */
 public final class ViperPresenterTest {
   @Rule public final ExpectedException thrown = ExpectedException.none();
-  private Router                                    router;
-  private BaseViperPresenter<ViewCallbacks, Router> viperPresenter;
+  private TestRouter         router;
+  private TestViperPresenter presenter;
 
   @Before
   public void setUp() {
-    router = mock(Router.class);
-    viperPresenter = spy(new BaseViperPresenter<>());
+    router = mock(TestRouter.class);
+    presenter = spy(new TestViperPresenter());
+  }
+
+  @Test
+  public void routerShouldNeverBeNull() {
+    assertThat(presenter.getRouter()).isNotNull();
+
+    presenter.takeRouter(router);
+    assertThat(presenter.getRouter()).isNotNull();
+
+    presenter.dropRouter(router);
+    assertThat(presenter.getRouter()).isNotNull();
   }
 
   @Test
   public void shouldNotHaveRouter() {
-    assertThat(viperPresenter.getRouter()).isNull();
-    assertThat(viperPresenter.hasRouter()).isFalse();
+    assertThat(presenter.hasRouter()).isFalse();
   }
 
   @Test
   public void shouldTakeRouter() {
-    viperPresenter.takeRouter(router);
-    assertThat(viperPresenter.getRouter()).isEqualTo(router);
-    assertThat(viperPresenter.hasRouter()).isTrue();
+    presenter.takeRouter(router);
+    assertThat(presenter.getRouter()).isEqualTo(router);
+    assertThat(presenter.hasRouter()).isTrue();
   }
 
   @Test
   public void shouldDropRouter() {
-    viperPresenter.takeRouter(router);
+    presenter.takeRouter(router);
 
-    viperPresenter.dropRouter(router);
-    assertThat(viperPresenter.getRouter()).isNull();
-    assertThat(viperPresenter.hasRouter()).isFalse();
+    presenter.dropRouter(router);
+    assertThat(presenter.hasRouter()).isFalse();
   }
 
   @Test
   public void shouldCallOnTakeRouter() {
-    viperPresenter.takeRouter(router);
-    verify(viperPresenter).onTakeRouter(router);
+    presenter.takeRouter(router);
+    verify(presenter).onTakeRouter(router);
   }
 
   @Test
   public void shouldCallOnTakeRouterOncePerRouter() {
-    viperPresenter.takeRouter(router);
-    viperPresenter.takeRouter(router);
-    verify(viperPresenter).onTakeRouter(router);
+    presenter.takeRouter(router);
+    presenter.takeRouter(router);
+    verify(presenter).onTakeRouter(router);
   }
 
   @Test
   public void shouldNotCallOnDropIfRouterIsNotAttached() {
-    viperPresenter.dropRouter(router);
-    verify(viperPresenter, never()).onDropRouter(router);
+    presenter.dropRouter(router);
+    verify(presenter, never()).onDropRouter(router);
   }
 
   @Test
   public void shouldIgnoreOnDropIfRouterIsNotTheSame() {
-    viperPresenter.takeRouter(router);
+    presenter.takeRouter(router);
 
-    final Router anotherRouter = mock(Router.class);
-    viperPresenter.dropRouter(anotherRouter);
-    verify(viperPresenter, never()).onDropRouter(router);
+    final TestRouter anotherRouter = mock(TestRouter.class);
+    presenter.dropRouter(anotherRouter);
+    verify(presenter, never()).onDropRouter(router);
   }
 
   @Test
   public void shouldDropPreviousRouterWhenNewRouterIsTaken() {
-    viperPresenter.takeRouter(router);
+    presenter.takeRouter(router);
 
-    final Router newRouter = mock(Router.class);
-    viperPresenter.takeRouter(newRouter);
-    verify(viperPresenter).onDropRouter(router);
+    final TestRouter newRouter = mock(TestRouter.class);
+    presenter.takeRouter(newRouter);
+    verify(presenter).onDropRouter(router);
   }
 
   @Test
   public void shouldCallOnTakeRouterAfterRouterIsTaken() {
-    viperPresenter.dummy = false;
-    viperPresenter.takeRouter(router);
+    presenter.dummy = false;
+    presenter.takeRouter(router);
   }
 
   @Test
   public void shouldCallOnDropRouterBeforeRouterIsDropped() {
-    viperPresenter.dummy = false;
-    viperPresenter.takeRouter(router);
-    viperPresenter.dropRouter(router);
+    presenter.dummy = false;
+    presenter.takeRouter(router);
+    presenter.dropRouter(router);
   }
 
   @Test
   public void takenRouterShouldNotBeNull() {
     thrown.expect(IllegalArgumentException.class);
-    viperPresenter.takeRouter(null);
+    presenter.takeRouter(null);
   }
 
   @Test
   public void droppedRouterShouldNotBeNull() {
     thrown.expect(IllegalArgumentException.class);
-    viperPresenter.dropRouter(null);
+    presenter.dropRouter(null);
   }
 
   @Test
   public void shouldBePresenter() {
-    assertThat(viperPresenter).isInstanceOf(Presenter.class);
+    assertThat(presenter).isInstanceOf(Presenter.class);
   }
 
   @Test
   public void constructorArgsShouldNotBeNull() {
-    check(() -> new BaseViperPresenter<>((Router) null), true);
-    check(() -> new BaseViperPresenter<>((ViewCallbacks) null), true);
-    check(() -> new BaseViperPresenter<>(null, router), true);
-    check(() -> new BaseViperPresenter<>(mock(ViewCallbacks.class), null), true);
+    TestUtil.check(() -> new TestViperPresenter((TestRouter) null), true, IllegalArgumentException.class);
+    TestUtil.check(() -> new TestViperPresenter((TestViewCallbacks) null), true, IllegalArgumentException.class);
+    TestUtil.check(() -> new TestViperPresenter(null, router), true, IllegalArgumentException.class);
+    TestUtil.check(() -> new TestViperPresenter(mock(TestViewCallbacks.class), null), true, IllegalArgumentException.class);
   }
 
   @Test
   public void constructorShouldSetArgs() {
-    check(() -> new BaseViperPresenter<>(router), false);
-    check(() -> new BaseViperPresenter<>(mock(ViewCallbacks.class)), false);
-    check(() -> new BaseViperPresenter<>(mock(ViewCallbacks.class), router), false);
+    TestUtil.check(() -> new TestViperPresenter(router), false, IllegalArgumentException.class);
+    TestUtil.check(() -> new TestViperPresenter(mock(TestViewCallbacks.class)), false, IllegalArgumentException.class);
+    TestUtil.check(() -> new TestViperPresenter(mock(TestViewCallbacks.class), router), false, IllegalArgumentException.class);
   }
 
-  private static void check(Runnable r, boolean shouldThrow) {
-    boolean thrown;
-    try {
-      thrown = false;
-      r.run();
-    } catch (IllegalArgumentException e) {
-      thrown = true;
-    }
-    if (shouldThrow) {
-      assertThat(thrown).isTrue();
-    } else {
-      assertThat(thrown).isFalse();
-    }
+  @Test
+  public void shouldReturnProxyRouter() {
+    presenter.takeRouter(router);
+
+    final TestRouter proxyRouter = presenter.getRouter();
+    assertThat(proxyRouter).isNotSameAs(router);
+    assertThat(Proxy.isProxyClass(proxyRouter.getClass())).isTrue();
+    assertThat(Proxy.getInvocationHandler(proxyRouter)).isInstanceOf(NullObject.class);
+  }
+
+  @Test
+  public void proxyShouldWrapRouter() {
+    final NullObject<TestRouter> nullObject = RxViper.getProxy(presenter.getRouter());
+    assertThat(nullObject.get()).isNull();
+
+    presenter.takeRouter(router);
+    assertThat(nullObject.get()).isSameAs(router);
+
+    presenter.dropRouter(router);
+    assertThat(nullObject.get()).isNull();
   }
 }

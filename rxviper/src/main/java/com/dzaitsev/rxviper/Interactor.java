@@ -52,8 +52,8 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @since 0.1.0
    */
   protected Interactor(Scheduler subscribeScheduler, Scheduler observeScheduler) {
-    Preconditions.requireNotNull(subscribeScheduler);
-    Preconditions.requireNotNull(observeScheduler);
+    RxViper.requireNotNull(subscribeScheduler);
+    RxViper.requireNotNull(observeScheduler);
 
     this.subscribeScheduler = subscribeScheduler;
     this.observeScheduler = observeScheduler;
@@ -81,7 +81,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @since 0.1.0
    */
   public final void execute(Subscriber<? super ResponseModel> subscriber, RequestModel requestModel) {
-    Preconditions.requireNotNull(subscriber);
+    RxViper.requireNotNull(subscriber);
 
     subscriptions.add(createObservable(requestModel).subscribeOn(subscribeScheduler)
         .observeOn(observeScheduler)
@@ -135,7 +135,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @since 0.4.0
    */
   public final void execute(Action1<? super ResponseModel> onNext, RequestModel requestModel) {
-    Preconditions.requireNotNull(onNext);
+    RxViper.requireNotNull(onNext);
 
     execute(new ActionSubscriber<>(onNext, InternalObservableUtils.ERROR_NOT_IMPLEMENTED, Actions.empty()), requestModel);
   }
@@ -173,8 +173,8 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @since 0.4.0
    */
   public final void execute(Action1<? super ResponseModel> onNext, Action1<Throwable> onError, RequestModel requestModel) {
-    Preconditions.requireNotNull(onNext);
-    Preconditions.requireNotNull(onError);
+    RxViper.requireNotNull(onNext);
+    RxViper.requireNotNull(onError);
 
     execute(new ActionSubscriber<>(onNext, onError, Actions.empty()), requestModel);
   }
@@ -217,9 +217,9 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    */
   public final void execute(Action1<? super ResponseModel> onNext, Action1<Throwable> onError, Action0 onCompleted,
       RequestModel requestModel) {
-    Preconditions.requireNotNull(onNext);
-    Preconditions.requireNotNull(onError);
-    Preconditions.requireNotNull(onCompleted);
+    RxViper.requireNotNull(onNext);
+    RxViper.requireNotNull(onError);
+    RxViper.requireNotNull(onCompleted);
 
     execute(new ActionSubscriber<>(onNext, onError, onCompleted), requestModel);
   }

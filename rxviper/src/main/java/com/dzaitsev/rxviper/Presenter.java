@@ -16,7 +16,8 @@
 
 package com.dzaitsev.rxviper;
 
-import java.lang.ref.WeakReference;
+import static com.dzaitsev.rxviper.RxViper.getProxy;
+import static com.dzaitsev.rxviper.RxViper.requireNotNull;
 
 /**
  * Contains view logic for preparing content for display (as received from the {@link Interactor}) and for reacting to user inputs (by
@@ -26,7 +27,7 @@ import java.lang.ref.WeakReference;
  * @since 0.1.0
  */
 public abstract class Presenter<V extends ViewCallbacks> {
-  private WeakReference<V> viewRef;
+  private final V viewProxy = RxViper.createView(null, getClass());
 
   /**
    * Creates a presenter with pre-attached view.
@@ -39,8 +40,8 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.11.0
    */
   protected Presenter(V view) {
-    Preconditions.requireNotNull(view);
-    viewRef = new WeakReference<>(view);
+    requireNotNull(view);
+    getProxy(viewProxy).set(view);
   }
 
   /**
@@ -64,24 +65,24 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.1.0
    */
   public final void dropView(V view) {
-    Preconditions.requireNotNull(view);
+    requireNotNull(view);
 
-    if (getView() == view) {
+    if (currentView() == view) {
       onDropView(view);
-      viewRef.clear();
+      getProxy(viewProxy).clear();
     }
   }
 
   /**
-   * Checks if a view is attached to this presenter. You should always call this method before calling {@link #getView} to get the view
-   * instance.
+   * Checks if a view is attached to this presenter.
    *
    * @return {@code true} if presenter has attached view
    *
+   * @see #getView()
    * @since 0.7.0
    */
   public final boolean hasView() {
-    return viewRef != null && viewRef.get() != null;
+    return currentView() != null;
   }
 
   /**
@@ -96,29 +97,29 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.1.0
    */
   public final void takeView(V view) {
-    Preconditions.requireNotNull(view);
+    requireNotNull(view);
 
-    final V currentView = getView();
+    final V currentView = currentView();
     if (currentView != view) {
       if (currentView != null) {
         dropView(currentView);
       }
-      viewRef = new WeakReference<>(view);
+      getProxy(viewProxy).set(view);
       onTakeView(view);
     }
   }
 
   /**
-   * Returns the view managed by this presenter, or {@code null} if {@link #takeView} has never been called, or after {@link #dropView}.
-   * <p>
-   * You should always call {@link #hasView} to check if the view is taken to avoid {@code NullPointerException}s.
+   * Returns the view managed by this presenter. You should always call {@link #hasView} to check if the view is taken to avoid no-op
+   * behavior.
    *
-   * @return {@code null}, if view is not taken, otherwise the concrete view instance.
+   * @return an instance of a proxy class for the specified view interface
    *
+   * @see #takeView(ViewCallbacks)
    * @since 0.1.0
    */
   protected final V getView() {
-    return viewRef == null ? null : viewRef.get();
+    return viewProxy;
   }
 
   /**
@@ -143,5 +144,9 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.6.0
    */
   protected void onTakeView(V view) {
+  }
+
+  private V currentView() {
+    return getProxy(viewProxy).get();
   }
 }

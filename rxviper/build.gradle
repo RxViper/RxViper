@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
@@ -39,12 +40,4 @@ dependencies {
   testCompile libraries.junit
   testCompile libraries.mockito
   testCompile libraries.truth
-}
-
-// Java8 not fully supported in library projects yet, https://code.google.com/p/android/issues/detail?id=211386
-// this is a temporary workaround to get at least lambdas compiling
-gradle.projectsEvaluated {
-  tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xbootclasspath/a:" + System.properties.get("java.home") + "/lib/rt.jar"
-  }
 }

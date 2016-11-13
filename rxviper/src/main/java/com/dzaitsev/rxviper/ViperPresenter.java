@@ -16,7 +16,8 @@
 
 package com.dzaitsev.rxviper;
 
-import java.lang.ref.WeakReference;
+import static com.dzaitsev.rxviper.RxViper.getProxy;
+import static com.dzaitsev.rxviper.RxViper.requireNotNull;
 
 /**
  * Contains view logic for preparing content for display (as received from the {@link Interactor}) and for reacting to user inputs (by
@@ -28,7 +29,7 @@ import java.lang.ref.WeakReference;
  * @since 0.10.0
  */
 public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> extends Presenter<V> {
-  private WeakReference<R> routerRef;
+  private final R routerProxy = RxViper.createRouter(null, getClass());
 
   /**
    * Creates a presenter with pre-attached view and router.
@@ -44,17 +45,17 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    */
   protected ViperPresenter(V view, R router) {
     super(view);
-    Preconditions.requireNotNull(router);
-    routerRef = new WeakReference<>(router);
+    requireNotNull(router);
+    getProxy(routerProxy).set(router);
   }
 
   /**
-   * Creates a presenter with pre-attached router.
+   * Creates a presenter with pre-attached view.
    * <p>
-   * Doesn't call {@link #onTakeRouter} callback.
+   * Doesn't call {@link #onTakeView} callback.
    *
-   * @param router
-   *     router that will be returned from {@link #getRouter()}.
+   * @param view
+   *     view that will be returned from {@link #getView()}.
    *
    * @since 0.11.0
    */
@@ -73,8 +74,8 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.11.0
    */
   protected ViperPresenter(R router) {
-    Preconditions.requireNotNull(router);
-    routerRef = new WeakReference<>(router);
+    requireNotNull(router);
+    getProxy(routerProxy).set(router);
   }
 
   /**
@@ -98,24 +99,24 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.1.0
    */
   public final void dropRouter(R router) {
-    Preconditions.requireNotNull(router);
+    requireNotNull(router);
 
-    if (getRouter() == router) {
+    if (currentRouter() == router) {
       onDropRouter(router);
-      routerRef.clear();
+      getProxy(routerProxy).clear();
     }
   }
 
   /**
-   * Checks if a router is attached to this presenter. You should always call this method before calling {@link #getRouter} to get the
-   * router instance.
+   * Checks if a router is attached to this presenter.
    *
    * @return {@code true} if presenter has attached router
    *
+   * @see #getRouter()
    * @since 0.7.0
    */
   public final boolean hasRouter() {
-    return routerRef != null && routerRef.get() != null;
+    return currentRouter() != null;
   }
 
   /**
@@ -130,30 +131,29 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.1.0
    */
   public final void takeRouter(R router) {
-    Preconditions.requireNotNull(router);
+    requireNotNull(router);
 
-    final R currentRouter = getRouter();
+    final R currentRouter = currentRouter();
     if (currentRouter != router) {
       if (currentRouter != null) {
         dropRouter(currentRouter);
       }
-      routerRef = new WeakReference<>(router);
+      getProxy(routerProxy).set(router);
       onTakeRouter(router);
     }
   }
 
   /**
-   * Returns the router managed by this presenter, or {@code null} if {@link #takeRouter} has never been called, or after
-   * {@link #dropRouter}.
-   * <p>
-   * You should always call {@link #hasRouter} to check if the router is taken to avoid {@code NullPointerException}s.
+   * Returns the router managed by this presenter. You should always call {@link #hasRouter} to check if the router is taken to avoid
+   * no-op behavior.
    *
-   * @return {@code null}, if router is not taken, otherwise the concrete router instance.
+   * @return an instance of a proxy class for the specified router interface
    *
+   * @see #takeRouter(Router)
    * @since 0.1.0
    */
   protected final R getRouter() {
-    return routerRef == null ? null : routerRef.get();
+    return routerProxy;
   }
 
   /**
@@ -178,5 +178,9 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.6.0
    */
   protected void onTakeRouter(R router) {
+  }
+
+  private R currentRouter() {
+    return getProxy(routerProxy).get();
   }
 }
