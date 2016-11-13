@@ -16,8 +16,6 @@
 
 package com.dzaitsev.rxviper;
 
-import java.lang.ref.WeakReference;
-
 /**
  * Contains view logic for preparing content for display (as received from the {@link Interactor}) and for reacting to user inputs (by
  * requesting new data from the Interactor).
@@ -28,7 +26,7 @@ import java.lang.ref.WeakReference;
  * @since 0.10.0
  */
 public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> extends Presenter<V> {
-  private WeakReference<R> routerRef;
+  private final R proxiedRouter = RxViper.createRouter(null, getClass());
 
   /**
    * Creates a presenter with pre-attached view and router.
@@ -44,8 +42,8 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    */
   protected ViperPresenter(V view, R router) {
     super(view);
-    Preconditions.requireNotNull(router);
-    routerRef = new WeakReference<>(router);
+    RxViper.requireNotNull(router);
+    RxViper.getProxy(proxiedRouter).set(router);
   }
 
   /**
@@ -59,8 +57,8 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.11.0
    */
   protected ViperPresenter(R router) {
-    Preconditions.requireNotNull(router);
-    routerRef = new WeakReference<>(router);
+    RxViper.requireNotNull(router);
+    RxViper.getProxy(proxiedRouter).set(router);
   }
 
   /**
@@ -84,11 +82,11 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.1.0
    */
   public final void dropRouter(R router) {
-    Preconditions.requireNotNull(router);
+    RxViper.requireNotNull(router);
 
-    if (getRouter() == router) {
+    if (currentRouter() == router) {
       onDropRouter(router);
-      routerRef.clear();
+      RxViper.getProxy(proxiedRouter).clear();
     }
   }
 
@@ -101,7 +99,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.7.0
    */
   public final boolean hasRouter() {
-    return routerRef != null && routerRef.get() != null;
+    return currentRouter() != null;
   }
 
   /**
@@ -116,14 +114,14 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.1.0
    */
   public final void takeRouter(R router) {
-    Preconditions.requireNotNull(router);
+    RxViper.requireNotNull(router);
 
-    final R currentRouter = getRouter();
+    final R currentRouter = currentRouter();
     if (currentRouter != router) {
       if (currentRouter != null) {
         dropRouter(currentRouter);
       }
-      routerRef = new WeakReference<>(router);
+      RxViper.getProxy(proxiedRouter).set(router);
       onTakeRouter(router);
     }
   }
@@ -139,7 +137,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.1.0
    */
   protected final R getRouter() {
-    return routerRef == null ? null : routerRef.get();
+    return proxiedRouter;
   }
 
   /**
@@ -164,5 +162,9 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.6.0
    */
   protected void onTakeRouter(R router) {
+  }
+
+  private R currentRouter() {
+    return RxViper.getProxy(proxiedRouter).get();
   }
 }

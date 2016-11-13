@@ -1,4 +1,7 @@
 ## Changelog
+##### 0.11.0
+* Use dynamic proxying for nullsafe using view and router. (Closes [#44]).
+
 ##### 0.10.0
 * Added constructors for `Presenter` and `ViperPresenter`. (Closes [#41]).
 
@@ -74,3 +77,4 @@
 [#36]: https://github.com/RxViper/RxViper/issues/36
 [#37]: https://github.com/RxViper/RxViper/issues/37
 [#41]: https://github.com/RxViper/RxViper/issues/41
+[#44]: https://github.com/RxViper/RxViper/issues/44

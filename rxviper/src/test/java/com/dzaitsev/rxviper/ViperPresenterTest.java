@@ -20,13 +20,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -37,12 +35,13 @@ import static org.mockito.Mockito.verify;
  */
 public final class ViperPresenterTest {
   @Rule public final ExpectedException thrown = ExpectedException.none();
-  @Mock Router             dummyRouter;
-  @Spy  TestViperPresenter spyViperPresenter;
+  private Router             dummyRouter;
+  private TestViperPresenter spyViperPresenter;
 
   @Before
   public void setUp() {
-    MockitoAnnotations.initMocks(this);
+    dummyRouter = mock(Router.class);
+    spyViperPresenter = spy(new TestViperPresenter());
   }
 
   @Test
@@ -68,8 +67,18 @@ public final class ViperPresenterTest {
   }
 
   @Test
+  public void routerShouldNeverBeNull() {
+    assertThat(spyViperPresenter.getRouter()).isNotNull();
+
+    spyViperPresenter.takeRouter(dummyRouter);
+    assertThat(spyViperPresenter.getRouter()).isNotNull();
+
+    spyViperPresenter.dropRouter(dummyRouter);
+    assertThat(spyViperPresenter.getRouter()).isNotNull();
+  }
+
+  @Test
   public void shouldNotHaveRouter() {
-    assertThat(spyViperPresenter.getRouter()).isNull();
     assertThat(spyViperPresenter.hasRouter()).isFalse();
   }
 
@@ -85,7 +94,6 @@ public final class ViperPresenterTest {
     spyViperPresenter.takeRouter(dummyRouter);
 
     spyViperPresenter.dropRouter(dummyRouter);
-    assertThat(spyViperPresenter.getRouter()).isNull();
     assertThat(spyViperPresenter.hasRouter()).isFalse();
   }
 
@@ -96,7 +104,7 @@ public final class ViperPresenterTest {
   }
 
   @Test
-  public void shouldCallOnTakeRouterOncePerView() {
+  public void shouldCallOnTakeRouterOncePerRouter() {
     spyViperPresenter.takeRouter(dummyRouter);
     spyViperPresenter.takeRouter(dummyRouter);
     verify(spyViperPresenter).onTakeRouter(dummyRouter);
@@ -128,13 +136,13 @@ public final class ViperPresenterTest {
 
   @Test
   public void shouldCallOnTakeRouterAfterRouterIsTaken() {
-    spyViperPresenter = new TestViperPresenter();
+    spyViperPresenter.dummy = false;
     spyViperPresenter.takeRouter(dummyRouter);
   }
 
   @Test
   public void shouldCallOnDropRouterBeforeRouterIsDropped() {
-    spyViperPresenter = new TestViperPresenter();
+    spyViperPresenter.dummy = false;
     spyViperPresenter.takeRouter(dummyRouter);
     spyViperPresenter.dropRouter(dummyRouter);
   }
@@ -152,11 +160,12 @@ public final class ViperPresenterTest {
   }
 
   private static class TestViperPresenter extends ViperPresenter<ViewCallbacks, Router> {
+    boolean dummy = true;
+
     TestViperPresenter(ViewCallbacks view, Router router) {
       super(view, router);
       assertThatRouterIsSet();
       assertThat(hasView()).isTrue();
-      assertThat(getView()).isNotNull();
     }
 
     TestViperPresenter(Router router) {
@@ -168,17 +177,20 @@ public final class ViperPresenterTest {
 
     @Override
     protected void onDropRouter(Router router) {
+      super.onDropRouter(router);
       assertThatRouterIsSet();
     }
 
     @Override
     protected void onTakeRouter(Router router) {
+      super.onTakeRouter(router);
       assertThatRouterIsSet();
     }
 
     private void assertThatRouterIsSet() {
-      assertThat(hasRouter()).isTrue();
-      assertThat(getRouter()).isNotNull();
+      if (!dummy) {
+        assertThat(hasRouter()).isTrue();
+      }
     }
   }
 }

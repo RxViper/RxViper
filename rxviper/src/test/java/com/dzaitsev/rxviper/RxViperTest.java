@@ -1,8 +1,12 @@
 package com.dzaitsev.rxviper;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.util.concurrent.atomic.AtomicBoolean;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -15,20 +19,20 @@ import static com.google.common.truth.Truth.assertThat;
  * @author Dmytro Zaitsev
  * @since 2016-Nov-04, 01:08
  */
-public final class PreconditionsTest {
+public final class RxViperTest {
   @Rule public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void argShouldNotBeNull() {
     thrown.expect(IllegalArgumentException.class);
     thrown.expectMessage("Argument can not be null");
-    Preconditions.requireNotNull(null);
+    RxViper.requireNotNull(null);
   }
 
   @Test
   public void checkPrivateConstructor() throws Throwable {
     try {
-      final Constructor<?>[] constructors = Preconditions.class.getDeclaredConstructors();
+      final Constructor<?>[] constructors = RxViper.class.getDeclaredConstructors();
       assertThat(constructors).hasLength(1);
       final Constructor<?> constructor = constructors[0];
       assertThat(Modifier.isPrivate(constructor.getModifiers())).isTrue();
@@ -45,7 +49,7 @@ public final class PreconditionsTest {
   @Test
   public void shouldReturnTheSameArg() {
     final Object actual = new Object();
-    final Object expected = Preconditions.requireNotNull(actual);
+    final Object expected = RxViper.requireNotNull(actual);
     assertThat(actual).isSameAs(expected);
   }
 }

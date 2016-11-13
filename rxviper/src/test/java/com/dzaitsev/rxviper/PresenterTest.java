@@ -20,13 +20,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -37,12 +35,13 @@ import static org.mockito.Mockito.verify;
  */
 public final class PresenterTest {
   @Rule public final ExpectedException thrown = ExpectedException.none();
-  @Mock ViewCallbacks            dummyView;
-  @Spy  Presenter<ViewCallbacks> spyPresenter;
+  private ViewCallbacks dummyView;
+  private TestPresenter spyPresenter;
 
   @Before
   public void setUp() {
-    MockitoAnnotations.initMocks(this);
+    dummyView = mock(ViewCallbacks.class);
+    spyPresenter = spy(new TestPresenter());
   }
 
   @Test
@@ -57,8 +56,18 @@ public final class PresenterTest {
   }
 
   @Test
+  public void viewShouldNeverBeNull() {
+    assertThat(spyPresenter.getView()).isNotNull();
+
+    spyPresenter.takeView(dummyView);
+    assertThat(spyPresenter.getView()).isNotNull();
+
+    spyPresenter.dropView(dummyView);
+    assertThat(spyPresenter.getView()).isNotNull();
+  }
+
+  @Test
   public void shouldNotHaveView() {
-    assertThat(spyPresenter.getView()).isNull();
     assertThat(spyPresenter.hasView()).isFalse();
   }
 
@@ -74,7 +83,6 @@ public final class PresenterTest {
     spyPresenter.takeView(dummyView);
 
     spyPresenter.dropView(dummyView);
-    assertThat(spyPresenter.getView()).isNull();
     assertThat(spyPresenter.hasView()).isFalse();
   }
 
@@ -117,13 +125,13 @@ public final class PresenterTest {
 
   @Test
   public void shouldCallOnTakeViewAfterViewIsTaken() {
-    spyPresenter = new TestPresenter();
+    spyPresenter.dummy = false;
     spyPresenter.takeView(dummyView);
   }
 
   @Test
   public void shouldCallOnDropViewBeforeViewIsDropped() {
-    spyPresenter = new TestPresenter();
+    spyPresenter.dummy = false;
     spyPresenter.takeView(dummyView);
     spyPresenter.dropView(dummyView);
   }
@@ -141,6 +149,8 @@ public final class PresenterTest {
   }
 
   private static class TestPresenter extends Presenter<ViewCallbacks> {
+    boolean dummy = true;
+
     TestPresenter(ViewCallbacks dummyView) {
       super(dummyView);
       assertThatViewIsSet();
@@ -150,17 +160,20 @@ public final class PresenterTest {
 
     @Override
     protected void onDropView(ViewCallbacks view) {
+      super.onDropView(view);
       assertThatViewIsSet();
     }
 
     @Override
     protected void onTakeView(ViewCallbacks view) {
+      super.onTakeView(view);
       assertThatViewIsSet();
     }
 
     private void assertThatViewIsSet() {
-      assertThat(hasView()).isTrue();
-      assertThat(getView()).isNotNull();
+      if (!dummy) {
+        assertThat(hasView()).isTrue();
+      }
     }
   }
 }

@@ -16,8 +16,6 @@
 
 package com.dzaitsev.rxviper;
 
-import java.lang.ref.WeakReference;
-
 /**
  * Contains view logic for preparing content for display (as received from the {@link Interactor}) and for reacting to user inputs (by
  * requesting new data from the Interactor).
@@ -26,7 +24,7 @@ import java.lang.ref.WeakReference;
  * @since 0.1.0
  */
 public abstract class Presenter<V extends ViewCallbacks> {
-  private WeakReference<V> viewRef;
+  private final V proxiedView = RxViper.createView(null, getClass());
 
   /**
    * Creates a presenter with pre-attached view.
@@ -39,8 +37,8 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.11.0
    */
   protected Presenter(V view) {
-    Preconditions.requireNotNull(view);
-    viewRef = new WeakReference<>(view);
+    RxViper.requireNotNull(view);
+    RxViper.getProxy(proxiedView).set(view);
   }
 
   /**
@@ -64,11 +62,11 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.1.0
    */
   public final void dropView(V view) {
-    Preconditions.requireNotNull(view);
+    RxViper.requireNotNull(view);
 
-    if (getView() == view) {
+    if (currentView() == view) {
       onDropView(view);
-      viewRef.clear();
+      RxViper.getProxy(proxiedView).clear();
     }
   }
 
@@ -81,7 +79,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.7.0
    */
   public final boolean hasView() {
-    return viewRef != null && viewRef.get() != null;
+    return currentView() != null;
   }
 
   /**
@@ -96,14 +94,14 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.1.0
    */
   public final void takeView(V view) {
-    Preconditions.requireNotNull(view);
+    RxViper.requireNotNull(view);
 
-    final V currentView = getView();
+    final V currentView = currentView();
     if (currentView != view) {
       if (currentView != null) {
         dropView(currentView);
       }
-      viewRef = new WeakReference<>(view);
+      RxViper.getProxy(proxiedView).set(view);
       onTakeView(view);
     }
   }
@@ -118,7 +116,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.1.0
    */
   protected final V getView() {
-    return viewRef == null ? null : viewRef.get();
+    return proxiedView;
   }
 
   /**
@@ -143,5 +141,9 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.6.0
    */
   protected void onTakeView(V view) {
+  }
+
+  private V currentView() {
+    return RxViper.getProxy(proxiedView).get();
   }
 }
