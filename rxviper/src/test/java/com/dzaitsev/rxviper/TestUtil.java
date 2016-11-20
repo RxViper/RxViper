@@ -16,21 +16,30 @@
 
 package com.dzaitsev.rxviper;
 
+import static com.google.common.truth.Truth.assertThat;
+
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-May-14, 15:26
+ * @since 2016-Nov-19, 23:35
  */
-final class Preconditions {
-  private Preconditions() {
-    throw new AssertionError("No instances please!");
-  }
 
-  static <T> T requireNotNull(T arg) {
-    if (arg == null) {
-      throw new IllegalArgumentException("Argument can not be null");
+final class TestUtil {
+  static void check(Runnable r, boolean shouldThrow, Class<? extends Throwable> throwableClass) {
+    boolean thrown = false;
+    try {
+      thrown = false;
+      r.run();
+    } catch (Throwable t) {
+      if (throwableClass.isInstance(t)) {
+        thrown = true;
+      }
     }
-    return arg;
+    if (shouldThrow) {
+      assertThat(thrown).isTrue();
+    } else {
+      assertThat(thrown).isFalse();
+    }
   }
 }
