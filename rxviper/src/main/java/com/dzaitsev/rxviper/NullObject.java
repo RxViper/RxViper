@@ -50,7 +50,7 @@ final class NullObject<T> implements InvocationHandler {
     return targetRef == null ? null : targetRef.get();
   }
 
-  void set(T value) {
-    targetRef = new WeakReference<>(value);
+  void set(T target) {
+    targetRef = new WeakReference<>(target);
   }
 }

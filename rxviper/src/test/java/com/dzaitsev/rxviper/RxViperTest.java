@@ -107,41 +107,44 @@ public final class RxViperTest {
 
   @Test
   public void testGenericParameterClass() {
-    class Foo<S, I> {} /*String, Integer*/
-    class Bar<I, S, C extends Collection> extends Foo<S, I> {} /*Integer, String, Set*/
-    class Baz<S extends Comparable<String>, D, I> extends Bar<I, S, Set<Long>> {} /*String, Double, Integer*/
-    class Qux<I, D extends Comparable<Double>> extends Baz<String, D, I> implements Plugh<D, I> {} /*Integer, Double*/
-    class Corge extends Qux<Integer, Double> {}
-    class Grault<B, L> extends Corge {} /*Byte, Long*/
-    class Waldo extends Grault<Byte, Long> {}
+    class ClassA<S, I> {} /*String, Integer*/
+    class ClassB<I, S, C extends Collection> extends ClassA<S, I> {} /*Integer, String, Set*/
+    class ClassC<S extends Comparable<String>, D, I> extends ClassB<I, S, Set<Long>> {} /*String, Double, Integer*/
+    class ClassD<I, D extends Comparable<Double>> extends ClassC<String, D, I> implements InterfaceB<D, I> {} /*Integer, Double*/
+    class ClassE extends ClassD<Integer, Double> {}
+    class ClassF<B, L> extends ClassE {} /*Byte, Long*/
+    class ClassG extends ClassF<Byte, Long> {}
 
-    final Class<?> waldoClass = Waldo.class;
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Foo.class, 1)).isNotSameAs(String.class);
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Foo.class, 0)).isSameAs(String.class);
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Foo.class, 1)).isSameAs(Integer.class);
+    final Class<?> classG = ClassG.class;
+    assertThat(RxViper.getGenericParameterClass(classG, ClassA.class, 1)).isNotSameAs(String.class);
+    assertThat(RxViper.getGenericParameterClass(classG, ClassA.class, 0)).isSameAs(String.class);
+    assertThat(RxViper.getGenericParameterClass(classG, ClassA.class, 1)).isSameAs(Integer.class);
 
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Bar.class, 0)).isSameAs(Integer.class);
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Bar.class, 1)).isSameAs(String.class);
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Bar.class, 2)).isSameAs(Set.class);
+    assertThat(RxViper.getGenericParameterClass(classG, ClassB.class, 0)).isSameAs(Integer.class);
+    assertThat(RxViper.getGenericParameterClass(classG, ClassB.class, 1)).isSameAs(String.class);
+    assertThat(RxViper.getGenericParameterClass(classG, ClassB.class, 2)).isSameAs(Set.class);
 
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Baz.class, 0)).isSameAs(String.class);
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Baz.class, 1)).isSameAs(Double.class);
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Baz.class, 2)).isSameAs(Integer.class);
+    assertThat(RxViper.getGenericParameterClass(classG, ClassC.class, 0)).isSameAs(String.class);
+    assertThat(RxViper.getGenericParameterClass(classG, ClassC.class, 1)).isSameAs(Double.class);
+    assertThat(RxViper.getGenericParameterClass(classG, ClassC.class, 2)).isSameAs(Integer.class);
 
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Qux.class, 0)).isSameAs(Integer.class);
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Qux.class, 1)).isSameAs(Double.class);
+    assertThat(RxViper.getGenericParameterClass(classG, ClassD.class, 0)).isSameAs(Integer.class);
+    assertThat(RxViper.getGenericParameterClass(classG, ClassD.class, 1)).isSameAs(Double.class);
 
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Grault.class, 0)).isSameAs(Byte.class);
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Grault.class, 1)).isSameAs(Long.class);
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Fred.class, 0)).isSameAs(Integer.class);
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Plugh.class, 0)).isSameAs(Double.class);
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Plugh.class, 1)).isSameAs(Integer.class);
+    assertThat(RxViper.getGenericParameterClass(classG, ClassF.class, 0)).isSameAs(Byte.class);
+    assertThat(RxViper.getGenericParameterClass(classG, ClassF.class, 1)).isSameAs(Long.class);
+    assertThat(RxViper.getGenericParameterClass(classG, InterfaceA.class, 0)).isSameAs(Integer.class);
+    assertThat(RxViper.getGenericParameterClass(classG, InterfaceB.class, 0)).isSameAs(Double.class);
+    assertThat(RxViper.getGenericParameterClass(classG, InterfaceB.class, 1)).isSameAs(Integer.class);
 
     thrown.expect(EmptyStackException.class);
-    assertThat(RxViper.getGenericParameterClass(waldoClass, Corge.class, 0)).isSameAs(Double.class);
+    assertThat(RxViper.getGenericParameterClass(classG, ClassE.class, 0)).isSameAs(Double.class);
   }
 
-  interface Fred<I> {} /*Integer*/
+  @Test
+  public void testName() {}
 
-  interface Plugh<D, I> extends Fred<I> {} /*Double, Integer*/
+  interface InterfaceA<I> {} /*Integer*/
+
+  interface InterfaceB<D, I> extends InterfaceA<I> {} /*Double, Integer*/
 }

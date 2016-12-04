@@ -43,7 +43,9 @@ final class TestViperPresenter extends ViperPresenter<TestViewCallbacks, TestRou
     assertThatViewIsSet(true);
   }
 
-  TestViperPresenter() {}
+  TestViperPresenter() {
+    super();
+  }
 
   @Override
   protected void onDropRouter(TestRouter router) {

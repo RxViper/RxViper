@@ -23,6 +23,8 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Stack;
 
+import static java.lang.String.format;
+
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
@@ -57,14 +59,14 @@ final class RxViper {
   @SuppressWarnings("unchecked")
   static Class getGenericParameterClass(final Class actualClass, final Class genericClass, final int parameterIndex) {
     check(genericClass.isAssignableFrom(actualClass) && !genericClass.equals(actualClass),
-        "Class " + genericClass.getName() + " is not a superclass of " + actualClass.getName() + ".");
+        format("Class %s is not a superclass of %s.", genericClass.getName(), actualClass.getName()));
     final boolean isInterface = genericClass.isInterface();
-    final Stack<ParameterizedType> genericClasses = new Stack<ParameterizedType>();
+    final Stack<ParameterizedType> genericClasses = new Stack<>();
     Class clazz = actualClass;
 
     while (true) {
       final Type genericInterface = isInterface ? getGenericInterface(clazz, genericClass) : null;
-      final Type currentType = genericInterface != null ? genericInterface : clazz.getGenericSuperclass();
+      final Type currentType = genericInterface == null ? clazz.getGenericSuperclass() : genericInterface;
 
       final boolean isParameterizedType = currentType instanceof ParameterizedType;
       if (isParameterizedType) {
@@ -89,35 +91,24 @@ final class RxViper {
       result = type.getActualTypeArguments()[actualArgumentIndex];
     }
 
-    check(!(result instanceof TypeVariable), "Unable to resolve type variable "
-        + result
-        + ". Try to replace instances of parametrized class with its non-parameterized subtype.");
+    check(!(result instanceof TypeVariable),
+        format("Unable to resolve type variable %s. Try to replace instances of parametrized class with its non-parameterized subtype.",
+            result));
 
     if (result instanceof ParameterizedType) {
       result = ((ParameterizedType) result).getRawType();
     }
 
-    check(result != null, "Unable to determine actual parameter type for " + actualClass.getName() + ".");
-    check(result instanceof Class, "Actual parameter type for " + actualClass.getName() + " is not a Class.");
+    check(result != null, format("Unable to determine actual parameter type for %s.", actualClass.getName()));
+    check(result instanceof Class, format("Actual parameter type for %s is not a Class.", actualClass.getName()));
     return (Class) result;
   }
 
   @SuppressWarnings("unchecked")
   private static <T, G> T createProxy(T target, Class<G> baseClass, Class<? extends G> childClass, int index) {
-    try {
-      final Class typeArgument = getGenericParameterClass(childClass, baseClass, index);
-      final Class[] interfaces;
-      if (typeArgument.isInterface()) {
-        interfaces = new Class[1];
-        interfaces[0] = typeArgument;
-      } else {
-        interfaces = typeArgument.getInterfaces();
-      }
-      return (T) Proxy.newProxyInstance(childClass.getClassLoader(), interfaces, new NullObject<>(target));
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
+    final Class typeArgument = getGenericParameterClass(childClass, baseClass, index);
+    check(typeArgument.isInterface(), format("%s must be an interface.", typeArgument));
+    return (T) Proxy.newProxyInstance(childClass.getClassLoader(), new Class[] { typeArgument }, new NullObject<>(target));
   }
 
   private static int getParameterTypeDeclarationIndex(final TypeVariable typeVariable) {
@@ -130,7 +121,7 @@ final class RxViper {
         break;
       }
     }
-    check(actualArgumentIndex != -1, "Argument " + typeVariable.toString() + " is not found in " + genericDeclaration.toString() + ".");
+    check(actualArgumentIndex != -1, format("Argument %s is not found in %s.", typeVariable, genericDeclaration));
     return actualArgumentIndex;
   }
 
