@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.domain;
+package com.dzaitsev.rxviper.sample.mainscreen.domain;
 
 import com.dzaitsev.rxviper.Interactor;
-import com.dzaitsev.rxviper.sample.dagger.Job;
-import com.dzaitsev.rxviper.sample.dagger.Main;
 import com.dzaitsev.rxviper.sample.data.CheeseStorage;
-import com.dzaitsev.rxviper.sample.presentation.CheeseViewModel;
 import java.util.Collection;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import rx.Observable;
 import rx.Scheduler;
 
@@ -33,19 +28,18 @@ import rx.Scheduler;
  * @author Dmytro Zaitsev
  * @since 2016-Jun-07, 10:32
  */
-@Singleton
 public final class GetCheesesInteractor extends Interactor<Integer, Collection<CheeseViewModel>> {
   private final CheeseStorage storage;
   private final CheeseMapper  mapper;
 
-  @Inject GetCheesesInteractor(@Job Scheduler subscribeOn, @Main Scheduler observeOn, CheeseStorage storage,
-      CheeseMapper mapper) {
+  public GetCheesesInteractor(Scheduler subscribeOn, Scheduler observeOn, CheeseStorage storage, CheeseMapper mapper) {
     super(subscribeOn, observeOn);
     this.storage = storage;
     this.mapper = mapper;
   }
 
-  @Override protected Observable<Collection<CheeseViewModel>> createObservable(Integer amount) {
+  @Override
+  protected Observable<Collection<CheeseViewModel>> createObservable(Integer amount) {
     return storage.getCheeses(amount)
         .map(mapper::map);
   }

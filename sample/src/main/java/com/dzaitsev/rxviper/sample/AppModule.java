@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.dagger;
+package com.dzaitsev.rxviper.sample;
 
 import android.app.Application;
 import android.content.res.Resources;
@@ -38,15 +38,20 @@ public final class AppModule {
     this.app = app;
   }
 
-  @Provides Resources provideResources() {
-    return app.getResources();
-  }
-
-  @Provides @Job Scheduler provideJobScheduler() {
+  @Provides
+  @Job
+  static Scheduler provideJobScheduler() {
     return Schedulers.computation();
   }
 
-  @Provides @Main Scheduler provideMainScheduler() {
+  @Provides
+  @Main
+  static Scheduler provideMainScheduler() {
     return AndroidSchedulers.mainThread();
+  }
+
+  @Provides
+  Resources provideResources() {
+    return app.getResources();
   }
 }

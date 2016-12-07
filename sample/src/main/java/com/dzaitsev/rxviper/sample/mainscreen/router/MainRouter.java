@@ -14,24 +14,17 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.presentation;
+package com.dzaitsev.rxviper.sample.mainscreen.router;
 
-import com.dzaitsev.rxviper.ViewCallbacks;
-import java.util.Collection;
+import com.dzaitsev.rxviper.Router;
+import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseViewModel;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Jun-07, 10:35
+ * @since 2016-Jun-07, 14:39
  */
-
-interface MainViewCallbacks extends ViewCallbacks {
-  void hideProgress();
-
-  void onNewCheeses(Collection<CheeseViewModel> cheeses);
-
-  void showError();
-
-  void showProgress();
+public interface MainRouter extends Router {
+  void navigateToDetails(CheeseViewModel model);
 }

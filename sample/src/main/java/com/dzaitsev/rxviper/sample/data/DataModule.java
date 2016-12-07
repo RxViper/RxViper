@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.presentation;
+package com.dzaitsev.rxviper.sample.data;
 
-import com.dzaitsev.rxviper.Router;
+import android.content.res.Resources;
+import com.dzaitsev.rxviper.sample.AppModule;
+import dagger.Module;
+import dagger.Provides;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Jun-07, 14:39
+ * @since 2016-Dec-17, 14:27
  */
-interface MainRouter extends Router {
-  void navigateToDetails(CheeseViewModel model);
+@Module(includes = AppModule.class)
+public final class DataModule {
+  @Provides
+  static CheeseStorage provideCheeseStorage(Resources resources) {
+    return new CheeseStorage(resources);
+  }
 }

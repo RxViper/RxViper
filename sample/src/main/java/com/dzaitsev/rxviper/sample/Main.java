@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.dagger;
+package com.dzaitsev.rxviper.sample;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -26,10 +26,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Jun-07, 12:26
+ * @since 2016-Jun-07, 12:30
  */
 @Qualifier
 @Documented
 @Retention(RUNTIME)
-public @interface Job {
+public @interface Main {
 }

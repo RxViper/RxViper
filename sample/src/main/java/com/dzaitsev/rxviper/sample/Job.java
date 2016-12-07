@@ -16,25 +16,20 @@
 
 package com.dzaitsev.rxviper.sample;
 
-import android.app.Application;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import javax.inject.Qualifier;
+
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Jun-07, 12:22
+ * @since 2016-Jun-07, 12:26
  */
-public final class App extends Application {
-  private AppComponent component;
-
-  public AppComponent getComponent() {
-    return component;
-  }
-
-  @Override public void onCreate() {
-    super.onCreate();
-    component = DaggerAppComponent.builder()
-        .appModule(new AppModule(this))
-        .build();
-  }
+@Qualifier
+@Documented
+@Retention(RUNTIME)
+public @interface Job {
 }

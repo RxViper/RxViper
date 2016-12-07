@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.domain;
+package com.dzaitsev.rxviper.sample.mainscreen.domain;
 
 import com.dzaitsev.rxviper.Mapper;
 import com.dzaitsev.rxviper.sample.data.Cheese;
-import com.dzaitsev.rxviper.sample.presentation.CheeseViewModel;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -28,13 +25,12 @@ import javax.inject.Singleton;
  * @author Dmytro Zaitsev
  * @since 2016-Jun-07, 11:18
  */
-@Singleton
 public final class CheeseMapper extends Mapper<Cheese, CheeseViewModel> {
-  @Inject CheeseMapper() {
-  }
 
-  @Override public CheeseViewModel map(Cheese cheese) {
-    final CheeseViewModel model = new CheeseViewModel(cheese.getName(), cheese.getId(), cheese.getType().name());
+  @Override
+  public CheeseViewModel map(Cheese cheese) {
+    final CheeseViewModel model = new CheeseViewModel(cheese.getName(), cheese.getId(), cheese.getType()
+        .name());
     model.setChecked(true);
     return model;
   }

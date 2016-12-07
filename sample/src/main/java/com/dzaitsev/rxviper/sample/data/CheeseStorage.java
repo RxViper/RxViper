@@ -22,8 +22,6 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import rx.Observable;
 
 import static java.lang.Math.min;
@@ -39,12 +37,11 @@ import static rx.Observable.timer;
  * @author Dmytro Zaitsev
  * @since 2016-Jun-07, 10:08
  */
-@Singleton
 public final class CheeseStorage {
   private final List<Cheese> cheeses;
   private final SecureRandom random = new SecureRandom();
 
-  @Inject CheeseStorage(Resources resources) {
+  CheeseStorage(Resources resources) {
     final String[] hard = resources.getStringArray(R.array.hard_cheeses);
     final String[] semiHard = resources.getStringArray(R.array.semi_hard_cheeses);
     final String[] semiSoft = resources.getStringArray(R.array.semi_soft_cheeses);

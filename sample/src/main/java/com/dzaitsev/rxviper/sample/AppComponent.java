@@ -16,25 +16,19 @@
 
 package com.dzaitsev.rxviper.sample;
 
-import android.app.Application;
+import com.dzaitsev.rxviper.sample.mainscreen.di.MainScreenModule;
+import com.dzaitsev.rxviper.sample.mainscreen.di.MainScreenSubcomponent;
+import dagger.Component;
+import javax.inject.Singleton;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Jun-07, 12:22
+ * @since 2016-Jun-07, 12:21
  */
-public final class App extends Application {
-  private AppComponent component;
-
-  public AppComponent getComponent() {
-    return component;
-  }
-
-  @Override public void onCreate() {
-    super.onCreate();
-    component = DaggerAppComponent.builder()
-        .appModule(new AppModule(this))
-        .build();
-  }
+@Singleton
+@Component(modules = AppModule.class)
+public interface AppComponent {
+  MainScreenSubcomponent plus(MainScreenModule module);
 }

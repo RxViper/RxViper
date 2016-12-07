@@ -14,20 +14,43 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.dagger;
-
-import com.dzaitsev.rxviper.sample.presentation.MainView;
-import dagger.Component;
-import javax.inject.Singleton;
+package com.dzaitsev.rxviper.sample.mainscreen.domain;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Jun-07, 12:21
+ * @since 2016-Jun-07, 11:51
  */
-@Singleton
-@Component(modules = AppModule.class)
-public interface AppComponent {
-  void inject(MainView view);
+public final class CheeseViewModel {
+  private final String  name;
+  private final long    id;
+  private final String  type;
+  private       boolean isChecked;
+
+  CheeseViewModel(String name, long id, String type) {
+    this.name = name;
+    this.id = id;
+    this.type = type;
+  }
+
+  public long getId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public boolean isChecked() {
+    return isChecked;
+  }
+
+  public void setChecked(boolean checked) {
+    isChecked = checked;
+  }
+
+  public String getType() {
+    return type;
+  }
 }

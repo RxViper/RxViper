@@ -14,43 +14,24 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.presentation;
+package com.dzaitsev.rxviper.sample.mainscreen.view;
+
+import com.dzaitsev.rxviper.ViewCallbacks;
+import java.util.Collection;
+import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseViewModel;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Jun-07, 11:51
+ * @since 2016-Jun-07, 10:35
  */
-public final class CheeseViewModel {
-  private final String  name;
-  private final long    id;
-  private final String  type;
-  private       boolean isChecked;
+public interface MainViewCallbacks extends ViewCallbacks {
+  void hideProgress();
 
-  public CheeseViewModel(String name, long id, String type) {
-    this.name = name;
-    this.id = id;
-    this.type = type;
-  }
+  void onNewCheeses(Collection<CheeseViewModel> cheeses);
 
-  public long getId() {
-    return id;
-  }
+  void showError();
 
-  public String getName() {
-    return name;
-  }
-
-  public boolean isChecked() {
-    return isChecked;
-  }
-
-  public void setChecked(boolean checked) {
-    isChecked = checked;
-  }
-
-  public String getType() {
-    return type;
-  }
+  void showProgress();
 }

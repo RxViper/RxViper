@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.presentation;
+package com.dzaitsev.rxviper.sample.detailsscreen;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 import com.dzaitsev.rxviper.sample.R;
 
-public final class MainActivity extends AppCompatActivity implements MainRouter {
-
-  @Override public void navigateToDetails(CheeseViewModel model) {
-    final Intent intent = new Intent(this, DetailsActivity.class);
-    intent.putExtra(DetailsActivity.NAME, model.getName());
-    intent.putExtra(DetailsActivity.CHECKED, model.isChecked());
-    intent.putExtra(DetailsActivity.TYPE, model.getType());
-    startActivity(intent);
-  }
+public final class DetailsActivity extends AppCompatActivity {
+  public static final String NAME    = "name";
+  public static final String CHECKED = "checked";
+  public static final String TYPE    = "type";
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.view_main);
+    setContentView(R.layout.activity_details);
+    final TextView text = (TextView) findViewById(R.id.details);
+    final Intent intent = getIntent();
+    text.setText(intent.getStringExtra(NAME));
+    text.append("\n:\n" + intent.getStringExtra(TYPE));
+    text.append(intent.getBooleanExtra(CHECKED, false) ? "\n:\nCHECKED" : "\n:\nNOT CHECKED");
   }
 }

@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample;
+package com.dzaitsev.rxviper.sample.mainscreen.di;
 
-import android.app.Application;
+import com.dzaitsev.rxviper.sample.mainscreen.presenter.MainPresenter;
+import com.dzaitsev.rxviper.sample.mainscreen.router.MainRouter;
+import com.dzaitsev.rxviper.sample.mainscreen.view.MainView;
+import dagger.Subcomponent;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Jun-07, 12:22
+ * @since 2016-Dec-08, 00:22
  */
-public final class App extends Application {
-  private AppComponent component;
+@MainScreenScope
+@Subcomponent(modules = MainScreenModule.class)
+public interface MainScreenSubcomponent {
+  void inject(MainView view);
 
-  public AppComponent getComponent() {
-    return component;
-  }
+  MainPresenter mainPresenter();
 
-  @Override public void onCreate() {
-    super.onCreate();
-    component = DaggerAppComponent.builder()
-        .appModule(new AppModule(this))
-        .build();
-  }
+  MainRouter mainRouter();
 }

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.presentation;
+package com.dzaitsev.rxviper.sample.mainscreen.presenter;
 
 import com.dzaitsev.rxviper.ViperPresenter;
-import com.dzaitsev.rxviper.sample.domain.GetCheesesInteractor;
+import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseViewModel;
+import com.dzaitsev.rxviper.sample.mainscreen.domain.GetCheesesInteractor;
+import com.dzaitsev.rxviper.sample.mainscreen.router.MainRouter;
+import com.dzaitsev.rxviper.sample.mainscreen.view.MainViewCallbacks;
 import java.util.Collection;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -28,21 +29,22 @@ import javax.inject.Singleton;
  * @author Dmytro Zaitsev
  * @since 2016-Jun-07, 10:34
  */
-@Singleton
-final class MainPresenter extends ViperPresenter<MainViewCallbacks, MainRouter> {
+public final class MainPresenter extends ViperPresenter<MainViewCallbacks, MainRouter> {
   private final GetCheesesInteractor        interactor;
   private       Collection<CheeseViewModel> cachedData;
 
-  @Inject MainPresenter(GetCheesesInteractor getCheesesInteractor) {
+  public MainPresenter(GetCheesesInteractor getCheesesInteractor) {
     interactor = getCheesesInteractor;
   }
 
-  @Override protected void onDropView(MainViewCallbacks view) {
+  @Override
+  protected void onDropView(MainViewCallbacks view) {
     /* The best place to unsubscribe all your interactors */
     interactor.unsubscribe();
   }
 
-  @Override protected void onTakeView(MainViewCallbacks view) {
+  @Override
+  protected void onTakeView(MainViewCallbacks view) {
     /* The place where you can set cached data */
     if (cachedData != null) {
       view.onNewCheeses(cachedData);
@@ -56,33 +58,25 @@ final class MainPresenter extends ViperPresenter<MainViewCallbacks, MainRouter> 
    * @throws RuntimeException
    *     if amount < 0
    */
-  void fetchCheeses(int count) {
-    if (hasView()) {
-      getView().showProgress();
-    }
+  public void fetchCheeses(int count) {
+    getView().showProgress();
     interactor.execute(
         // onNext
         cheeses -> {
           cachedData = cheeses;
-          if (hasView()) {
-            getView().onNewCheeses(cheeses);
-            getView().hideProgress();
-          }
+          getView().onNewCheeses(cheeses);
+          getView().hideProgress();
         },
         // onError
         throwable -> {
-          if (hasView()) {
-            getView().showError();
-            getView().hideProgress();
-          }
+          getView().showError();
+          getView().hideProgress();
         },
-        // parameter
+        // argument
         count);
   }
 
-  void onItemClicked(CheeseViewModel model) {
-    if (hasRouter()) {
-      getRouter().navigateToDetails(model);
-    }
+  public void onItemClicked(CheeseViewModel model) {
+    getRouter().navigateToDetails(model);
   }
 }

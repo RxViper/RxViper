@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.dagger;
+package com.dzaitsev.rxviper.sample.mainscreen.di;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
-import javax.inject.Qualifier;
-
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.RetentionPolicy;
+import javax.inject.Scope;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Jun-07, 12:30
+ * @since 2016-Dec-17, 15:37
  */
-@Qualifier
+@Scope
 @Documented
-@Retention(RUNTIME)
-public @interface Main {
-}
+@Retention(RetentionPolicy.RUNTIME)
+@interface MainScreenScope {}
