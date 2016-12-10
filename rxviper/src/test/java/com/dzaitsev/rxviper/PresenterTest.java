@@ -17,12 +17,11 @@
 package com.dzaitsev.rxviper;
 
 import java.lang.reflect.Proxy;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -34,19 +33,18 @@ import static org.mockito.Mockito.verify;
  * @author Dmytro Zaitsev
  * @since 2016-May-13, 12:31
  */
-public final class PresenterTest {
-  @Rule public final ExpectedException thrown = ExpectedException.none();
+final class PresenterTest {
   private TestViewCallbacks view;
   private TestPresenter     presenter;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     view = mock(TestViewCallbacks.class);
     presenter = spy(new TestPresenter());
   }
 
   @Test
-  public void viewShouldNeverBeNull() {
+  void viewShouldNeverBeNull() {
     assertThat(presenter.getView()).isNotNull();
 
     presenter.takeView(view);
@@ -57,19 +55,19 @@ public final class PresenterTest {
   }
 
   @Test
-  public void shouldNotHaveView() {
+  void shouldNotHaveView() {
     assertThat(presenter.hasView()).isFalse();
   }
 
   @Test
-  public void shouldTakeView() {
+  void shouldTakeView() {
     presenter.takeView(view);
     assertThat(presenter.getView()).isEqualTo(view);
     assertThat(presenter.hasView()).isTrue();
   }
 
   @Test
-  public void shouldDropView() {
+  void shouldDropView() {
     presenter.takeView(view);
 
     presenter.dropView(view);
@@ -77,26 +75,26 @@ public final class PresenterTest {
   }
 
   @Test
-  public void shouldCallOnTakeView() {
+  void shouldCallOnTakeView() {
     presenter.takeView(view);
     verify(presenter).onTakeView(view);
   }
 
   @Test
-  public void shouldCallOnTakeViewOncePerView() {
+  void shouldCallOnTakeViewOncePerView() {
     presenter.takeView(view);
     presenter.takeView(view);
     verify(presenter).onTakeView(view);
   }
 
   @Test
-  public void shouldNotCallOnDropIfViewIsNotAttached() {
+  void shouldNotCallOnDropIfViewIsNotAttached() {
     presenter.dropView(view);
     verify(presenter, never()).onDropView(view);
   }
 
   @Test
-  public void shouldIgnoreOnDropIfViewIsNotTheSame() {
+  void shouldIgnoreOnDropIfViewIsNotTheSame() {
     presenter.takeView(view);
 
     final TestViewCallbacks anotherView = mock(TestViewCallbacks.class);
@@ -105,7 +103,7 @@ public final class PresenterTest {
   }
 
   @Test
-  public void shouldDropPreviousViewWhenNewViewIsTaken() {
+  void shouldDropPreviousViewWhenNewViewIsTaken() {
     presenter.takeView(view);
 
     final TestViewCallbacks newView = mock(TestViewCallbacks.class);
@@ -114,43 +112,40 @@ public final class PresenterTest {
   }
 
   @Test
-  public void shouldCallOnTakeViewAfterViewIsTaken() {
+  void shouldCallOnTakeViewAfterViewIsTaken() {
     presenter.dummy = false;
     presenter.takeView(view);
   }
 
   @Test
-  public void shouldCallOnDropViewBeforeViewIsDropped() {
+  void shouldCallOnDropViewBeforeViewIsDropped() {
     presenter.dummy = false;
     presenter.takeView(view);
     presenter.dropView(view);
   }
 
   @Test
-  public void takenViewShouldNotBeNull() {
-    thrown.expect(IllegalArgumentException.class);
-    presenter.takeView(null);
+  void takenViewShouldNotBeNull() {
+    assertThrows(IllegalArgumentException.class, () -> presenter.takeView(null));
   }
 
   @Test
-  public void droppedViewShouldNotBeNull() {
-    thrown.expect(IllegalArgumentException.class);
-    presenter.dropView(null);
+  void droppedViewShouldNotBeNull() {
+    assertThrows(IllegalArgumentException.class, () -> presenter.dropView(null));
   }
 
   @Test
-  public void constructorViewShouldNotBeNull() {
-    thrown.expect(IllegalArgumentException.class);
-    new TestPresenter(null);
+  void constructorViewShouldNotBeNull() {
+    assertThrows(IllegalArgumentException.class, () -> new TestPresenter(null));
   }
 
   @Test
-  public void constructorShouldSetView() {
+  void constructorShouldSetView() {
     new TestPresenter(view);
   }
 
   @Test
-  public void shouldReturnProxyView() {
+  void shouldReturnProxyView() {
     presenter.takeView(view);
 
     final TestViewCallbacks proxyView = presenter.getView();
@@ -160,7 +155,7 @@ public final class PresenterTest {
   }
 
   @Test
-  public void proxyShouldWrapView() {
+  void proxyShouldWrapView() {
     final NullObject<TestViewCallbacks> nullObject = RxViper.getProxy(presenter.getView());
     assertThat(nullObject.get()).isNull();
 

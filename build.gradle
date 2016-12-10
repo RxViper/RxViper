@@ -19,9 +19,12 @@ buildscript {
   apply from: 'gradle/config.gradle'
   repositories {
     jcenter()
+    mavenCentral()
     maven { url "https://plugins.gradle.org/m2/" }
+    maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
   }
   dependencies {
+    classpath gradlePlugins.dependencyManagement
     classpath gradlePlugins.android
     classpath gradlePlugins.bintray
     classpath gradlePlugins.maven
@@ -29,12 +32,16 @@ buildscript {
     classpath gradlePlugins.apt
     classpath gradlePlugins.retrolambda
     classpath gradlePlugins.versions
+    classpath gradlePlugins.junitPlatform
   }
 }
 
 allprojects {
   repositories {
     jcenter()
+    mavenCentral()
+    maven { url 'http://repository.jetbrains.com/all' }
+    maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
   }
 
   apply from: rootProject.file('gradle/license.gradle')

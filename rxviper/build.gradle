@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 apply plugin: 'java'
+apply plugin: 'org.junit.platform.gradle.plugin'
 apply from: '../gradle/bintray.gradle'
 
-sourceCompatibility = 1.8
 targetCompatibility = 1.8
+sourceCompatibility = 1.8
 
 compileJava {
   sourceCompatibility = 1.7
@@ -28,11 +29,19 @@ compileTestJava {
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
 }
+
 apply from: '../gradle/maven.gradle'
+
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   compile libraries.rxJava
-  testCompile libraries.junit
-  testCompile libraries.mockito
-  testCompile libraries.truth
+
+  testCompile testLibraries.mockito
+  testCompile testLibraries.truth
+
+  testCompile testLibraries.junitPlatformRunner
+  testCompile testLibraries.junitJupiterApi
+  testRuntime testLibraries.junitJupiterEngine
+  testRuntime testLibraries.junitVintageEngine
+  testRuntime testLibraries.junitPlatformLauncher
 }

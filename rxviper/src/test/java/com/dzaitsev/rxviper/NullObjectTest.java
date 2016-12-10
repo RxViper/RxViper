@@ -18,8 +18,8 @@ package com.dzaitsev.rxviper;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.spy;
@@ -31,16 +31,16 @@ import static org.mockito.Mockito.verify;
  * @author Dmytro Zaitsev
  * @since 2016-Nov-20, 11:15
  */
-public final class NullObjectTest {
+final class NullObjectTest {
   private TestViewCallbacks target;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     target = new TestViewCallbacksImpl();
   }
 
   @Test
-  public void shoulInvokeTargetMethods() throws Throwable {
+  void shoulInvokeTargetMethods() throws Throwable {
     final TestViewCallbacks spy = spy(target);
     final Method doJob = TestViewCallbacks.class.getMethod("doJob");
     final NullObject<TestViewCallbacks> nullObject = new NullObject<>(spy);
@@ -49,14 +49,14 @@ public final class NullObjectTest {
   }
 
   @Test
-  public void shouldClearTarget() {
+  void shouldClearTarget() {
     final NullObject<TestViewCallbacks> nullObject = new NullObject<>(target);
     nullObject.clear();
     assertThat(nullObject.get()).isNull();
   }
 
   @Test
-  public void shouldHaveWeakTarget() {
+  void shouldHaveWeakTarget() {
     final NullObject<TestViewCallbacks> nullObject = new NullObject<>(target);
     target = null;
     System.gc();
@@ -64,12 +64,12 @@ public final class NullObjectTest {
   }
 
   @Test
-  public void shouldImplementInvocationHandler() {
+  void shouldImplementInvocationHandler() {
     assertThat(NullObject.class).isAssignableTo(InvocationHandler.class);
   }
 
   @Test
-  public void shouldReturnPassedTarget() {
+  void shouldReturnPassedTarget() {
     final NullObject<TestViewCallbacks> nullObject1 = new NullObject<>(target);
     assertThat(nullObject1.get()).isSameAs(target);
 
@@ -78,7 +78,7 @@ public final class NullObjectTest {
   }
 
   @Test
-  public void shouldSetTarget() {
+  void shouldSetTarget() {
     final NullObject<TestViewCallbacks> nullObject = new NullObject<>(null);
     assertThat(nullObject.get()).isNull();
 

@@ -27,38 +27,43 @@ ext {
 
   versions = [
       // Gradle Plugins
-      androidPlugin    : '2.2.2',
-      bintrayPlugin    : '1.7.3',
-      mavenPlugin      : '1.4.1',
-      licensePlugin    : '0.12.1',
-      retrolambdaPlugin: '3.4.0',
-      aptPlugin        : '1.8',
-      versionsPlugin   : '0.13.0',
+      androidPlugin             : '2.2.2',
+      bintrayPlugin             : '1.7.3',
+      mavenPlugin               : '1.5',
+      licensePlugin             : '0.12.1',
+      retrolambdaPlugin         : '3.4.0',
+      aptPlugin                 : '1.8',
+      versionsPlugin            : '0.13.0',
+      dependencyManagementPlugin: '1.0.0.RC1',
       // Java libraries
-      rxJava           : '1.2.4',
-      dagger           : '2.8',
-      jsr250           : '1.0',
-      junit            : '4.12',
-      mockito          : '2.3.6',
-      truth            : '0.31',
+      rxJava                    : '1.2.4',
+      dagger                    : '2.8',
+      jsr250                    : '1.0',
+      junitPlatform             : '1.0.0-M3',
+      junitVintage              : '4.12.0-M3',
+      junitJupiter              : '5.0.0-M3',
+      junit                     : '4.12',
+      mockito                   : '2.3.6',
+      truth                     : '0.31',
       // Android libraries
-      rxAndroid        : '1.2.1',
-      support          : '25.0.0',
-      constraintLayout : '1.0.0-beta4',
+      rxAndroid                 : '1.2.1',
+      support                   : '25.0.0',
+      constraintLayout          : '1.0.0-beta4',
   ]
 
   gradlePlugins = [
-      android    : "com.android.tools.build:gradle:${versions.androidPlugin}",
-      bintray    : "com.jfrog.bintray.gradle:gradle-bintray-plugin:${versions.bintrayPlugin}",
-      maven      : "com.github.dcendents:android-maven-gradle-plugin:${versions.mavenPlugin}",
-      license    : "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${versions.licensePlugin}",
-      retrolambda: "me.tatarka:gradle-retrolambda:${versions.retrolambdaPlugin}",
-      apt        : "com.neenbedankt.gradle.plugins:android-apt:${versions.aptPlugin}",
-      versions   : "com.github.ben-manes:gradle-versions-plugin:${versions.versionsPlugin}"
+      android             : "com.android.tools.build:gradle:${versions.androidPlugin}",
+      bintray             : "com.jfrog.bintray.gradle:gradle-bintray-plugin:${versions.bintrayPlugin}",
+      maven               : "com.github.dcendents:android-maven-gradle-plugin:${versions.mavenPlugin}",
+      license             : "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${versions.licensePlugin}",
+      retrolambda         : "me.tatarka:gradle-retrolambda:${versions.retrolambdaPlugin}",
+      apt                 : "com.neenbedankt.gradle.plugins:android-apt:${versions.aptPlugin}",
+      versions            : "com.github.ben-manes:gradle-versions-plugin:${versions.versionsPlugin}",
+      junitPlatform       : "org.junit.platform:junit-platform-gradle-plugin:${versions.junitPlatform}",
+      dependencyManagement: "io.spring.gradle:dependency-management-plugin:${versions.dependencyManagementPlugin}",
   ]
 
   libraries = [
-      // Java
       rxJava          : "io.reactivex:rxjava:${versions.rxJava}",
       dagger          : "com.google.dagger:dagger:${versions.dagger}",
       daggerCompiler  : "com.google.dagger:dagger-compiler:${versions.dagger}",
@@ -69,9 +74,15 @@ ext {
       design          : "com.android.support:design:${versions.support}",
       cardView        : "com.android.support:cardview-v7:${versions.support}",
       rxAndroid       : "io.reactivex:rxandroid:${versions.rxAndroid}",
-      // Test
-      junit           : "junit:junit:${versions.junit}",
-      mockito         : "org.mockito:mockito-core:${versions.mockito}",
-      truth           : "com.google.truth:truth:${versions.truth}",
+  ]
+
+  testLibraries = [
+      mockito                : "org.mockito:mockito-core:${versions.mockito}",
+      truth                  : "com.google.truth:truth:${versions.truth}",
+      junitPlatformRunner    : "org.junit.platform:junit-platform-runner:${versions.junitPlatform}",
+      junitPlatformLauncher  : "org.junit.platform:junit-platform-launcher:${versions.junitPlatform}",
+      junitJupiterApi        : "org.junit.jupiter:junit-jupiter-api:${versions.junitJupiter}",
+      junitJupiterEngine     : "org.junit.jupiter:junit-jupiter-engine:${versions.junitJupiter}",
+      junitVintageEngine     : "org.junit.vintage:junit-vintage-engine:${versions.junitVintage}",
   ]
 }

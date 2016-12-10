@@ -24,7 +24,7 @@ import static com.google.common.truth.Truth.assertThat;
  * @author Dmytro Zaitsev
  * @since 2016-Nov-14, 02:08
  */
-final class TestPresenter extends Presenter<TestViewCallbacks> {
+/*final*/ class TestPresenter extends Presenter<TestViewCallbacks> {
   boolean dummy = true;
 
   TestPresenter(TestViewCallbacks view) {

@@ -23,7 +23,7 @@ package com.dzaitsev.rxviper;
  * @since 2016-Nov-20, 14:16
  */
 
-final class TestViewCallbacksImpl implements TestViewCallbacks {
+/*final*/ class TestViewCallbacksImpl implements TestViewCallbacks {
   @Override
   public void doJob() {
     // no op

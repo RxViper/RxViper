@@ -24,11 +24,10 @@ import java.lang.reflect.Proxy;
 import java.util.Collection;
 import java.util.EmptyStackException;
 import java.util.Set;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -36,25 +35,22 @@ import static com.google.common.truth.Truth.assertThat;
  * @author Dmytro Zaitsev
  * @since 2016-Nov-04, 01:08
  */
-public final class RxViperTest {
-  @Rule public ExpectedException thrown = ExpectedException.none();
-
+final class RxViperTest {
   @Test
-  public void requiredArgShouldBeTheSame() {
+  void requiredArgShouldBeTheSame() {
     final Object actual = new Object();
     final Object expected = RxViper.requireNotNull(actual);
     assertThat(actual).isSameAs(expected);
   }
 
   @Test
-  public void requiredArgShouldNotBeNull() {
-    thrown.expect(IllegalArgumentException.class);
-    thrown.expectMessage("Argument can not be null");
-    RxViper.requireNotNull(null);
+  void requiredArgShouldNotBeNull() {
+    final Throwable thrown = assertThrows(IllegalArgumentException.class, () -> RxViper.requireNotNull(null));
+    assertThat(thrown.getMessage()).isEqualTo("Argument can not be null");
   }
 
   @Test
-  public void shouldCreateProxyRouter() {
+  void shouldCreateProxyRouter() {
     class TestRouterImpl implements TestRouter {}
     final TestRouter router = new TestRouterImpl();
     final TestRouter proxyRouter = RxViper.createRouter(router, TestViperPresenter.class);
@@ -65,7 +61,7 @@ public final class RxViperTest {
   }
 
   @Test
-  public void shouldCreateProxyView() {
+  void shouldCreateProxyView() {
     final TestViewCallbacks view = new TestViewCallbacksImpl();
     final TestViewCallbacks proxyView = RxViper.createView(view, TestPresenter.class);
     assertThat(Proxy.isProxyClass(proxyView.getClass())).isTrue();
@@ -75,7 +71,7 @@ public final class RxViperTest {
   }
 
   @Test
-  public void shouldNotCreateInstances() throws Throwable {
+  void shouldNotCreateInstances() throws Throwable {
     try {
       final Constructor<?>[] constructors = RxViper.class.getDeclaredConstructors();
       assertThat(constructors).hasLength(1);
@@ -85,20 +81,18 @@ public final class RxViperTest {
       constructor.newInstance();
     } catch (InvocationTargetException ite) {
       final Throwable cause = ite.getCause();
-      thrown.expect(AssertionError.class);
-      thrown.expectMessage("No instances please!");
-      throw cause;
+      assertThat(cause).isInstanceOf(AssertionError.class);
+      assertThat(cause.getMessage()).isEqualTo("No instances please!");
     }
   }
 
   @Test
-  public void shouldNotGetTypeSelf() {
-    thrown.expect(IllegalStateException.class);
-    RxViper.getGenericParameterClass(Object.class, Object.class, 0);
+  void shouldNotGetTypeSelf() {
+    assertThrows(IllegalStateException.class, () -> RxViper.getGenericParameterClass(Object.class, Object.class, 0));
   }
 
   @Test
-  public void shouldReturnNullObject() {
+  void shouldReturnNullObject() {
     final TestPresenter presenter = new TestPresenter(new TestViewCallbacksImpl());
     final TestViewCallbacks proxyView = presenter.getView();
     final NullObject<TestViewCallbacks> nullObject = RxViper.getProxy(proxyView);
@@ -106,7 +100,7 @@ public final class RxViperTest {
   }
 
   @Test
-  public void testGenericParameterClass() {
+  void testGenericParameterClass() {
     class ClassA<S, I> {} /*String, Integer*/
     class ClassB<I, S, C extends Collection> extends ClassA<S, I> {} /*Integer, String, Set*/
     class ClassC<S extends Comparable<String>, D, I> extends ClassB<I, S, Set<Long>> {} /*String, Double, Integer*/
@@ -137,12 +131,9 @@ public final class RxViperTest {
     assertThat(RxViper.getGenericParameterClass(classG, InterfaceB.class, 0)).isSameAs(Double.class);
     assertThat(RxViper.getGenericParameterClass(classG, InterfaceB.class, 1)).isSameAs(Integer.class);
 
-    thrown.expect(EmptyStackException.class);
-    assertThat(RxViper.getGenericParameterClass(classG, ClassE.class, 0)).isSameAs(Double.class);
+    assertThrows(EmptyStackException.class,
+        () -> assertThat(RxViper.getGenericParameterClass(classG, ClassE.class, 0)).isSameAs(Double.class));
   }
-
-  @Test
-  public void testName() {}
 
   interface InterfaceA<I> {} /*Integer*/
 
