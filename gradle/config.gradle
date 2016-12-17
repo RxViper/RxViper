@@ -26,21 +26,23 @@ ext {
   versions = [
       // Gradle Plugins
       androidPlugin    : '2.2.2',
-      bintrayPlugin    : '1.7.2',
+      bintrayPlugin    : '1.7.3',
       mavenPlugin      : '1.4.1',
       licensePlugin    : '0.12.1',
-      retrolambdaPlugin: '3.3.1',
+      retrolambdaPlugin: '3.4.0',
       aptPlugin        : '1.8',
+      versionsPlugin   : '0.13.0',
       // Java libraries
-      rxJava           : '1.2.1',
-      dagger           : '2.7',
+      rxJava           : '1.2.4',
+      dagger           : '2.8',
+      jsr250           : '1.0',
       junit            : '4.12',
-      mockito          : '2.2.3', // don't update to 2.2.4/2.2.9 because code coverage decreases
-      truth            : '0.30',
+      mockito          : '2.3.6',
+      truth            : '0.31',
       // Android libraries
       rxAndroid        : '1.2.1',
       support          : '25.0.0',
-      constraintLayout : '1.0.0-alpha7',
+      constraintLayout : '1.0.0-beta4',
   ]
 
   gradlePlugins = [
@@ -50,6 +52,7 @@ ext {
       license    : "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${versions.licensePlugin}",
       retrolambda: "me.tatarka:gradle-retrolambda:${versions.retrolambdaPlugin}",
       apt        : "com.neenbedankt.gradle.plugins:android-apt:${versions.aptPlugin}",
+      versions   : "com.github.ben-manes:gradle-versions-plugin:${versions.versionsPlugin}"
   ]
 
   libraries = [
@@ -57,6 +60,7 @@ ext {
       rxJava          : "io.reactivex:rxjava:${versions.rxJava}",
       dagger          : "com.google.dagger:dagger:${versions.dagger}",
       daggerCompiler  : "com.google.dagger:dagger-compiler:${versions.dagger}",
+      jsr250          : "javax.annotation:jsr250-api:${versions.jsr250}",
       // Android
       constraintLayout: "com.android.support.constraint:constraint-layout:${versions.constraintLayout}",
       appCompat       : "com.android.support:appcompat-v7:${versions.support}",

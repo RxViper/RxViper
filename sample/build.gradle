@@ -43,6 +43,7 @@ dependencies {
   compile project(':rxviper')
   compile libraries.rxAndroid
   compile libraries.dagger
+  provided libraries.jsr250
   compile libraries.appCompat
   compile libraries.design
   compile libraries.cardView
