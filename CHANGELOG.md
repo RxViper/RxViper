@@ -1,9 +1,10 @@
 ## Changelog
-##### 0.11.0
-* Use dynamic proxying for nullsafe using view and router. (Closes [#44]).
+##### 1.0.0-RC1
 
-##### 0.10.0
+* Use dynamic proxying for nullsafe using view and router. (Closes [#44]).
 * Added constructors for `Presenter` and `ViperPresenter`. (Closes [#41]).
+* Bump RxJava version to `1.2.4`.
+* Change root package `viper` -> `com.dzaitsev.rxviper`. (Closes [#39]).
 
 ##### 0.10.0
 * Now we have two types of presenters: simple `Presenter` for just MVP (it manages only View) and `ViperPresenter` for VIPER that additionally manages `Router`. (Closes [#36]).
@@ -76,5 +77,6 @@
 [#31]: https://github.com/RxViper/RxViper/issues/31
 [#36]: https://github.com/RxViper/RxViper/issues/36
 [#37]: https://github.com/RxViper/RxViper/issues/37
+[#39]: https://github.com/RxViper/RxViper/issues/39
 [#41]: https://github.com/RxViper/RxViper/issues/41
 [#44]: https://github.com/RxViper/RxViper/issues/44

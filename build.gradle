@@ -38,6 +38,7 @@ allprojects {
   }
 
   apply from: rootProject.file('gradle/license.gradle')
+  apply plugin: 'idea'
 }
 
 task clean(type: Delete) {
@@ -46,4 +47,8 @@ task clean(type: Delete) {
 
 task licenseFormatEverything(type: nl.javadude.gradle.plugins.license.License) {
   source = fileTree(dir: projectDir).include(["**/*.gradle", "**/*.properties", "**/*.xml"])
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.14.1'
 }

@@ -95,7 +95,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @param subscriber
    *     the Subscriber that will handle emissions and notifications from the Observable
    *
-   * @see #execute(Subscriber, RequestModel)
+   * @see #execute(Subscriber, Object)
    * @since 0.2.0
    */
   public final void execute(Subscriber<? super ResponseModel> subscriber) {
@@ -125,7 +125,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @param onNext
    *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
    * @param requestModel
-   *     parameter which will be passed to {@link #createObservable(RequestModel)}.
+   *     parameter which will be passed to {@link #createObservable(Object)}.
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null
