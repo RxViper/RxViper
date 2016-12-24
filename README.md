@@ -12,7 +12,7 @@ This is a micro framework with a small, extensible API which provides basic abst
 Grab via Gradle:
 
 ```groovy
-compile 'com.dzaitsev.rxviper:rxviper:0.10.0'
+compile 'com.dzaitsev.rxviper:rxviper:1.0.0-rc1'
 ```
 
 Maven:
@@ -21,7 +21,7 @@ Maven:
 <dependency>
     <groupId>com.dzaitsev.rxviper</groupId>
     <artifactId>rxviper</artifactId>
-    <version>0.10.0</version>
+    <version>1.0.0-rc1</version>
 </dependency>
 ```
 

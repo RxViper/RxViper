@@ -1,0 +1,23 @@
+ext {
+  BINTRAY_REPO = 'maven'
+  BINTRAY_NAME = 'com.dzaitsev.rxviper'
+
+  POM_GROUP_ID = 'com.dzaitsev.rxviper'
+  POM_LIBRARY_NAME = 'RxViper'
+  POM_ARTIFACT = 'rxviper'
+
+  POM_LIBRARY_DESCRIPTION = 'Android micro framework with a small, extensible API for developing apps based on clean VIPER architecture.'
+
+  POM_SITE_URL = 'https://github.com/RxViper/RxViper'
+  POM_GIT_URL = 'https://github.com/RxViper/RxViper.git'
+
+  POM_LIBRARY_VERSION = '1.0.0-rc1'
+
+  POM_DEVELOPER_ID = 'dmitriyzaitsev'
+  POM_DEVELOPER_NAME = 'Dmytro Zaitsev'
+  POM_DEVELOPER_EMAIL = 'd.zaitsev.dev@gmail.com'
+
+  POM_LICENSE_NAME = 'The Apache Software License, Version 2.0'
+  POM_LICENSE_URL = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+  POM_ALL_LICENSES = 'Apache-2.0'
+}

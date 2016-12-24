@@ -16,6 +16,7 @@
 import java.text.SimpleDateFormat
 
 apply plugin: 'com.jfrog.bintray'
+apply from: rootProject.file('gradle/properties.gradle')
 
 version = POM_LIBRARY_VERSION
 Date buildTimeAndDate = new Date()
@@ -37,36 +38,14 @@ def manifestAttributes = [
     'Implementation-Vendor' : POM_SITE_URL
 ]
 
-android.libraryVariants.all { variant ->
-  def name = variant.buildType.name
-  if (!name.equals("debug")) {
-    def task = project.tasks.create "jar${name.capitalize()}", Jar
-    task.dependsOn variant.javaCompile
-    task.from variant.javaCompile.destinationDir
-    task.exclude('**/BuildConfig.class')
-    task.manifest { attributes(manifestAttributes) }
-    artifacts.add('archives', task);
-  }
-}
-
 task sourcesJar(type: Jar) {
-  manifest {
-    attributes(manifestAttributes)
-  }
-  from android.sourceSets.main.java.srcDirs
+  manifest.attributes(manifestAttributes)
   classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-  failOnError false
-  source = android.sourceSets.main.java.srcDirs
-  classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+  from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-  manifest {
-    attributes(manifestAttributes)
-  }
+  manifest.attributes(manifestAttributes)
   classifier = 'javadoc'
   from javadoc.destinationDir
 }
@@ -77,8 +56,9 @@ artifacts {
 }
 
 bintray {
-  dryRun = false // Whether to run this as dry-run, without deploying
-  publish = false // If version should be auto published after an upload
+  dryRun = false // [Default: false] Whether to run this as dry-run, without deploying
+  publish = false // [Default: false] Whether version should be auto published after an upload
+  override = false // [Default: false] Whether to override version artifacts already published
   user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
   key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
 

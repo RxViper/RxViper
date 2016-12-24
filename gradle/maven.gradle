@@ -22,7 +22,7 @@ install {
     // This generates POM.xml with proper parameters
     pom {
       project {
-        packaging 'aar'
+        packaging 'jar'
         groupId POM_GROUP_ID
         artifactId POM_ARTIFACT
 
