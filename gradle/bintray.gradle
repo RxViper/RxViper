@@ -38,6 +38,8 @@ def manifestAttributes = [
     'Implementation-Vendor' : POM_SITE_URL
 ]
 
+jar.manifest.attributes(manifestAttributes)
+
 task sourcesJar(type: Jar) {
   manifest.attributes(manifestAttributes)
   classifier = 'sources'
