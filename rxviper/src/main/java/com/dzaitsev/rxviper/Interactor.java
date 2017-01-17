@@ -24,8 +24,9 @@ import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Actions;
 import rx.internal.util.ActionSubscriber;
-import rx.internal.util.InternalObservableUtils;
 import rx.subscriptions.CompositeSubscription;
+
+import static rx.internal.util.InternalObservableUtils.ERROR_NOT_IMPLEMENTED;
 
 /**
  * Contains the business logic as specified by a use case
@@ -39,6 +40,7 @@ import rx.subscriptions.CompositeSubscription;
  * @since 0.1.0
  */
 public abstract class Interactor<RequestModel, ResponseModel> implements Subscription {
+  static final Action0 ON_COMPLETED = Actions.empty();
   private final Scheduler             subscribeScheduler;
   private final Scheduler             observeScheduler;
   private final CompositeSubscription subscriptions;
@@ -137,7 +139,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
   public final void execute(Action1<? super ResponseModel> onNext, RequestModel requestModel) {
     RxViper.requireNotNull(onNext);
 
-    execute(new ActionSubscriber<>(onNext, InternalObservableUtils.ERROR_NOT_IMPLEMENTED, Actions.empty()), requestModel);
+    execute(new ActionSubscriber<>(onNext, ERROR_NOT_IMPLEMENTED, ON_COMPLETED), requestModel);
   }
 
   /**
@@ -176,7 +178,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
     RxViper.requireNotNull(onNext);
     RxViper.requireNotNull(onError);
 
-    execute(new ActionSubscriber<>(onNext, onError, Actions.empty()), requestModel);
+    execute(new ActionSubscriber<>(onNext, onError, ON_COMPLETED), requestModel);
   }
 
   /**
