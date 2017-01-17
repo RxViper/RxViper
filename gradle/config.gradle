@@ -45,6 +45,8 @@ ext {
       rxAndroid        : '2.0.0',
       support          : '25.0.0',
       constraintLayout : '1.0.0-beta4',
+      // Kotlin
+      kotlin           : '1.1-M04'
   ]
 
   gradlePlugins = [
@@ -54,7 +56,8 @@ ext {
       license    : "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${versions.licensePlugin}",
       retrolambda: "me.tatarka:gradle-retrolambda:${versions.retrolambdaPlugin}",
       apt        : "com.neenbedankt.gradle.plugins:android-apt:${versions.aptPlugin}",
-      versions   : "com.github.ben-manes:gradle-versions-plugin:${versions.versionsPlugin}"
+      versions   : "com.github.ben-manes:gradle-versions-plugin:${versions.versionsPlugin}",
+      kotlin     : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
   ]
 
   libraries = [
@@ -73,5 +76,7 @@ ext {
       junit           : "junit:junit:${versions.junit}",
       mockito         : "org.mockito:mockito-core:${versions.mockito}",
       truth           : "com.google.truth:truth:${versions.truth}",
+      // Kotlin
+      kotlin          : "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}",
   ]
 }
