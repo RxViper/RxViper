@@ -26,10 +26,10 @@ import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Actions;
 import rx.internal.util.ActionSubscriber;
-import rx.internal.util.InternalObservableUtils;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.dzaitsev.rxviper.RxViper.requireNotNull;
+import static rx.internal.util.InternalObservableUtils.ERROR_NOT_IMPLEMENTED;
 
 /**
  * Contains the business logic as specified by a use case
@@ -141,7 +141,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
   public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nullable RequestModel requestModel) {
     requireNotNull(onNext);
 
-    execute(new ActionSubscriber<>(onNext, InternalObservableUtils.ERROR_NOT_IMPLEMENTED, Actions.empty()), requestModel);
+    execute(new ActionSubscriber<>(onNext, ERROR_NOT_IMPLEMENTED, Actions.empty()), requestModel);
   }
 
   /**
