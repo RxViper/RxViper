@@ -19,6 +19,7 @@ buildscript {
   apply from: 'gradle/config.gradle'
   repositories {
     jcenter()
+    maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.1' }
     maven { url "https://plugins.gradle.org/m2/" }
   }
   dependencies {
@@ -29,12 +30,14 @@ buildscript {
     classpath gradlePlugins.apt
     classpath gradlePlugins.retrolambda
     classpath gradlePlugins.versions
+    classpath gradlePlugins.kotlin
   }
 }
 
 allprojects {
   repositories {
     jcenter()
+    maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.1' }
   }
 
   apply from: rootProject.file('gradle/license.gradle')
