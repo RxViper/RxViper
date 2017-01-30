@@ -7,6 +7,12 @@ This is a micro framework with a small, extensible API which provides basic abst
 
 > I copy these classes into all apps I make. I'm tired of doing it. Now it's a library. ©
 
+#### Dedicated slides and video from my talk @ GDG Minsk 2016
+
+[SpeakerDeck](https://speakerdeck.com/dmitriyzaitsev/viper-sexy-architecting-or-mvp-on-steroids) or [SlideShare](http://www.slideshare.net/DmitriyZaitsev2/sexy-architecting-viper-mvp-on-steroids)
+
+[![My talk @ GDG Minsk](https://img.youtube.com/vi/pSSN_dnadKU/0.jpg)](https://www.youtube.com/watch?v=pSSN_dnadKU)
+
 ## Download
 
 Grab via Gradle:
