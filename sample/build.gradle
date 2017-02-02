@@ -17,6 +17,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 
+//apply plugin: 'com.dzaitsev.rxviper.gradle'
+
+apply plugin: com.dzaitsev.rxviper.plugin.RxViperPlugin
+
 android {
   compileSdkVersion androidConfig.compileSdkVersion
   buildToolsVersion androidConfig.buildToolsVersion
@@ -49,4 +53,31 @@ dependencies {
   compile libraries.cardView
   compile libraries.constraintLayout
   testCompile libraries.junit
+}
+
+rxViper {
+  splitPackages = true
+  useLambdas = true
+  skipExisting = false
+  screens {
+    foo {
+      packageName = "generated"
+      withTests = false
+      hasRouter = true
+      requestModel = String.class
+      responseModel = Long.class
+      useCases = ["GetItems", "WatchPorn", "Login"]
+      routesTo = ["Home", "Settings", "Registration", "News"]
+    }
+
+    bar {
+      packageName = "generated"
+      useCases = ["SayHello"]
+      useLambdas = false
+    }
+
+    bazQux {
+      packageName = "generated"
+    }
+  }
 }

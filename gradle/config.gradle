@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-apply from: 'gradle/properties.gradle'
 ext {
   androidConfig = [
       compileSdkVersion: 24,
@@ -22,7 +21,7 @@ ext {
       minSdkVersion    : 9,
       targetSdkVersion : 24,
       versionCode      : 12,
-      versionName      : POM_LIBRARY_VERSION,
+      versionName      : '1.0',
   ]
 
   versions = [
