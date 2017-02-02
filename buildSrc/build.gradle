@@ -1,0 +1,42 @@
+//apply plugin: 'groovy'
+apply plugin: 'kotlin'
+
+buildscript {
+  apply from: '../gradle/config.gradle'
+  repositories {
+    jcenter()
+    mavenCentral()
+    maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.1' }
+  }
+
+  dependencies {
+    classpath gradlePlugins.kotlin
+  }
+}
+
+dependencies {
+  compile gradleApi()
+  compile libraries.kotlin
+  compile 'com.squareup:javapoet:1.8.0'
+  compile 'com.dzaitsev.rxviper:rxviper:1.0.0-rc1'
+  compile 'com.android.tools.build:gradle:2.2.2'
+}
+
+apply plugin: 'maven'
+
+repositories {
+  jcenter()
+  mavenCentral()
+  maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.1' }
+}
+
+group = 'com.dzaitsev.rxviper'
+version = '1.0-SNAPSHOT'
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      repository(url: uri('repo'))
+    }
+  }
+}
