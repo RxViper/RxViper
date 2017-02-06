@@ -40,7 +40,7 @@ internal class PresenterGenerator(feature: FeatureOptions, val hasRouter: Boolea
 
         constructorBuilder
             .addParameter(ClassName.get(feature.fullPackage, className), argName)
-            .addCode("this.$argName = $argName;\n")
+            .addStatement("this.$argName = $argName")
 
         presenterBuilder.addField(ClassName.get(feature.fullPackage, className), argName, Modifier.PRIVATE, Modifier.FINAL)
             .addMethod(methodBuilder.addStatement(methodBody(argName),
