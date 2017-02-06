@@ -1,6 +1,8 @@
-package com.dzaitsev.rxviper.plugin
+package com.dzaitsev.rxviper.plugin.generator
 
 import com.dzaitsev.rxviper.Router
+import com.dzaitsev.rxviper.plugin.FeatureOptions
+import com.dzaitsev.rxviper.plugin.clazz
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
 import rx.Observable
@@ -15,7 +17,7 @@ internal class RouterGenerator(feature: FeatureOptions) : Generator(feature) {
         .addSuperinterface(clazz<Router>())
         .addModifiers(Modifier.PUBLIC)
     feature.routesTo.forEach {
-      routerBuilder.addMethod(MethodSpec.methodBuilder("navigateTo$it")
+      routerBuilder.addMethod(MethodSpec.methodBuilder("navigateTo${it.capitalize()}")
           .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
           .build())
     }

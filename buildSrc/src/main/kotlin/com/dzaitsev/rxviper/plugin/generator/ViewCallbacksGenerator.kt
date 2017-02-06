@@ -1,6 +1,8 @@
-package com.dzaitsev.rxviper.plugin
+package com.dzaitsev.rxviper.plugin.generator
 
 import com.dzaitsev.rxviper.ViewCallbacks
+import com.dzaitsev.rxviper.plugin.FeatureOptions
+import com.dzaitsev.rxviper.plugin.clazz
 import com.squareup.javapoet.TypeSpec
 import rx.Observable
 import rx.Observable.just
