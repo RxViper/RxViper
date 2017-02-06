@@ -25,7 +25,6 @@ open class GeneratingTask : DefaultTask() {
       }
 
       generators.forEach {
-        println("Generating ${it.typeSpecName}...")
         it.saveTo(directory)
       }
     }
