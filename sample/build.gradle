@@ -56,28 +56,31 @@ dependencies {
 }
 
 rxViper {
-  splitPackages = true
-  useLambdas = true
-  skipExisting = false
+  packageName "generated"
+  splitPackages true
+  useLambdas true
+  skipExisting  false
+  justMvp false
+  hasRouter true
+  withTests false
+
   screens {
     foo {
-      packageName = "generated"
-      withTests = false
-      hasRouter = true
-      requestModel = String.class
-      responseModel = Long.class
-      useCases = ["GetItems", "WatchPorn", "Login"]
-      routesTo = ["Home", "Settings", "Registration", "News"]
+      packageName "generated"
+      withTests false
+      hasRouter true
+      requestModel String.class
+      responseModel Long.class
+      // useCases ["GetItems", "WatchPorn"]
+      // routesTo ["Home", "Settings", "Registration", "News"]
     }
 
     bar {
-      packageName = "generated"
-      useCases = ["SayHello"]
-      useLambdas = false
-    }
-
-    bazQux {
-      packageName = "generated"
+      useLambdas false
+      hasRouter false
+      withTests true
+      //useCases ["Login", "Post"]
+      //routesTo ["Auth", "Main", "UserProfile"]
     }
   }
 }
