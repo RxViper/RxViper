@@ -9,7 +9,7 @@ import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 
-open class GeneratingTask : DefaultTask() {
+open class RxViperGenerate : DefaultTask() {
   internal lateinit var options: NamedDomainObjectContainer<FeatureOptions>
   internal lateinit var directory: File
 
