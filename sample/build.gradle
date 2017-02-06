@@ -59,28 +59,28 @@ rxViper {
   packageName "generated"
   splitPackages true
   useLambdas true
-  skipExisting  false
+  skipExisting false
   justMvp false
   hasRouter true
   withTests false
 
   screens {
     foo {
-      packageName "generated"
+      packageName rxViper.packageName
       withTests false
       hasRouter true
       requestModel String.class
       responseModel Long.class
-      // useCases ["GetItems", "WatchPorn"]
-      // routesTo ["Home", "Settings", "Registration", "News"]
+      useCases = ["GetItems", "WatchPorn"]
+      routesTo = ["Home", "Settings", "Registration", "News"]
     }
 
     bar {
       useLambdas false
       hasRouter false
       withTests true
-      //useCases ["Login", "Post"]
-      //routesTo ["Auth", "Main", "UserProfile"]
+      useCases = ["Login", "Post"]
+      routesTo = ["Auth", "Main", "UserProfile"]
     }
   }
 }

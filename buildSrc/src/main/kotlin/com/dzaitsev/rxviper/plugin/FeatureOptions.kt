@@ -5,61 +5,36 @@ class FeatureOptions(private val _name: String) {
   val fullPackage: String
     get() = "$packageName.${_name.toLowerCase()}"
 
-  internal var packageName = RxViperDSL.packageName
-  internal var hasRouter = RxViperDSL.hasRouter
-  internal var splitPackages = RxViperDSL.splitPackages
-  internal var useLambdas = RxViperDSL.useLambdas
-  internal var justMvp = RxViperDSL.justMvp
-  internal var skipExisting = RxViperDSL.skipExisting
-  internal var withTests = RxViperDSL.withTests
+  var packageName = RxViperDSL.packageName
+    @JvmName("packageName") set
 
-  internal var useCases = emptyArray<String>()
-  internal var routesTo = emptyArray<String>()
-  internal var requestModel = clazz<Any>()
-  internal var responseModel = clazz<Any>()
+  var hasRouter = RxViperDSL.hasRouter
+    @JvmName("hasRouter") set
 
-  fun packageName(value: String) {
-    packageName = value
-  }
+  var splitPackages = RxViperDSL.splitPackages
+    @JvmName("splitPackages") set
 
-  fun splitPackages(value: Boolean) {
-    splitPackages = value
-  }
+  var useLambdas = RxViperDSL.useLambdas
+    @JvmName("useLambdas") set
 
-  fun useLambdas(value: Boolean) {
-    useLambdas = value
-  }
+  var justMvp = RxViperDSL.justMvp
+    @JvmName("justMvp") set
 
-  fun justMvp(value: Boolean) {
-    justMvp = value
-  }
+  var skipExisting = RxViperDSL.skipExisting
+    @JvmName("skipExisting") set
 
-  fun skipExisting(value: Boolean) {
-    skipExisting = value
-  }
+  var withTests = RxViperDSL.withTests @JvmName("withTests") set
 
-  fun hasRouter(value: Boolean) {
-    hasRouter = value
-  }
+  var useCases = emptyArray<String>()
+    @JvmName("useCases") set
 
-  fun withTests(value: Boolean) {
-    withTests = value
-  }
+  var routesTo = emptyArray<String>()
+    @JvmName("routesTo") set
 
-  fun useCases(value: Array<String>) {
-    useCases = value
-  }
+  var requestModel = clazz<Any>()
+    @JvmName("requestModel") set
 
-  fun routesTo(value: Array<String>) {
-    routesTo = value
-  }
-
-  fun requestModel(value: Class<Any>) {
-    requestModel = value
-  }
-
-  fun responseModel(value: Class<Any>) {
-    responseModel = value
-  }
+  var responseModel = clazz<Any>()
+    @JvmName("responseModel") set
 }
 

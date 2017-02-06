@@ -19,6 +19,7 @@ internal abstract class Generator(protected val feature: FeatureOptions) {
           .skipJavaLangImports(true)
           .build()
           .writeTo(directory)
+      println("Generated ${it.name}")
     }
   }
 }
