@@ -1,5 +1,6 @@
-package com.dzaitsev.rxviper.plugin
+package com.dzaitsev.rxviper.plugin.generator
 
+import com.dzaitsev.rxviper.plugin.FeatureOptions
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 import rx.Observable

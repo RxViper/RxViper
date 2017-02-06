@@ -1,10 +1,13 @@
-package com.dzaitsev.rxviper.plugin
+package com.dzaitsev.rxviper.plugin.generator
 
 import com.dzaitsev.rxviper.Interactor
+import com.dzaitsev.rxviper.plugin.FeatureOptions
+import com.dzaitsev.rxviper.plugin.clazz
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeSpec
 import rx.Observable
+import rx.Observable.from
 import rx.Observable.just
 import rx.Scheduler
 import javax.lang.model.element.Modifier
@@ -19,7 +22,7 @@ internal class InteractorGenerator(feature: FeatureOptions) : Generator(feature)
     } else {
       val interactors = java.util.ArrayList<TypeSpec>()
       useCases.forEach { interactors.add(from("${it}Interactor")) }
-      return Observable.from(interactors)
+      return from(interactors)
     }
   }
 
