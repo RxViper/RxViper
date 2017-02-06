@@ -16,7 +16,7 @@ class RxViperPlugin : Plugin<Project> {
     val rxViper = extensions.create("rxViper", clazz<RxViperDSL>(), container(clazz<FeatureOptions>()))
 
     afterEvaluate {
-      with(task<GeneratingTask>("generateScreens")) {
+      with(task<RxViperGenerate>("generateScreens")) {
         configure(this) { group = "RxViper" }
 
         options = rxViper.options
