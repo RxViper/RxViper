@@ -69,18 +69,29 @@ rxViper {
       packageName rxViper.packageName
       //withTests false
       hasRouter true
-      requestModel String.class
-      responseModel Long.class
-      useCases = ["GetItems", "WatchPorn"]
-      routesTo = ["Home", "Settings", "Registration", "News"]
+      useCases {
+        getItems {
+          requestModel Long.class
+          responseModel String.class
+        }
+        watchPorn {
+          requestModel Integer.class
+          responseModel Boolean.class
+        }
+      }
+      routesTo "Home", "Settings", "Registration", "News"
     }
 
     bar {
       useLambdas false
       hasRouter false
       //withTests true
-      useCases = ["Login", "Post"]
-      routesTo = ["Auth", "Main", "UserProfile"]
+      useCases {
+          login
+          post
+          createUser
+      }
+      routesTo "Auth", "Main", "UserProfile"
     }
   }
 }
