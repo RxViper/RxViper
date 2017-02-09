@@ -1,13 +1,13 @@
 package com.dzaitsev.rxviper.plugin
 
-import org.gradle.api.Action
+import groovy.lang.Closure
 import org.gradle.api.Incubating
 import org.gradle.api.NamedDomainObjectContainer
 
 open class RxViperExtension(internal val screens: NamedDomainObjectContainer<Screen>) {
 
-  fun screens(action: Action<NamedDomainObjectContainer<Screen>>) {
-    action.execute(screens)
+  fun screens(closure: Closure<NamedDomainObjectContainer<Screen>>) {
+    screens.configure(closure)
   }
 
   companion object {

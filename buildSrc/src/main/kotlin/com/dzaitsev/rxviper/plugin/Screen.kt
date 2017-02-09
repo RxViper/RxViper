@@ -1,11 +1,13 @@
 package com.dzaitsev.rxviper.plugin
 
+import groovy.lang.Closure
 import org.gradle.api.Incubating
+import org.gradle.api.NamedDomainObjectContainer
 
-class Screen(private val _name: String) {
+class Screen(_name: String, internal val useCases: NamedDomainObjectContainer<UseCase>) {
   val name = _name.capitalize()
   val fullPackage: String
-    get() = "$packageName.${_name.toLowerCase()}"
+    get() = "$packageName.${name.toLowerCase()}"
 
   var packageName = RxViperExtension.packageName
     @JvmName("packageName") set
@@ -19,17 +21,12 @@ class Screen(private val _name: String) {
   var justMvp = RxViperExtension.justMvp
     @JvmName("justMvp") set
 
-  var useCases = emptyArray<String>()
-    @JvmName("useCases") set
-
   var routesTo = emptyArray<String>()
     @JvmName("routesTo") set
 
-  var requestModel = clazz<Any>()
-    @JvmName("requestModel") set
-
-  var responseModel = clazz<Any>()
-    @JvmName("responseModel") set
+  fun useCases(closure: Closure<NamedDomainObjectContainer<UseCase>>) {
+    useCases.configure(closure)
+  }
 
 
   @Incubating internal var splitPackages = RxViperExtension.splitPackages

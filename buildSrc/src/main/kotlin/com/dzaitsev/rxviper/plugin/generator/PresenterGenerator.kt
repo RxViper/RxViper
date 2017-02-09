@@ -3,6 +3,7 @@ package com.dzaitsev.rxviper.plugin.generator
 import com.dzaitsev.rxviper.Presenter
 import com.dzaitsev.rxviper.ViperPresenter
 import com.dzaitsev.rxviper.plugin.Screen
+import com.dzaitsev.rxviper.plugin.UseCase
 import com.dzaitsev.rxviper.plugin.clazz
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
@@ -18,7 +19,7 @@ internal class PresenterGenerator(screen: Screen, val hasRouter: Boolean = true)
   override val typeName = "Presenter"
 
   override fun createSpec(): Observable<TypeSpec> {
-    val useCases = if (screen.useCases.isEmpty()) arrayOf(screen.name) else screen.useCases
+    val useCases = if (screen.useCases.isEmpty()) listOf(UseCase(screen.name)) else screen.useCases.map { it }
     val constructorBuilder = MethodSpec.constructorBuilder()
         .addModifiers(Modifier.PUBLIC)
 
@@ -27,15 +28,15 @@ internal class PresenterGenerator(screen: Screen, val hasRouter: Boolean = true)
         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
 
     useCases.forEach { useCase ->
-      val methodBuilder = MethodSpec.methodBuilder("do$useCase")
+      val methodBuilder = MethodSpec.methodBuilder("do${useCase.name}")
           .addModifiers(Modifier.PUBLIC)
-          .addParameter(screen.requestModel, "requestModel")
+          .addParameter(useCase.requestModel, "requestModel")
 
       if (screen.justMvp) {
         presenterBuilder.addMethod(methodBuilder.addComment("TODO: Implement your business logic here...")
             .build())
       } else {
-        val className = "${useCase}Interactor"
+        val className = "${useCase.name}Interactor"
         val argName = className.decapitalize()
 
         constructorBuilder
@@ -43,10 +44,10 @@ internal class PresenterGenerator(screen: Screen, val hasRouter: Boolean = true)
             .addStatement("this.$argName = $argName")
 
         presenterBuilder.addField(ClassName.get(screen.fullPackage, className), argName, Modifier.PRIVATE, Modifier.FINAL)
-            .addMethod(methodBuilder.addStatement(methodBody(argName),
+            .addMethod(methodBuilder.addStatement(methodBody(argName, useCase),
                 clazz<Action1<*>>(),
-                screen.responseModel,
-                screen.responseModel,
+                useCase.responseModel,
+                useCase.responseModel,
                 clazz<Throwable>(),
                 clazz<Throwable>())
                 .build())
@@ -56,8 +57,8 @@ internal class PresenterGenerator(screen: Screen, val hasRouter: Boolean = true)
     return just(presenterBuilder.addMethod(constructorBuilder.build()).build())
   }
 
-  private fun methodBody(argName: String): String {
-    val value = screen.responseModel.simpleName.first().toLowerCase()
+  private fun methodBody(argName: String, useCase: UseCase): String {
+    val value = useCase.responseModel.simpleName.first().toLowerCase()
     return when {
       screen.useLambdas -> "$argName.execute($value -> {\n" +
           "  // TODO: Implement onNext here...\n" +
