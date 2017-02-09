@@ -18,7 +18,7 @@ class RxViperPlugin : Plugin<Project> {
           "Required plugins: 'com.android.application' or 'com.android.library'."
     }
 
-    val rxViper = extensions.create(RxViperExtension.NAME, clazz<RxViperExtension>(), container(clazz<Screen>()))
+    val rxViper = extensions.create(RxViperExtension.NAME, clazz<RxViperExtension>(), container(clazz<Screen>(), ScreenFactory(this)))
 
     afterEvaluate {
       with(task<GenerateRxViperTask>(GenerateRxViperTask.NAME)) {
