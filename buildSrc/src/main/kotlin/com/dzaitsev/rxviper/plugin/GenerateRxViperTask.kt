@@ -9,13 +9,13 @@ import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 
-open class RxViperGenerate : DefaultTask() {
-  internal lateinit var options: NamedDomainObjectContainer<FeatureOptions>
+open class GenerateRxViperTask : DefaultTask() {
+  internal lateinit var screens: NamedDomainObjectContainer<Screen>
   internal lateinit var directory: File
 
   @TaskAction
-  fun generate() {
-    options.all {
+  fun generateRxViper() {
+    screens.all {
       val generators = mutableListOf(ViewCallbacksGenerator(it), PresenterGenerator(it, it.hasRouter))
       if (it.hasRouter) {
         generators.add(RouterGenerator(it))
@@ -28,5 +28,9 @@ open class RxViperGenerate : DefaultTask() {
         it.saveTo(directory)
       }
     }
+  }
+
+  companion object {
+    @JvmStatic internal val NAME = "generateRxViper"
   }
 }
