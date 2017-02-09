@@ -1,7 +1,7 @@
 package com.dzaitsev.rxviper.plugin.generator
 
 import com.dzaitsev.rxviper.Interactor
-import com.dzaitsev.rxviper.plugin.FeatureOptions
+import com.dzaitsev.rxviper.plugin.Screen
 import com.dzaitsev.rxviper.plugin.clazz
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterizedTypeName
@@ -12,11 +12,11 @@ import rx.Observable.just
 import rx.Scheduler
 import javax.lang.model.element.Modifier
 
-internal class InteractorGenerator(feature: FeatureOptions) : Generator(feature) {
+internal class InteractorGenerator(screen: Screen) : Generator(screen) {
   override val typeName = "Interactor"
 
   override fun createSpec(): Observable<TypeSpec> {
-    val useCases = feature.useCases
+    val useCases = screen.useCases
     if (useCases.isEmpty()) {
       return just(from(typeSpecName))
     } else {
@@ -27,21 +27,21 @@ internal class InteractorGenerator(feature: FeatureOptions) : Generator(feature)
   }
 
   private fun from(name: String) = TypeSpec.classBuilder(name)
-      .superclass(ParameterizedTypeName.get(clazz<Interactor<*, *>>(), feature.requestModel, feature.responseModel))
+      .superclass(ParameterizedTypeName.get(clazz<Interactor<*, *>>(), screen.requestModel, screen.responseModel))
       .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
       .addMethod(MethodSpec.constructorBuilder()
           .addModifiers(Modifier.PUBLIC)
           .addParameter(clazz<Scheduler>(), "subscribeScheduler")
           .addParameter(clazz<Scheduler>(), "observeScheduler")
-          .addCode("super(subscribeScheduler, observeScheduler);\n")
+          .addStatement("super(subscribeScheduler, observeScheduler)")
           .build())
       .addMethod(MethodSpec.methodBuilder("createObservable")
           .addModifiers(Modifier.PROTECTED)
           .addAnnotation(clazz<Override>())
-          .addParameter(feature.requestModel, "requestModel")
+          .addParameter(screen.requestModel, "requestModel")
           .addComment("TODO: Write your business logic here...")
           .addStatement("return \$T.empty()", clazz<Observable<*>>())
-          .returns(ParameterizedTypeName.get(clazz<Observable<*>>(), feature.responseModel))
+          .returns(ParameterizedTypeName.get(clazz<Observable<*>>(), screen.responseModel))
           .build())
       .build()
 }
