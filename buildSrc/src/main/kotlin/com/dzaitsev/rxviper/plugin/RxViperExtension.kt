@@ -23,7 +23,7 @@ open class RxViperExtension(internal val screens: NamedDomainObjectContainer<Scr
     @JvmStatic var hasRouter = true
       @JvmName("hasRouter") set
 
-    @JvmStatic internal var skipExisting = false
+    @Incubating @JvmStatic internal var skipExisting = false
       @JvmName("skipExisting") set
 
     @Incubating @JvmStatic internal var splitPackages = false

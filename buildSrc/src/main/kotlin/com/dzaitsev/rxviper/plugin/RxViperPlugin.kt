@@ -8,7 +8,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 class RxViperPlugin : Plugin<Project> {
-  private val GROUP_NAME = "RxViper"
   private val ANDROID_EXTENSION = "android"
 
   override fun apply(project: Project) = with(project) {
@@ -18,12 +17,11 @@ class RxViperPlugin : Plugin<Project> {
           "Required plugins: 'com.android.application' or 'com.android.library'."
     }
 
-    val rxViper = extensions.create(RxViperExtension.NAME, clazz<RxViperExtension>(), container(clazz<Screen>(), ScreenFactory(this)))
+    val extension = extensions.create(RxViperExtension.NAME, clazz<RxViperExtension>(), container(clazz<Screen>(), ScreenFactory(this)))
 
     afterEvaluate {
       with(task<GenerateRxViperTask>(GenerateRxViperTask.NAME)) {
-        configure(this) { group = GROUP_NAME }
-        screens = rxViper.screens
+        screens = extension.screens
         directory = if (isLibrary) {
           getExtension<LibraryExtension>(ANDROID_EXTENSION)
         } else {
