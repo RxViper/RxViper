@@ -31,6 +31,10 @@ open class GenerateRxViperTask : DefaultTask() {
   }
 
   companion object {
-    @JvmStatic internal val NAME = "generateRxViper"
+    @JvmStatic
+    internal val NAME = "generateRxViper"
+
+    @JvmStatic
+    internal val GROUP = "RxViper"
   }
 }
