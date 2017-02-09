@@ -2,7 +2,7 @@ package com.dzaitsev.rxviper.plugin.generator
 
 import com.dzaitsev.rxviper.Presenter
 import com.dzaitsev.rxviper.ViperPresenter
-import com.dzaitsev.rxviper.plugin.FeatureOptions
+import com.dzaitsev.rxviper.plugin.Screen
 import com.dzaitsev.rxviper.plugin.clazz
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
@@ -14,11 +14,11 @@ import rx.Observable.just
 import rx.functions.Action1
 import javax.lang.model.element.Modifier
 
-internal class PresenterGenerator(feature: FeatureOptions, val hasRouter: Boolean = true) : Generator(feature) {
+internal class PresenterGenerator(screen: Screen, val hasRouter: Boolean = true) : Generator(screen) {
   override val typeName = "Presenter"
 
   override fun createSpec(): Observable<TypeSpec> {
-    val useCases = if (feature.useCases.isEmpty()) arrayOf(feature.name) else feature.useCases
+    val useCases = if (screen.useCases.isEmpty()) arrayOf(screen.name) else screen.useCases
     val constructorBuilder = MethodSpec.constructorBuilder()
         .addModifiers(Modifier.PUBLIC)
 
@@ -29,9 +29,9 @@ internal class PresenterGenerator(feature: FeatureOptions, val hasRouter: Boolea
     useCases.forEach { useCase ->
       val methodBuilder = MethodSpec.methodBuilder("do$useCase")
           .addModifiers(Modifier.PUBLIC)
-          .addParameter(feature.requestModel, "requestModel")
+          .addParameter(screen.requestModel, "requestModel")
 
-      if (feature.justMvp) {
+      if (screen.justMvp) {
         presenterBuilder.addMethod(methodBuilder.addComment("TODO: Implement your business logic here...")
             .build())
       } else {
@@ -39,14 +39,14 @@ internal class PresenterGenerator(feature: FeatureOptions, val hasRouter: Boolea
         val argName = className.decapitalize()
 
         constructorBuilder
-            .addParameter(ClassName.get(feature.fullPackage, className), argName)
+            .addParameter(ClassName.get(screen.fullPackage, className), argName)
             .addStatement("this.$argName = $argName")
 
-        presenterBuilder.addField(ClassName.get(feature.fullPackage, className), argName, Modifier.PRIVATE, Modifier.FINAL)
+        presenterBuilder.addField(ClassName.get(screen.fullPackage, className), argName, Modifier.PRIVATE, Modifier.FINAL)
             .addMethod(methodBuilder.addStatement(methodBody(argName),
                 clazz<Action1<*>>(),
-                feature.responseModel,
-                feature.responseModel,
+                screen.responseModel,
+                screen.responseModel,
                 clazz<Throwable>(),
                 clazz<Throwable>())
                 .build())
@@ -57,9 +57,9 @@ internal class PresenterGenerator(feature: FeatureOptions, val hasRouter: Boolea
   }
 
   private fun methodBody(argName: String): String {
-    val value = feature.responseModel.simpleName.first().toLowerCase()
+    val value = screen.responseModel.simpleName.first().toLowerCase()
     return when {
-      feature.useLambdas -> "$argName.execute($value -> {\n" +
+      screen.useLambdas -> "$argName.execute($value -> {\n" +
           "  // TODO: Implement onNext here...\n" +
           "}, t -> {\n" +
           "  // TODO: Implement onError here...\n" +
@@ -78,11 +78,11 @@ internal class PresenterGenerator(feature: FeatureOptions, val hasRouter: Boolea
   }
 
   private fun superClass(): TypeName {
-    val viewCallbacks = ClassName.get(feature.fullPackage, "${feature.name}ViewCallbacks")
+    val viewCallbacks = ClassName.get(screen.fullPackage, "${screen.name}ViewCallbacks")
 
     return when {
       hasRouter -> ParameterizedTypeName.get(
-          ClassName.get(clazz<ViperPresenter<*, *>>()), viewCallbacks, ClassName.get(feature.fullPackage, "${feature.name}Router"))
+          ClassName.get(clazz<ViperPresenter<*, *>>()), viewCallbacks, ClassName.get(screen.fullPackage, "${screen.name}Router"))
       else -> ParameterizedTypeName.get(ClassName.get(clazz<Presenter<*>>()), viewCallbacks)
     }
   }
