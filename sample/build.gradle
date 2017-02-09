@@ -67,7 +67,7 @@ rxViper {
   screens {
     foo {
       packageName rxViper.packageName
-      withTests false
+      //withTests false
       hasRouter true
       requestModel String.class
       responseModel Long.class
@@ -78,7 +78,7 @@ rxViper {
     bar {
       useLambdas false
       hasRouter false
-      withTests true
+      //withTests true
       useCases = ["Login", "Post"]
       routesTo = ["Auth", "Main", "UserProfile"]
     }
