@@ -15,19 +15,14 @@ import javax.lang.model.element.Modifier
 internal class InteractorGenerator(screen: Screen) : Generator(screen) {
   override val typeName = "Interactor"
 
-  override fun createSpec(): Observable<TypeSpec> {
-    val useCases = screen.useCases
-    if (useCases.isEmpty()) {
-      return just(from(typeSpecName))
-    } else {
-      val interactors = java.util.ArrayList<TypeSpec>()
-      useCases.forEach { interactors.add(from("${it}Interactor")) }
-      return from(interactors)
-    }
+  override fun createSpec(): Observable<TypeSpec> = if (screen.useCases.isEmpty()) {
+    just(create(typeSpecName, clazz(), clazz()))
+  } else {
+    from(screen.useCases.map { create("${it.name}Interactor", it.requestModel, it.responseModel) })
   }
 
-  private fun from(name: String) = TypeSpec.classBuilder(name)
-      .superclass(ParameterizedTypeName.get(clazz<Interactor<*, *>>(), screen.requestModel, screen.responseModel))
+  private fun create(name: String, requestModel: Class<Any>, responseModel: Class<Any>) = TypeSpec.classBuilder(name)
+      .superclass(ParameterizedTypeName.get(clazz<Interactor<*, *>>(), requestModel, responseModel))
       .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
       .addMethod(MethodSpec.constructorBuilder()
           .addModifiers(Modifier.PUBLIC)
@@ -38,10 +33,10 @@ internal class InteractorGenerator(screen: Screen) : Generator(screen) {
       .addMethod(MethodSpec.methodBuilder("createObservable")
           .addModifiers(Modifier.PROTECTED)
           .addAnnotation(clazz<Override>())
-          .addParameter(screen.requestModel, "requestModel")
+          .addParameter(requestModel, "requestModel")
           .addComment("TODO: Write your business logic here...")
           .addStatement("return \$T.empty()", clazz<Observable<*>>())
-          .returns(ParameterizedTypeName.get(clazz<Observable<*>>(), screen.responseModel))
+          .returns(ParameterizedTypeName.get(clazz<Observable<*>>(), responseModel))
           .build())
       .build()
 }
