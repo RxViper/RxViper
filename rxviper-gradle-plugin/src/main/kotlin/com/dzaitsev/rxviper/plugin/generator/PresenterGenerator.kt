@@ -2,7 +2,8 @@ package com.dzaitsev.rxviper.plugin.generator
 
 import com.dzaitsev.rxviper.Presenter
 import com.dzaitsev.rxviper.ViperPresenter
-import com.dzaitsev.rxviper.plugin.FeatureOptions
+import com.dzaitsev.rxviper.plugin.Screen
+import com.dzaitsev.rxviper.plugin.UseCase
 import com.dzaitsev.rxviper.plugin.clazz
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
@@ -14,11 +15,11 @@ import rx.Observable.just
 import rx.functions.Action1
 import javax.lang.model.element.Modifier
 
-internal class PresenterGenerator(feature: FeatureOptions, val hasRouter: Boolean = true) : Generator(feature) {
+internal class PresenterGenerator(screen: Screen) : Generator(screen) {
   override val typeName = "Presenter"
 
   override fun createSpec(): Observable<TypeSpec> {
-    val useCases = if (feature.useCases.isEmpty()) arrayOf(feature.name) else feature.useCases
+    val useCases = if (screen.useCases.isEmpty()) listOf(UseCase(screen.name)) else screen.useCases.map { it }
     val constructorBuilder = MethodSpec.constructorBuilder()
         .addModifiers(Modifier.PUBLIC)
 
@@ -27,62 +28,63 @@ internal class PresenterGenerator(feature: FeatureOptions, val hasRouter: Boolea
         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
 
     useCases.forEach { useCase ->
-      val methodBuilder = MethodSpec.methodBuilder("do$useCase")
+      val methodBuilder = MethodSpec.methodBuilder("do${useCase.name}")
           .addModifiers(Modifier.PUBLIC)
-          .addParameter(feature.requestModel, "requestModel")
+          .addParameter(useCase.requestModel, "requestModel")
 
-      if (feature.justMvp) {
-        presenterBuilder.addMethod(methodBuilder.addComment("TODO: Implement your business logic here...")
-            .build())
-      } else {
-        val className = "${useCase}Interactor"
+      if (screen.hasInteractor) {
+        val className = "${useCase.name}Interactor"
         val argName = className.decapitalize()
 
         constructorBuilder
-            .addParameter(ClassName.get(feature.fullPackage, className), argName)
+            .addParameter(ClassName.get(screen.fullPackage, className), argName)
             .addStatement("this.$argName = $argName")
 
-        presenterBuilder.addField(ClassName.get(feature.fullPackage, className), argName, Modifier.PRIVATE, Modifier.FINAL)
-            .addMethod(methodBuilder.addStatement(methodBody(argName),
+        presenterBuilder.addField(ClassName.get(screen.fullPackage, className), argName, Modifier.PRIVATE, Modifier.FINAL)
+            .addMethod(methodBuilder.addStatement(methodBody(argName, useCase),
                 clazz<Action1<*>>(),
-                feature.responseModel,
-                feature.responseModel,
+                useCase.responseModel,
+                useCase.responseModel,
                 clazz<Throwable>(),
                 clazz<Throwable>())
                 .build())
+      } else {
+        presenterBuilder.addMethod(methodBuilder.addComment("TODO: Implement your business logic here...")
+            .build())
       }
     }
 
     return just(presenterBuilder.addMethod(constructorBuilder.build()).build())
   }
 
-  private fun methodBody(argName: String): String {
-    val value = feature.responseModel.simpleName.first().toLowerCase()
+  private fun methodBody(argName: String, useCase: UseCase): String {
+    val value = useCase.responseModel.simpleName.first().toLowerCase()
     return when {
-      feature.useLambdas -> "$argName.execute($value -> {\n" +
+      screen.useLambdas -> "$argName.execute($value -> {\n" +
           "  // TODO: Implement onNext here...\n" +
           "}, t -> {\n" +
           "  // TODO: Implement onError here...\n" +
           "}, requestModel)"
       else -> "$argName.execute(new \$T<\$T>() {\n" +
-          "@Override\n" +
-          "public void call(\$T $value) {\n" +
-          "  // TODO: Implement onNext here...\n" +
-          "}\n }, new Action1<\$T>() {\n" +
-          "@Override\n" +
-          "public void call(\$T t) {\n" +
-          "// TODO: Implement onError here...\n" +
-          "}\n" +
+          "  @Override\n" +
+          "  public void call(\$T $value) {\n" +
+          "    // TODO: Implement onNext here...\n" +
+          "  }\n" +
+          "}, new Action1<\$T>() {\n" +
+          "  @Override\n" +
+          "  public void call(\$T t) {\n" +
+          "  // TODO: Implement onError here...\n" +
+          "  }\n" +
           "}, requestModel)"
     }
   }
 
   private fun superClass(): TypeName {
-    val viewCallbacks = ClassName.get(feature.fullPackage, "${feature.name}ViewCallbacks")
+    val viewCallbacks = ClassName.get(screen.fullPackage, "${screen.name}ViewCallbacks")
 
     return when {
-      hasRouter -> ParameterizedTypeName.get(
-          ClassName.get(clazz<ViperPresenter<*, *>>()), viewCallbacks, ClassName.get(feature.fullPackage, "${feature.name}Router"))
+      screen.hasRouter -> ParameterizedTypeName.get(
+          ClassName.get(clazz<ViperPresenter<*, *>>()), viewCallbacks, ClassName.get(screen.fullPackage, "${screen.name}Router"))
       else -> ParameterizedTypeName.get(ClassName.get(clazz<Presenter<*>>()), viewCallbacks)
     }
   }
