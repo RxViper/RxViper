@@ -2,9 +2,9 @@ package com.dzaitsev.rxviper.plugin.internal.codegen
 
 import com.dzaitsev.rxviper.Presenter
 import com.dzaitsev.rxviper.ViperPresenter
+import com.dzaitsev.rxviper.plugin.aClass
 import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import com.dzaitsev.rxviper.plugin.internal.dsl.UseCase
-import com.dzaitsev.rxviper.plugin.aClass
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterizedTypeName
@@ -20,6 +20,14 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
     val useCases = if (screen.useCases.isEmpty()) listOf(UseCase(screen.name)) else screen.useCases.map { it }
     val constructorBuilder = MethodSpec.constructorBuilder()
         .addModifiers(Modifier.PUBLIC)
+    val onDropViewMethodBuilder = MethodSpec.methodBuilder("onDropView")
+        .addModifiers(Modifier.PROTECTED)
+        .addParameter(ClassName.get(screen.fullPackage, "${screen.name}ViewCallbacks"), "view")
+        .addAnnotation(aClass<Override>())
+
+    if (useCases.isEmpty()) {
+      onDropViewMethodBuilder.addComment("TODO: Release your resources here...")
+    }
 
     val presenterBuilder = TypeSpec.classBuilder(typeSpecName)
         .superclass(superClass())
@@ -38,6 +46,8 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
             .addParameter(ClassName.get(screen.fullPackage, className), argName)
             .addStatement("this.$argName = $argName")
 
+        onDropViewMethodBuilder.addStatement("$argName.unsubscribe()")
+
         presenterBuilder.addField(ClassName.get(screen.fullPackage, className), argName, Modifier.PRIVATE, Modifier.FINAL)
             .addMethod(methodBuilder.addStatement(methodBody(argName, useCase),
                 aClass<Action1<*>>(),
@@ -52,7 +62,8 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
       }
     }
 
-    return listOf(presenterBuilder.addMethod(constructorBuilder.build()))
+    return listOf(presenterBuilder.addMethod(constructorBuilder.build())
+        .addMethod(onDropViewMethodBuilder.build()))
   }
 
   private fun methodBody(argName: String, useCase: UseCase): String {
