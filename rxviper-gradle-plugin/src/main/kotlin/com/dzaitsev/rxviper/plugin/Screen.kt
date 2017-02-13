@@ -19,6 +19,8 @@ class Screen(_name: String, internal val useCases: NamedDomainObjectContainer<Us
 
   var routesTo = emptyArray<String>(); @JvmName("routesTo") set
 
+  var addMetaInfo = RxViperExtension.addMetaInfo; @JvmName("addMetaInfo") set
+
   fun useCases(closure: Closure<NamedDomainObjectContainer<UseCase>>) = useCases.configure(closure)
 
   @Incubating

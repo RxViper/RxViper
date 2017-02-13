@@ -24,7 +24,7 @@ class RxViperPluginTest {
       project.applyRxViperPlugin()
     } catch(e: Exception) {
       val ise = e.cause
-      assertThat(ise).isInstanceOf(clazz<IllegalStateException>())
+      assertThat(ise).isInstanceOf(aClass<IllegalStateException>())
       assertThat(ise?.message).isEqualTo("RxViper plugin can only be applied to Android projects.\n" +
           "Required plugins: 'com.android.application' or 'com.android.library'.")
       thrown = true
@@ -71,7 +71,7 @@ class RxViperPluginTest {
     project.applyRxViperPlugin()
     // assert
     val extension = project.extensions.getByName("rxViper")
-    assertThat(extension).isInstanceOf(clazz<RxViperExtension>())
+    assertThat(extension).isInstanceOf(aClass<RxViperExtension>())
   }
 
   @Test
@@ -83,7 +83,7 @@ class RxViperPluginTest {
     // assert
     project.afterEvaluate {
       val task = project.tasks.getByName(RxViperTask.NAME)
-      assertThat(task).isInstanceOf(clazz<RxViperTask>())
+      assertThat(task).isInstanceOf(aClass<RxViperTask>())
       assertThat(task.group).isEqualTo(RxViperTask.GROUP)
     }
   }
