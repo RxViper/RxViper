@@ -1,7 +1,7 @@
 package com.dzaitsev.rxviper.plugin.internal.codegen
 
 import com.dzaitsev.rxviper.ViewCallbacks
-import com.dzaitsev.rxviper.plugin.Screen
+import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import com.dzaitsev.rxviper.plugin.aClass
 import com.squareup.javapoet.TypeSpec
 import javax.lang.model.element.Modifier
