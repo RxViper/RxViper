@@ -3,9 +3,9 @@ package com.dzaitsev.rxviper.plugin
 class UseCase(_name: String) {
   internal val name = _name.capitalize()
 
-  var requestModel = clazz<Any>()
+  var requestModel = aClass<Any>()
     @JvmName("requestModel") set
 
-  var responseModel = clazz<Any>()
+  var responseModel = aClass<Any>()
     @JvmName("responseModel") set
 }

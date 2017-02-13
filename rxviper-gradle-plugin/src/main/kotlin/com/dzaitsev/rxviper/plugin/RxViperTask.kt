@@ -2,22 +2,22 @@ package com.dzaitsev.rxviper.plugin
 
 import com.android.build.gradle.AndroidConfig
 import com.android.build.gradle.internal.api.DefaultAndroidSourceSet
-import com.dzaitsev.rxviper.plugin.generator.InteractorGenerator
-import com.dzaitsev.rxviper.plugin.generator.PresenterGenerator
-import com.dzaitsev.rxviper.plugin.generator.RouterGenerator
-import com.dzaitsev.rxviper.plugin.generator.ViewCallbacksGenerator
+import com.dzaitsev.rxviper.plugin.internal.codegen.InteractorGenerator
+import com.dzaitsev.rxviper.plugin.internal.codegen.PresenterGenerator
+import com.dzaitsev.rxviper.plugin.internal.codegen.RouterGenerator
+import com.dzaitsev.rxviper.plugin.internal.codegen.ViewCallbacksGenerator
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME
 import org.gradle.api.tasks.TaskAction
 
 open class RxViperTask : DefaultTask() {
-  private val androidConfig = project.getExtension<AndroidConfig>("android")
+  private val androidConfig = project.extensions.getByName("android") as AndroidConfig
 
   protected var destinationDir = (androidConfig.sourceSets.findByName(MAIN_SOURCE_SET_NAME)
       ?: DefaultAndroidSourceSet(MAIN_SOURCE_SET_NAME, project, true)).java.srcDirs.first()
     @JvmName("destinationDir") set
 
-  protected var screens = project.getExtension<RxViperExtension>(RxViperExtension.NAME).screens
+  protected var screens = (project.extensions.getByName(RxViperExtension.NAME) as RxViperExtension).screens
     @JvmName("screens") set
 
   @TaskAction

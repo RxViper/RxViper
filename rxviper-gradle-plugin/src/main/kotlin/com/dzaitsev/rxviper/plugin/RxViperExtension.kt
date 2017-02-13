@@ -21,6 +21,8 @@ open class RxViperExtension(val screens: NamedDomainObjectContainer<Screen>) {
 
     @JvmStatic var hasRouter = true; @JvmName("hasRouter") set
 
+    @JvmStatic var addMetaInfo = true; @JvmName("addMetaInfo") set
+
     @Incubating
     @JvmStatic internal var skipExisting = false; @JvmName("skipExisting") set
 

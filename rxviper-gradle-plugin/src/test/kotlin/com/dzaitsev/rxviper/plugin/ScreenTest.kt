@@ -11,7 +11,7 @@ class ScreenTest {
     // arrange
     val project = ProjectBuilder().build()
     // act
-    val screen = Screen("Test", project.container(clazz<UseCase>()))
+    val screen = Screen("Test", project.container(aClass<UseCase>()))
     // assert
     with(screen) {
       assertThat(packageName).isSameAs(RxViperExtension.packageName)
