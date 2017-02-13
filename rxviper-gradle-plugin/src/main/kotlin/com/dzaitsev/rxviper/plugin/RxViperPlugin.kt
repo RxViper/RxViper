@@ -2,6 +2,8 @@ package com.dzaitsev.rxviper.plugin
 
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.LibraryPlugin
+import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
+import com.dzaitsev.rxviper.plugin.internal.dsl.ScreenFactory
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import com.dzaitsev.rxviper.plugin.RxViperExtension.Companion.NAME as RXVIPER_EXT

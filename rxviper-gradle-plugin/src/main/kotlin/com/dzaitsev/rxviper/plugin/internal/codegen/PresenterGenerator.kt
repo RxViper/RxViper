@@ -2,8 +2,8 @@ package com.dzaitsev.rxviper.plugin.internal.codegen
 
 import com.dzaitsev.rxviper.Presenter
 import com.dzaitsev.rxviper.ViperPresenter
-import com.dzaitsev.rxviper.plugin.Screen
-import com.dzaitsev.rxviper.plugin.UseCase
+import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
+import com.dzaitsev.rxviper.plugin.internal.dsl.UseCase
 import com.dzaitsev.rxviper.plugin.aClass
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
