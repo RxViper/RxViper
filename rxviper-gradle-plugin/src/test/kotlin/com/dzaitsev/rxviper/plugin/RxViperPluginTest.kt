@@ -82,9 +82,9 @@ class RxViperPluginTest {
     project.applyRxViperPlugin()
     // assert
     project.afterEvaluate {
-      val task = project.tasks.getByName(GenerateRxViperTask.NAME)
-      assertThat(task).isInstanceOf(clazz<GenerateRxViperTask>())
-      assertThat(task.group).isEqualTo(GenerateRxViperTask.GROUP)
+      val task = project.tasks.getByName(RxViperTask.NAME)
+      assertThat(task).isInstanceOf(clazz<RxViperTask>())
+      assertThat(task.group).isEqualTo(RxViperTask.GROUP)
     }
   }
 }
