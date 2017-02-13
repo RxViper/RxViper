@@ -1,24 +1,22 @@
-package com.dzaitsev.rxviper.plugin.generator
+package com.dzaitsev.rxviper.plugin.internal.codegen
 
 import com.dzaitsev.rxviper.Presenter
 import com.dzaitsev.rxviper.ViperPresenter
 import com.dzaitsev.rxviper.plugin.Screen
 import com.dzaitsev.rxviper.plugin.UseCase
-import com.dzaitsev.rxviper.plugin.clazz
+import com.dzaitsev.rxviper.plugin.aClass
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
-import rx.Observable
-import rx.Observable.just
 import rx.functions.Action1
 import javax.lang.model.element.Modifier
 
 internal class PresenterGenerator(screen: Screen) : Generator(screen) {
   override val typeName = "Presenter"
 
-  override fun createSpec(): Observable<TypeSpec> {
+  override fun createSpec(): List<TypeSpec.Builder> {
     val useCases = if (screen.useCases.isEmpty()) listOf(UseCase(screen.name)) else screen.useCases.map { it }
     val constructorBuilder = MethodSpec.constructorBuilder()
         .addModifiers(Modifier.PUBLIC)
@@ -42,11 +40,11 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
 
         presenterBuilder.addField(ClassName.get(screen.fullPackage, className), argName, Modifier.PRIVATE, Modifier.FINAL)
             .addMethod(methodBuilder.addStatement(methodBody(argName, useCase),
-                clazz<Action1<*>>(),
+                aClass<Action1<*>>(),
                 useCase.responseModel,
                 useCase.responseModel,
-                clazz<Throwable>(),
-                clazz<Throwable>())
+                aClass<Throwable>(),
+                aClass<Throwable>())
                 .build())
       } else {
         presenterBuilder.addMethod(methodBuilder.addComment("TODO: Implement your business logic here...")
@@ -54,7 +52,7 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
       }
     }
 
-    return just(presenterBuilder.addMethod(constructorBuilder.build()).build())
+    return listOf(presenterBuilder.addMethod(constructorBuilder.build()))
   }
 
   private fun methodBody(argName: String, useCase: UseCase): String {
@@ -84,8 +82,8 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
 
     return when {
       screen.hasRouter -> ParameterizedTypeName.get(
-          ClassName.get(clazz<ViperPresenter<*, *>>()), viewCallbacks, ClassName.get(screen.fullPackage, "${screen.name}Router"))
-      else -> ParameterizedTypeName.get(ClassName.get(clazz<Presenter<*>>()), viewCallbacks)
+          ClassName.get(aClass<ViperPresenter<*, *>>()), viewCallbacks, ClassName.get(screen.fullPackage, "${screen.name}Router"))
+      else -> ParameterizedTypeName.get(ClassName.get(aClass<Presenter<*>>()), viewCallbacks)
     }
   }
 }

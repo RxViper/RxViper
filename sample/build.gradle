@@ -56,11 +56,12 @@ dependencies {
 }
 
 rxViper {
-  packageName "generated"
+  packageName android.defaultConfig.applicationId
   splitPackages true
   useLambdas true
   skipExisting false
   hasInteractor true
+  addMetaInfo true
   hasRouter true
   withTests false
 
@@ -84,6 +85,7 @@ rxViper {
     }
 
     bar {
+      addMetaInfo false
       useLambdas false
       hasRouter false
       //withTests true
