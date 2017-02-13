@@ -17,7 +17,9 @@ class RxViperPlugin : Plugin<Project> {
     extensions.create(RXVIPER_EXT, aClass<RxViperExtension>(), container(aClass<Screen>(), ScreenFactory(this)))
 
     afterEvaluate {
-      task(mapOf("type" to aClass<RxViperTask>()), name)
+      with(task(mapOf("type" to aClass<RxViperTask>()), name)) {
+        group = RxViperTask.GROUP
+      }
     }
   }
 
