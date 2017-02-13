@@ -1,5 +1,7 @@
 package com.dzaitsev.rxviper.plugin
 
+import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
+import com.dzaitsev.rxviper.plugin.internal.dsl.UseCase
 import com.google.common.truth.Truth.assertThat
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Test
