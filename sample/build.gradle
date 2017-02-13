@@ -60,7 +60,7 @@ rxViper {
   splitPackages true
   useLambdas true
   skipExisting false
-  justMvp false
+  hasInteractor true
   hasRouter true
   withTests false
 
@@ -69,13 +69,14 @@ rxViper {
       packageName rxViper.packageName
       //withTests false
       hasRouter true
+      useLambdas false
       useCases {
         getItems {
           requestModel Long.class
           responseModel String.class
         }
         watchPorn {
-          requestModel Integer.class
+          requestModel Void.class
           responseModel Boolean.class
         }
       }
@@ -94,4 +95,9 @@ rxViper {
       routesTo "Auth", "Main", "UserProfile"
     }
   }
+}
+
+task genViper(type: com.dzaitsev.rxviper.plugin.RxViperTask) {
+  destinationDir new File("${project.buildDir}/HELLO")
+  screens rxViper.screens
 }

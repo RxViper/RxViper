@@ -9,7 +9,7 @@ class RxViperExtensionTest {
     with(RxViperExtension) {
       assertThat(packageName).isEqualTo("generated")
       assertThat(useLambdas).isFalse()
-      assertThat(justMvp).isFalse()
+      assertThat(hasInteractor).isFalse()
       assertThat(hasRouter).isTrue()
       assertThat(skipExisting).isFalse()
       assertThat(splitPackages).isFalse()
