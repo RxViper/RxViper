@@ -1,5 +1,6 @@
 package com.dzaitsev.rxviper.plugin
 
+import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import groovy.lang.Closure
 import org.gradle.api.Incubating
 import org.gradle.api.NamedDomainObjectContainer

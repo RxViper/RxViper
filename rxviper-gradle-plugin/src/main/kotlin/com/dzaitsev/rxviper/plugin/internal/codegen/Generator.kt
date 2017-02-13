@@ -1,6 +1,6 @@
 package com.dzaitsev.rxviper.plugin.internal.codegen
 
-import com.dzaitsev.rxviper.plugin.Screen
+import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import com.dzaitsev.rxviper.plugin.aClass
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.JavaFile
