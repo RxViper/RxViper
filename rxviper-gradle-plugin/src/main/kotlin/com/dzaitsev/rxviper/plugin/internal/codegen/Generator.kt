@@ -38,6 +38,6 @@ internal abstract class Generator(protected val screen: Screen) {
   }
 
   companion object {
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sZ", Locale.UK)
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sssZ", Locale.UK)
   }
 }
