@@ -11,9 +11,6 @@ class RxViperExtensionTest {
       assertThat(useLambdas).isFalse()
       assertThat(hasInteractor).isFalse()
       assertThat(hasRouter).isTrue()
-      assertThat(skipExisting).isFalse()
-      assertThat(splitPackages).isFalse()
-      assertThat(withTests).isFalse()
     }
   }
 
