@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Dmytro Zaitsev
+ * Copyright 2017 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ license {
   header = rootProject.file('HEADER.txt')
   strictCheck = true
   ignoreFailures = true
+  skipExistingHeaders = true
   mapping {
     java = 'SLASHSTAR_STYLE'
     groovy = 'SLASHSTAR_STYLE'
