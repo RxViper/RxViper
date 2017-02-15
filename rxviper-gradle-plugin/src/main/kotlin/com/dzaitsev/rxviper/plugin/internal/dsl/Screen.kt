@@ -2,7 +2,6 @@ package com.dzaitsev.rxviper.plugin.internal.dsl
 
 import com.dzaitsev.rxviper.plugin.RxViperExtension
 import groovy.lang.Closure
-import org.gradle.api.Incubating
 import org.gradle.api.NamedDomainObjectContainer
 
 class Screen(_name: String, internal val useCases: NamedDomainObjectContainer<UseCase>) {
@@ -23,14 +22,5 @@ class Screen(_name: String, internal val useCases: NamedDomainObjectContainer<Us
   var addMetaInfo = RxViperExtension.addMetaInfo; @JvmName("addMetaInfo") set
 
   fun useCases(closure: Closure<NamedDomainObjectContainer<UseCase>>) = useCases.configure(closure)
-
-  @Incubating
-  internal var splitPackages = RxViperExtension.splitPackages; @JvmName("splitPackages") set
-
-  @Incubating
-  internal var skipExisting = RxViperExtension.skipExisting; @JvmName("skipExisting") set
-
-  @Incubating
-  internal var withTests = RxViperExtension.withTests; @JvmName("withTests") set
 }
 

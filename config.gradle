@@ -15,16 +15,8 @@
  */
 
 ext {
-  androidConfig = [
-      compileSdkVersion: 24,
-      buildToolsVersion: '24.0.3',
-      minSdkVersion    : 9,
-      targetSdkVersion : 24,
-      versionCode      : 12,
-      versionName      : '1.0',
-  ]
-
   versions = [
+      rxViper          : '1.0.0-rc1',
       // Gradle Plugins
       androidPlugin    : '2.2.2',
       bintrayPlugin    : '1.7.3',
@@ -40,15 +32,17 @@ ext {
       junit            : '4.12',
       mockito          : '2.3.6',
       truth            : '0.31',
+      javaPoet         : '1.8.0',
       // Android libraries
       rxAndroid        : '1.2.1',
       support          : '25.0.0',
       constraintLayout : '1.0.0-beta4',
       // Kotlin
-      kotlin           : '1.1-M04'
+      kotlin           : '1.0.6'
   ]
 
   gradlePlugins = [
+      rxViper    : "com.dzaitsev.rxviper:rxviper-gradle-plugin:${versions.rxViper}",
       android    : "com.android.tools.build:gradle:${versions.androidPlugin}",
       bintray    : "com.jfrog.bintray.gradle:gradle-bintray-plugin:${versions.bintrayPlugin}",
       maven      : "com.github.dcendents:android-maven-gradle-plugin:${versions.mavenPlugin}",
@@ -60,11 +54,13 @@ ext {
   ]
 
   libraries = [
+      rxViper         : "com.dzaitsev.rxviper:rxviper:${versions.rxViper}",
       // Java
       rxJava          : "io.reactivex:rxjava:${versions.rxJava}",
       dagger          : "com.google.dagger:dagger:${versions.dagger}",
       daggerCompiler  : "com.google.dagger:dagger-compiler:${versions.dagger}",
       jsr250          : "javax.annotation:jsr250-api:${versions.jsr250}",
+      javaPoet        : "com.squareup:javapoet:${versions.javaPoet}",
       // Android
       constraintLayout: "com.android.support.constraint:constraint-layout:${versions.constraintLayout}",
       appCompat       : "com.android.support:appcompat-v7:${versions.support}",
