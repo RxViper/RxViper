@@ -16,7 +16,7 @@
 import java.text.SimpleDateFormat
 
 apply plugin: 'com.jfrog.bintray'
-apply from: rootProject.file('gradle/properties.gradle')
+apply from: rootProject.file('properties.gradle')
 
 version = POM_LIBRARY_VERSION
 Date buildTimeAndDate = new Date()
