@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2016 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 apply plugin: 'com.github.ben-manes.versions'
 
 buildscript {
@@ -49,6 +50,7 @@ task clean(type: Delete) {
 }
 
 task licenseFormatEverything(type: nl.javadude.gradle.plugins.license.License) {
+  group 'license'
   source = fileTree(dir: projectDir).include(["**/*.gradle", "**/*.properties", "**/*.xml", "**/*.kt"])
 }
 
