@@ -16,21 +16,18 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
-
-//apply plugin: 'com.dzaitsev.rxviper.gradle'
-
-apply plugin: com.dzaitsev.rxviper.plugin.RxViperPlugin
+apply plugin: 'com.dzaitsev.rxviper'
 
 android {
-  compileSdkVersion androidConfig.compileSdkVersion
-  buildToolsVersion androidConfig.buildToolsVersion
+  compileSdkVersion 24
+  buildToolsVersion '24.0.3'
 
   defaultConfig {
     applicationId "com.dzaitsev.rxviper.sample"
-    minSdkVersion androidConfig.minSdkVersion
-    targetSdkVersion androidConfig.targetSdkVersion
-    versionCode androidConfig.versionCode
-    versionName androidConfig.versionName
+    minSdkVersion 9
+    targetSdkVersion 24
+    versionCode 1
+    versionName '1.0'
   }
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
@@ -57,18 +54,14 @@ dependencies {
 
 rxViper {
   packageName android.defaultConfig.applicationId
-  splitPackages true
   useLambdas true
-  skipExisting false
   hasInteractor true
   addMetaInfo true
   hasRouter true
-  withTests false
 
   screens {
     foo {
       packageName rxViper.packageName
-      //withTests false
       hasRouter true
       useLambdas true
       useCases {
@@ -89,7 +82,6 @@ rxViper {
       addMetaInfo false
       useLambdas false
       hasRouter false
-      //withTests true
       useCases {
           login
           post
@@ -98,9 +90,4 @@ rxViper {
       routesTo "Auth", "Main", "UserProfile"
     }
   }
-}
-
-task genViper(type: com.dzaitsev.rxviper.plugin.RxViperTask) {
-  destinationDir new File("${project.buildDir}/HELLO")
-  screens rxViper.screens
 }

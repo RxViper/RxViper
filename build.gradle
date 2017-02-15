@@ -16,11 +16,11 @@
 apply plugin: 'com.github.ben-manes.versions'
 
 buildscript {
-  apply from: 'gradle/config.gradle'
+  apply from: 'config.gradle'
   repositories {
     jcenter()
-    maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.1' }
     maven { url "https://plugins.gradle.org/m2/" }
+    maven { url 'repo' }
   }
   dependencies {
     classpath gradlePlugins.android
@@ -31,16 +31,16 @@ buildscript {
     classpath gradlePlugins.retrolambda
     classpath gradlePlugins.versions
     classpath gradlePlugins.kotlin
+    classpath "com.dzaitsev.rxviper:rxviper-gradle-plugin:1.0-SNAPSHOT"
   }
 }
 
 allprojects {
   repositories {
     jcenter()
-    maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.1' }
   }
 
-  apply from: rootProject.file('gradle/license.gradle')
+  apply from: rootProject.file('license.gradle')
   apply plugin: 'idea'
 }
 
@@ -49,7 +49,7 @@ task clean(type: Delete) {
 }
 
 task licenseFormatEverything(type: nl.javadude.gradle.plugins.license.License) {
-  source = fileTree(dir: projectDir).include(["**/*.gradle", "**/*.properties", "**/*.xml"])
+  source = fileTree(dir: projectDir).include(["**/*.gradle", "**/*.properties", "**/*.xml", "**/*.kt"])
 }
 
 task wrapper(type: Wrapper) {
