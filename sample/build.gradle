@@ -70,16 +70,17 @@ rxViper {
       packageName rxViper.packageName
       //withTests false
       hasRouter true
-      useLambdas false
+      useLambdas true
       useCases {
         getItems {
-          requestModel Long.class
-          responseModel String.class
+          requestClass Long.class
+          requestClass String.class
         }
         watchPorn {
-          requestModel Void.class
-          responseModel Boolean.class
+          requestClass Void.class
+          responseClass Boolean.class
         }
+        buyGoods
       }
       routesTo "Home", "Settings", "Registration", "News"
     }
