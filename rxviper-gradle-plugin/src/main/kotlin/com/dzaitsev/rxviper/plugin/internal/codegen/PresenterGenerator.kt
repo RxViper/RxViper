@@ -17,26 +17,25 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
   override val typeName = "Presenter"
 
   override fun createSpec(): List<TypeSpec.Builder> {
-    val useCases = if (screen.useCases.isEmpty()) listOf(UseCase(screen.name)) else screen.useCases.map { it }
     val constructorBuilder = MethodSpec.constructorBuilder()
         .addModifiers(Modifier.PUBLIC)
     val onDropViewMethodBuilder = MethodSpec.methodBuilder("onDropView")
         .addModifiers(Modifier.PROTECTED)
         .addParameter(ClassName.get(screen.fullPackage, "${screen.name}ViewCallbacks"), "view")
         .addAnnotation(aClass<Override>())
+    val presenterBuilder = TypeSpec.classBuilder(typeSpecName)
+        .superclass(superClass())
+        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+    val useCases = if (screen.useCases.isEmpty()) listOf(UseCase(screen.name)) else screen.useCases.map { it }
 
     if (useCases.isEmpty()) {
       onDropViewMethodBuilder.addComment("TODO: Release your resources here...")
     }
 
-    val presenterBuilder = TypeSpec.classBuilder(typeSpecName)
-        .superclass(superClass())
-        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-
     useCases.forEach { useCase ->
       val methodBuilder = MethodSpec.methodBuilder("do${useCase.name}")
           .addModifiers(Modifier.PUBLIC)
-          .addParameter(useCase.requestModel, "requestModel")
+          .addParameter(useCase.requestClass, "requestModel")
 
       if (screen.hasInteractor) {
         val className = "${useCase.name}Interactor"
@@ -44,18 +43,24 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
 
         constructorBuilder
             .addParameter(ClassName.get(screen.fullPackage, className), argName)
-            .addStatement("this.$argName = $argName")
+            .addStatement("this.\$1N = \$1N", argName)
 
-        onDropViewMethodBuilder.addStatement("$argName.unsubscribe()")
+        onDropViewMethodBuilder.addStatement("\$N.unsubscribe()", argName)
 
         presenterBuilder.addField(ClassName.get(screen.fullPackage, className), argName, Modifier.PRIVATE, Modifier.FINAL)
-            .addMethod(methodBuilder.addStatement(methodBody(argName, useCase),
-                aClass<Action1<*>>(),
-                useCase.responseModel,
-                useCase.responseModel,
-                aClass<Throwable>(),
-                aClass<Throwable>())
-                .build())
+        presenterBuilder.addMethod(when {
+          screen.useLambdas -> methodBuilder.addStatement("\$N.execute(\$N -> {\n" +
+              "  // TODO: Implement onNext here...\n" +
+              "}, t -> {\n" +
+              "  // TODO: Implement onError here...\n" +
+              "}, \$N)", argName, useCase.responseClass.simpleName.first().toLowerCase().toString(), "requestModel").build()
+          else -> methodBuilder.addStatement("\$N.execute(\$L, \$L, \$N)",
+              argName,
+              action1Anonymous(useCase.responseClass, useCase.responseClass.simpleName.first().toLowerCase().toString(), "TODO: Implement onNext here..."),
+              action1Anonymous(aClass<Throwable>(), "t", "TODO: Implement onError here..."),
+              "requestModel")
+              .build()
+        })
       } else {
         presenterBuilder.addMethod(methodBuilder.addComment("TODO: Implement your business logic here...")
             .build())
@@ -66,26 +71,16 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
         .addMethod(onDropViewMethodBuilder.build()))
   }
 
-  private fun methodBody(argName: String, useCase: UseCase): String {
-    val value = useCase.responseModel.simpleName.first().toLowerCase()
-    return when {
-      screen.useLambdas -> "$argName.execute($value -> {\n" +
-          "  // TODO: Implement onNext here...\n" +
-          "}, t -> {\n" +
-          "  // TODO: Implement onError here...\n" +
-          "}, requestModel)"
-      else -> "$argName.execute(new \$T<\$T>() {\n" +
-          "  @Override\n" +
-          "  public void call(\$T $value) {\n" +
-          "    // TODO: Implement onNext here...\n" +
-          "  }\n" +
-          "}, new Action1<\$T>() {\n" +
-          "  @Override\n" +
-          "  public void call(\$T t) {\n" +
-          "  // TODO: Implement onError here...\n" +
-          "  }\n" +
-          "}, requestModel)"
-    }
+  private fun action1Anonymous(clazz: Class<*>, paramName: String, comment: String): TypeSpec {
+    return TypeSpec.anonymousClassBuilder("")
+        .addSuperinterface(ParameterizedTypeName.get(aClass<Action1<*>>(), clazz))
+        .addMethod(MethodSpec.methodBuilder("call")
+            .addAnnotation(aClass<Override>())
+            .addModifiers(Modifier.PUBLIC)
+            .addParameter(clazz, paramName)
+            .addComment(comment)
+            .build())
+        .build()
   }
 
   private fun superClass(): TypeName {
