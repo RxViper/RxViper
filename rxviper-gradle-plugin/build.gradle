@@ -25,15 +25,4 @@ dependencies {
   testCompile libraries.truth
 }
 
-apply plugin: 'maven'
-
-group = 'com.dzaitsev.rxviper'
-version = '1.0-SNAPSHOT'
-
-uploadArchives {
-  repositories {
-    mavenDeployer {
-      repository(url: uri('../repo'))
-    }
-  }
-}
+apply from: rootProject.file('publish.gradle')

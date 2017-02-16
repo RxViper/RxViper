@@ -36,5 +36,4 @@ dependencies {
   testCompile libraries.truth
 }
 
-apply from: '../bintray.gradle'
-apply from: '../maven.gradle'
+apply from: rootProject.file('publish.gradle')
