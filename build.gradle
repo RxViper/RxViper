@@ -17,11 +17,10 @@
 apply plugin: 'com.github.ben-manes.versions'
 
 buildscript {
-  apply from: 'config.gradle'
+  apply from: rootProject.file('dependencies.gradle')
   repositories {
     jcenter()
     maven { url "https://plugins.gradle.org/m2/" }
-    maven { url 'repo' }
   }
   dependencies {
     classpath gradlePlugins.android
@@ -32,7 +31,7 @@ buildscript {
     classpath gradlePlugins.retrolambda
     classpath gradlePlugins.versions
     classpath gradlePlugins.kotlin
-    classpath "com.dzaitsev.rxviper:rxviper-gradle-plugin:1.0-SNAPSHOT"
+    classpath gradlePlugins.rxViper
   }
 }
 

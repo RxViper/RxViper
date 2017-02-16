@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 ext {
   versions = [
-      rxViper          : '1.0.0-rc1',
+      rxViper          : POM_VERSION,
       // Gradle Plugins
       androidPlugin    : '2.2.2',
       bintrayPlugin    : '1.7.3',
       mavenPlugin      : '1.4.1',
-      licensePlugin    : '0.12.1',
-      retrolambdaPlugin: '3.4.0',
+      licensePlugin    : '0.13.1',
+      retrolambdaPlugin: '3.5.0',
       aptPlugin        : '1.8',
-      versionsPlugin   : '0.13.0',
+      versionsPlugin   : '0.14.0',
       // Java libraries
-      rxJava           : '1.2.4',
-      dagger           : '2.8',
+      rxJava           : '1.2.6',
+      dagger           : '2.9',
       jsr250           : '1.0',
       jsr305           : '3.0.2',
       junit            : '4.12',

@@ -16,9 +16,8 @@
 import java.text.SimpleDateFormat
 
 apply plugin: 'com.jfrog.bintray'
-apply from: rootProject.file('properties.gradle')
 
-version = POM_LIBRARY_VERSION
+version = POM_VERSION
 Date buildTimeAndDate = new Date()
 ext {
   buildTime = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
@@ -30,11 +29,11 @@ def manifestAttributes = [
     'Created-By'            : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.getProperty("java.vm.version")})",
     'Build-Date'            : project.buildTime,
     'Build-Time'            : project.buildDate,
-    'Specification-Title'   : POM_ARTIFACT,
+    'Specification-Title'   : POM_ARTIFACT_ID,
     'Specification-Version' : project.version,
     'Specification-Vendor'  : POM_SITE_URL,
-    'Implementation-Title'  : POM_ARTIFACT,
-    'Implementation-Version': POM_LIBRARY_VERSION,
+    'Implementation-Title'  : POM_ARTIFACT_ID,
+    'Implementation-Version': POM_VERSION,
     'Implementation-Vendor' : POM_SITE_URL
 ]
 
@@ -68,7 +67,7 @@ bintray {
   pkg {
     repo = BINTRAY_REPO
     name = BINTRAY_NAME
-    desc = POM_LIBRARY_DESCRIPTION
+    desc = POM_DESCRIPTION
     websiteUrl = POM_SITE_URL
     vcsUrl = POM_GIT_URL
     licenses = ['Apache-2.0']
@@ -76,12 +75,54 @@ bintray {
     publish = true
     publicDownloadNumbers = true
     version {
-      desc = POM_LIBRARY_DESCRIPTION
+      desc = POM_DESCRIPTION
       gpg {
         sign = true // Determines whether to GPG sign the files. The default is false
         passphrase = project.hasProperty('bintrayGpgPassword') ? project.property('bintrayGpgPassword') :
             System.getenv('BINTRAY_GPG_PASSWORD')
         //Optional. The passphrase for GPG signing'
+      }
+    }
+  }
+}
+
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = POM_GROUP_ID // Maven Group ID for the artifact
+
+install {
+  repositories.mavenInstaller {
+    // This generates POM.xml with proper parameters
+    pom {
+      project {
+        packaging POM_PACKAGING
+        groupId POM_GROUP_ID
+        artifactId POM_ARTIFACT_ID
+
+        // Add your description here
+        name POM_NAME
+        description POM_DESCRIPTION
+        url POM_SITE_URL
+
+        // Set your license
+        licenses {
+          license {
+            name POM_LICENSE_NAME
+            url POM_LICENSE_URL
+          }
+        }
+        developers {
+          developer {
+            id POM_DEVELOPER_ID
+            name POM_DEVELOPER_NAME
+            email POM_DEVELOPER_EMAIL
+          }
+        }
+        scm {
+          connection POM_GIT_URL
+          developerConnection POM_GIT_URL
+          url POM_SITE_URL
+        }
       }
     }
   }
