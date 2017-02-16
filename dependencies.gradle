@@ -13,24 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 ext {
   versions = [
-      rxViper          : '1.0.0-rc1',
+      rxViper          : POM_VERSION,
       // Gradle Plugins
       androidPlugin    : '2.2.2',
       bintrayPlugin    : '1.7.3',
       mavenPlugin      : '1.4.1',
-      licensePlugin    : '0.12.1',
-      retrolambdaPlugin: '3.4.0',
+      licensePlugin    : '0.13.1',
+      retrolambdaPlugin: '3.5.0',
       aptPlugin        : '1.8',
-      versionsPlugin   : '0.13.0',
+      versionsPlugin   : '0.14.0',
       // Java libraries
-      rxJava           : '1.2.4',
-      dagger           : '2.8',
+      rxJava           : '1.2.6',
+      dagger           : '2.9',
       jsr250           : '1.0',
       junit            : '4.12',
-      mockito          : '2.3.6',
+      mockito          : '2.7.11',
       truth            : '0.31',
       javaPoet         : '1.8.0',
       // Android libraries
@@ -69,7 +68,7 @@ ext {
       rxAndroid       : "io.reactivex:rxandroid:${versions.rxAndroid}",
       // Test
       junit           : "junit:junit:${versions.junit}",
-      mockito         : "org.mockito:mockito-core:${versions.mockito}",
+      mockito         : "org.mockito:mockito-inline:${versions.mockito}",
       truth           : "com.google.truth:truth:${versions.truth}",
       // Kotlin
       kotlin          : "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}",
