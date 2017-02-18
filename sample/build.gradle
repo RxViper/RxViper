@@ -27,7 +27,7 @@ android {
     minSdkVersion 9
     targetSdkVersion 24
     versionCode 1
-    versionName '1.0'
+    versionName POM_VERSION
   }
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
@@ -53,14 +53,15 @@ dependencies {
 }
 
 rxViper {
-  packageName android.defaultConfig.applicationId
-  useLambdas true
-  hasInteractor true
-  addMetaInfo true
-  hasRouter true
+  packageName android.defaultConfig.applicationId // default "generated"
+  useLambdas true // default false
+  hasInteractor true // default true
+  addMetaInfo true // default true
+  hasRouter true // default true
+  //split false // default true
 
   screens {
-    foo {
+    main {
       packageName rxViper.packageName
       hasRouter true
       useLambdas true

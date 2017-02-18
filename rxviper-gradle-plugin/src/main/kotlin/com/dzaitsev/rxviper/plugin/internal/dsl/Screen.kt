@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Dmytro Zaitsev
+ * Copyright 2017 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import org.gradle.api.NamedDomainObjectContainer
 class Screen(_name: String, internal val useCases: NamedDomainObjectContainer<UseCase>) {
   val name = _name.capitalize()
 
-  val fullPackage: String; get() = "$packageName.${name.toLowerCase()}"
+  val fullPackage: String; get() = if (split) "$packageName.${name.toLowerCase()}" else packageName
 
   var packageName = RxViperExtension.packageName; @JvmName("packageName") set
 
@@ -37,6 +37,7 @@ class Screen(_name: String, internal val useCases: NamedDomainObjectContainer<Us
 
   var addMetaInfo = RxViperExtension.addMetaInfo; @JvmName("addMetaInfo") set
 
+  var split = RxViperExtension.split; @JvmName("split") set
+
   fun useCases(closure: Closure<NamedDomainObjectContainer<UseCase>>) = useCases.configure(closure)
 }
-

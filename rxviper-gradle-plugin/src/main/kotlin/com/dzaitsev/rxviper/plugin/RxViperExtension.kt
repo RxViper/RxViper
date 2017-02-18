@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Dmytro Zaitsev
+ * Copyright 2017 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,7 @@ import org.gradle.api.NamedDomainObjectContainer
 
 open class RxViperExtension(val screens: NamedDomainObjectContainer<Screen>) {
 
-  fun screens(closure: Closure<NamedDomainObjectContainer<Screen>>) {
-    screens.configure(closure)
-  }
+  fun screens(closure: Closure<NamedDomainObjectContainer<Screen>>) = screens.configure(closure)
 
   companion object {
     @JvmStatic val NAME = "rxViper"
@@ -38,5 +36,7 @@ open class RxViperExtension(val screens: NamedDomainObjectContainer<Screen>) {
     @JvmStatic var hasRouter = true; @JvmName("hasRouter") set
 
     @JvmStatic var addMetaInfo = true; @JvmName("addMetaInfo") set
+
+    @JvmStatic var split = true; @JvmName("split") set
   }
 }
