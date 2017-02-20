@@ -34,8 +34,8 @@ class ScreenTest {
     with(screen) {
       assertThat(packageName).isSameAs(RxViperExtension.packageName)
       assertThat(useLambdas).isSameAs(RxViperExtension.useLambdas)
-      assertThat(hasInteractor).isSameAs(RxViperExtension.hasInteractor)
-      assertThat(hasRouter).isSameAs(RxViperExtension.hasRouter)
+      assertThat(includeInteractor).isSameAs(RxViperExtension.includeInteractor)
+      assertThat(includeRouter).isSameAs(RxViperExtension.includeRouter)
       assertThat(split).isSameAs(RxViperExtension.split)
     }
   }
