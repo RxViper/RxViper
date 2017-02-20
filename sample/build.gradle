@@ -55,15 +55,15 @@ dependencies {
 rxViper {
   packageName android.defaultConfig.applicationId // default "generated"
   useLambdas true // default false
-  hasInteractor true // default true
+  includeInteractor true // default true
   addMetaInfo true // default true
-  hasRouter true // default true
-  //split false // default true
+  includeRouter true // default true
+  split true // default true
 
   screens {
-    main {
+    foo {
       packageName rxViper.packageName
-      hasRouter true
+      includeRouter true
       useLambdas true
       useCases {
         getItems {
@@ -82,7 +82,7 @@ rxViper {
     bar {
       addMetaInfo false
       useLambdas false
-      hasRouter false
+      includeRouter false
       useCases {
           login
           post

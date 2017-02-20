@@ -53,7 +53,7 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
           .addModifiers(Modifier.PUBLIC)
           .addParameter(useCase.requestClass, "requestModel")
 
-      if (screen.hasInteractor) {
+      if (screen.includeInteractor) {
         val className = "${useCase.name}Interactor"
         val argName = className.decapitalize()
 
@@ -103,7 +103,7 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
     val viewCallbacks = ClassName.get(screen.fullPackage, "${screen.name}ViewCallbacks")
 
     return when {
-      screen.hasRouter -> ParameterizedTypeName.get(
+      screen.includeRouter -> ParameterizedTypeName.get(
           ClassName.get(aClass<ViperPresenter<*, *>>()), viewCallbacks, ClassName.get(screen.fullPackage, "${screen.name}Router"))
       else -> ParameterizedTypeName.get(ClassName.get(aClass<Presenter<*>>()), viewCallbacks)
     }
