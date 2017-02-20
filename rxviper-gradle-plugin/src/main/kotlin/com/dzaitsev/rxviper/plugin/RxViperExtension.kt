@@ -31,9 +31,9 @@ open class RxViperExtension(val screens: NamedDomainObjectContainer<Screen>) {
 
     @JvmStatic var useLambdas = false; @JvmName("useLambdas") set
 
-    @JvmStatic var hasInteractor = false; @JvmName("hasInteractor") set
+    @JvmStatic var includeInteractor = true; @JvmName("includeInteractor") set
 
-    @JvmStatic var hasRouter = true; @JvmName("hasRouter") set
+    @JvmStatic var includeRouter = true; @JvmName("includeRouter") set
 
     @JvmStatic var addMetaInfo = true; @JvmName("addMetaInfo") set
 
