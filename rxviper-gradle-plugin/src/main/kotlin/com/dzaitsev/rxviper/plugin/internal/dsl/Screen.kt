@@ -27,11 +27,11 @@ class Screen(_name: String, internal val useCases: NamedDomainObjectContainer<Us
 
   var packageName = RxViperExtension.packageName; @JvmName("packageName") set
 
-  var hasRouter = RxViperExtension.hasRouter; @JvmName("hasRouter") set
+  var includeRouter = RxViperExtension.includeRouter; @JvmName("includeRouter") set
 
   var useLambdas = RxViperExtension.useLambdas; @JvmName("useLambdas") set
 
-  var hasInteractor = RxViperExtension.hasInteractor; @JvmName("hasInteractor") set
+  var includeInteractor = RxViperExtension.includeInteractor; @JvmName("includeInteractor") set
 
   var routesTo = emptyArray<String>(); @JvmName("routesTo") set
 
