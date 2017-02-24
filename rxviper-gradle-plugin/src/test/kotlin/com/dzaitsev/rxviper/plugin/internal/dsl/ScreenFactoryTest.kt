@@ -16,12 +16,17 @@
 
 package com.dzaitsev.rxviper.plugin.internal.dsl
 
-import com.dzaitsev.rxviper.plugin.aClass
+import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Test
 
-class UseCase(_name: String) {
-  internal val name = _name.capitalize()
-
-  var requestClass = aClass<Any>(); @JvmName("requestClass") set
-
-  var responseClass = aClass<Any>(); @JvmName("responseClass") set
+class ScreenFactoryTest {
+  @Test
+  fun `should create new screen`() {
+    // arrange
+    val factory = ScreenFactory(ProjectBuilder().build())
+    // act
+    val screen = factory.create("test")
+    // assert
+    ScreenTest.verify(screen)
+  }
 }
