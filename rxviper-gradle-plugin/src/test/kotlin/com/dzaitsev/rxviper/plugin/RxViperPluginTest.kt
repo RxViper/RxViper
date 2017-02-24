@@ -33,7 +33,7 @@ class RxViperPluginTest {
 
   @Test
   fun `plugin should add the extension`() {
-    assertThat(project.extensions.getByName("rxViper")).isInstanceOf(aClass<RxViperExtension>())
+    assertThat(project.extensions.getByName(RxViperExtension.NAME)).isInstanceOf(aClass<RxViperExtension>())
   }
 
   @Test
