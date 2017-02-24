@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.plugin
+package com.dzaitsev.rxviper.plugin.internal.dsl
 
-import com.dzaitsev.rxviper.plugin.internal.dsl.UseCase
+import com.dzaitsev.rxviper.plugin.aClass
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
@@ -27,5 +27,12 @@ class UseCaseTest {
     val name = "CamelCase"
     assertThat(UseCase(name.decapitalize()).name).isEqualTo(name)
     assertThat(UseCase(name).name).isEqualTo(name)
+  }
+
+  @Test
+  fun `check defaults`() {
+    val useCase = UseCase("Test")
+    assertThat(useCase.requestClass).isSameAs(aClass<Any>())
+    assertThat(useCase.responseClass).isSameAs(aClass<Any>())
   }
 }
