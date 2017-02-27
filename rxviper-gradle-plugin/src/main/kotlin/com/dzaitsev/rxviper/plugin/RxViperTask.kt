@@ -26,14 +26,17 @@ import org.gradle.api.tasks.TaskAction
 
 open class RxViperTask : DefaultTask() {
 
-  protected var destinationDir = project.file("src/$MAIN_SOURCE_SET_NAME/java"); @JvmName("destinationDir") set
+  init {
+    group = GROUP
+    description = DESCRIPTION
+  }
 
-  protected var screens = (project.extensions.getByName(RxViperExtension.NAME) as RxViperExtension).screens; @JvmName("screens") set
+  var destinationDir = project.file("src/$MAIN_SOURCE_SET_NAME/java"); @JvmName("destinationDir") set
+  var screens = (project.extensions.getByName(RxViperExtension.NAME) as RxViperExtension).screens; @JvmName("screens") set
 
   @TaskAction
   fun generateRxViper() {
     destinationDir.parentFile?.mkdirs()
-
     screens.all { screen ->
       with(mutableListOf(ViewCallbacksGenerator(screen), PresenterGenerator(screen))) {
         if (screen.includeRouter) {
@@ -42,7 +45,6 @@ open class RxViperTask : DefaultTask() {
         if (screen.includeInteractor) {
           add(InteractorGenerator(screen))
         }
-
         forEach { it.saveTo(destinationDir) }
       }
     }
@@ -54,5 +56,8 @@ open class RxViperTask : DefaultTask() {
 
     @JvmStatic
     val GROUP = "RxViper"
+
+    @JvmStatic
+    val DESCRIPTION = "Generates VIPER modules adding them to right targets"
   }
 }
