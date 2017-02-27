@@ -16,8 +16,8 @@
 
 package com.dzaitsev.rxviper.plugin.internal.codegen
 
-import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import com.dzaitsev.rxviper.plugin.aClass
+import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
@@ -34,12 +34,15 @@ internal abstract class Generator(protected val screen: Screen) {
 
   protected abstract fun createSpec(): List<TypeSpec.Builder>
 
+  internal var dateTime: String? = null
+
   internal fun saveTo(directory: File) {
     createSpec().forEach { builder ->
       if (screen.addMetaInfo) {
+        dateTime = dateFormat.format(Date())
         builder.addAnnotation(AnnotationSpec.builder(aClass<Generated>())
             .addMember("value", "\$S", javaClass.name)
-            .addMember("date", "\$S", dateFormat.format(Date()))
+            .addMember("date", "\$S", dateTime)
             .addMember("comments", "\$S", "Created by RxViper Gradle Plugin")
             .build())
       }
