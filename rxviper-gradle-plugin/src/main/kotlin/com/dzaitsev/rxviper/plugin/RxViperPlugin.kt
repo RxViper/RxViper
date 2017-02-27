@@ -24,8 +24,10 @@ import com.dzaitsev.rxviper.plugin.RxViperExtension.Companion.NAME as RXVIPER_EX
 import com.dzaitsev.rxviper.plugin.RxViperTask.Companion.NAME as RXVIPER_TASK
 
 class RxViperPlugin : Plugin<Project> {
-  override fun apply(project: Project) = with(project) {
-    extensions.create(RXVIPER_EXT, aClass<RxViperExtension>(), container(aClass<Screen>(), ScreenFactory(this)))
-    task(mapOf("type" to aClass<RxViperTask>()), RXVIPER_TASK).group = RxViperTask.GROUP
+  override fun apply(project: Project) {
+    with(project) {
+      extensions.add(RXVIPER_EXT, RxViperExtension(container(aClass<Screen>(), ScreenFactory(this))))
+      task(mapOf("type" to aClass<RxViperTask>()), RXVIPER_TASK)
+    }
   }
 }
