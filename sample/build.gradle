@@ -68,7 +68,7 @@ rxViper {
       useCases {
         getItems {
           requestClass Long.class
-          requestClass String.class
+          responseClass String.class
         }
         watchPorn {
           requestClass Void.class

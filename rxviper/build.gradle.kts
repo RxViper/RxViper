@@ -1,7 +1,7 @@
 import org.gradle.api.tasks.compile.JavaCompile
 
-plugins {
-  java
+apply {
+  plugin("java")
 }
 
 configure<JavaPluginConvention> {

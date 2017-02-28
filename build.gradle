@@ -31,7 +31,7 @@ buildscript {
     classpath gradlePlugins.retrolambda
     classpath gradlePlugins.versions
     classpath gradlePlugins.kotlin
-    classpath gradlePlugins.rxViper
+//    classpath gradlePlugins.rxViper
   }
 }
 

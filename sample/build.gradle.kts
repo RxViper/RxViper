@@ -2,6 +2,8 @@ import com.android.build.gradle.AppExtension
 import com.android.builder.core.DefaultApiVersion
 import com.android.builder.core.DefaultProductFlavor
 import com.android.builder.model.ApiVersion
+import com.dzaitsev.rxviper.plugin.RxViperExtension
+import com.dzaitsev.rxviper.plugin.RxViperPlugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper
 
@@ -9,7 +11,7 @@ apply {
   plugin("com.android.application")
   plugin("com.neenbedankt.android-apt")
   plugin("me.tatarka.retrolambda")
-  plugin("com.dzaitsev.rxviper")
+  plugin<RxViperPlugin>()
   plugin<KotlinAndroidPluginWrapper>()
 }
 
@@ -48,7 +50,50 @@ dependencies {
   testCompile(libraries("junit"))
 }
 
+rxViper {
+    packageName = (extensions["android"] as AppExtension).defaultConfig.applicationId!! // default "generated"
+    useLambdas = true // default false
+    includeInteractor = true // default true
+    addMetaInfo = true // default true
+    includeRouter = true // default true
+    splitPackages = true // default true
+
+  screens {
+    "foo" {
+      packageName = this@rxViper.packageName
+      includeRouter = true
+      useLambdas = true
+      useCases {
+        "getItems" {
+          requestClass = Long::class.javaObjectType
+          responseClass = String::class.javaObjectType
+        }
+        "watchPorn" {
+          requestClass = Void::class.javaObjectType
+          responseClass = Boolean::class.javaObjectType
+        }
+        "buyGoods" {}
+      }
+      routesTo = arrayOf("Home", "Settings", "Registration", "News")
+    }
+
+    "bar" {
+      addMetaInfo = false
+      useLambdas = false
+      includeRouter = false
+      useCases {
+        "login" {}
+        "post" {}
+        "createUser" {}
+      }
+      routesTo = arrayOf("Auth", "Main", "UserProfile")
+    }
+  }
+}
+
 fun Project.android(configuration: AppExtension.() -> Unit) = configure(configuration)
+
+fun Project.rxViper(configuration: RxViperExtension.() -> Unit) = configure(configuration)
 
 fun DefaultProductFlavor.setMinSdkVersion(value: Int) = setMinSdkVersion(value.asApiVersion())
 
