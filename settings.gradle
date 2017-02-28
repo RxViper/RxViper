@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 include ':rxviper'
-include ':rxviper-gradle-plugin'
+//include ':rxviper-gradle-plugin'
 include ':sample'
