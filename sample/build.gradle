@@ -16,7 +16,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.dzaitsev.rxviper'
+apply plugin: com.dzaitsev.rxviper.plugin.RxViperPlugin
 
 android {
   compileSdkVersion 24
@@ -58,7 +58,7 @@ rxViper {
   includeInteractor true // default true
   addMetaInfo true // default true
   includeRouter true // default true
-  split true // default true
+  splitPackages false // default true
 
   screens {
     foo {
