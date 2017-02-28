@@ -13,15 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.0"
+  }
+}
+
+repositories {
+  jcenter()
+}
+
 apply plugin: 'kotlin'
 
 dependencies {
   compile gradleApi()
-  compile libraries.kotlin
-  compile libraries.javaPoet
-  compile project(':rxviper')
-  testCompile libraries.junit
-  testCompile libraries.truth
+  compile "org.jetbrains.kotlin:kotlin-stdlib:1.1.0"
+  compile "com.squareup:javapoet:1.8.0"
+  compile "com.dzaitsev.rxviper:rxviper:1.0.0-rc2"
+  testCompile "junit:junit:4.12"
+  testCompile "com.google.truth:truth:0.31"
+//  testCompile "com.android.tools.build:gradle:2.2.2"
 }
 
-apply from: rootProject.file('publish.gradle')
+//apply from: rootProject.file('publish.gradle')
