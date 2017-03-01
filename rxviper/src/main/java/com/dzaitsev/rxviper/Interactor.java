@@ -106,7 +106,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * Subscribes to an Observable and provides a callback to handle the items it emits.
    *
    * @param onNext
-   *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
+   *     the {@code Action1<ResponseModel>} you have designed to accept emissions from the Observable
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null
@@ -123,7 +123,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * Subscribes to an Observable and provides a callback to handle the items it emits.
    *
    * @param onNext
-   *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
+   *     the {@code Action1<ResponseModel>} you have designed to accept emissions from the Observable
    * @param requestModel
    *     parameter which will be passed to {@link #createObservable(Object)}.
    *
@@ -144,7 +144,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * Subscribes to an Observable and provides callbacks to handle the items it emits and any error notification it issues.
    *
    * @param onNext
-   *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
+   *     the {@code Action1<ResponseModel>} you have designed to accept emissions from the Observable
    * @param onError
    *     the {@code Action1<Throwable>} you have designed to accept any error notification from the Observable
    *
@@ -161,7 +161,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * Subscribes to an Observable and provides callbacks to handle the items it emits and any error notification it issues.
    *
    * @param onNext
-   *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
+   *     the {@code Action1<ResponseModel>} you have designed to accept emissions from the Observable
    * @param onError
    *     the {@code Action1<Throwable>} you have designed to accept any error notification from the Observable
    * @param requestModel
@@ -183,7 +183,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * Subscribes to an Observable and provides callbacks to handle the items it emits and any error or completion notification it issues.
    *
    * @param onNext
-   *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
+   *     the {@code Action1<ResponseModel>} you have designed to accept emissions from the Observable
    * @param onError
    *     the {@code Action1<Throwable>} you have designed to accept any error notification from the Observable
    * @param onCompleted
@@ -202,7 +202,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * Subscribes to an Observable and provides callbacks to handle the items it emits and any error or completion notification it issues.
    *
    * @param onNext
-   *     the {@code Action1<Result>} you have designed to accept emissions from the Observable
+   *     the {@code Action1<ResponseModel>} you have designed to accept emissions from the Observable
    * @param onError
    *     the {@code Action1<Throwable>} you have designed to accept any error notification from the Observable
    * @param onCompleted
