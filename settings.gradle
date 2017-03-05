@@ -13,6 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+def configureGradleScriptKotlinOn(ProjectDescriptor project) {
+  project.buildFileName = 'build.gradle.kts'
+  project.children.each { configureGradleScriptKotlinOn(it) }
+}
+
 include ':rxviper'
 include ':rxviper-gradle-plugin'
 include ':sample'
+
+configureGradleScriptKotlinOn rootProject
