@@ -16,6 +16,7 @@
 
 package com.dzaitsev.rxviper.plugin.internal.dsl
 
+import com.dzaitsev.rxviper.plugin.RxViperExtension
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Test
 
@@ -23,10 +24,11 @@ class ScreenFactoryTest {
   @Test
   fun `should create new screen`() {
     // arrange
-    val factory = ScreenFactory(ProjectBuilder().build())
+    val rxViper = RxViperExtension()
+    val factory = ScreenFactory(ProjectBuilder().build(), rxViper)
     // act
     val screen = factory.create("test")
     // assert
-    ScreenTest.verify(screen)
+    ScreenTest.verify(screen, rxViper)
   }
 }

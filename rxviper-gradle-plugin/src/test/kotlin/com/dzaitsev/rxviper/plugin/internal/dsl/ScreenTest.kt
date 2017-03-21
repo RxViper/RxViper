@@ -28,25 +28,26 @@ class ScreenTest {
   fun `check defaults`() {
     // arrange
     val project = ProjectBuilder().build()
+    val rxViper = RxViperExtension()
     // act
-    val screen = Screen("test", project.container(aClass<UseCase>()))
+    val screen = Screen("test", rxViper, project.container(aClass<UseCase>()))
     // assert
-    verify(screen)
+    verify(screen, rxViper)
   }
 
   companion object {
-    fun verify(screen: Screen) {
+    fun verify(screen: Screen, rxViper: RxViperExtension) {
       with(screen) {
         assertThat(name).isEqualTo("Test")
         assertThat(useCases).isEmpty()
         assertThat(fullPackage).isEqualTo("$packageName.${name.toLowerCase()}")
-        assertThat(packageName).isSameAs(RxViperExtension.packageName)
-        assertThat(includeRouter).isSameAs(RxViperExtension.includeRouter)
-        assertThat(useLambdas).isSameAs(RxViperExtension.useLambdas)
-        assertThat(includeInteractor).isSameAs(RxViperExtension.includeInteractor)
+        assertThat(packageName).isSameAs(rxViper.packageName)
+        assertThat(includeRouter).isSameAs(rxViper.includeRouter)
+        assertThat(useLambdas).isSameAs(rxViper.useLambdas)
+        assertThat(includeInteractor).isSameAs(rxViper.includeInteractor)
+        assertThat(addMetaInfo).isSameAs(rxViper.addMetaInfo)
+        assertThat(splitPackages).isSameAs(rxViper.splitPackages)
         assertThat(routesTo).isEmpty()
-        assertThat(addMetaInfo).isSameAs(RxViperExtension.addMetaInfo)
-        assertThat(split).isSameAs(RxViperExtension.split)
       }
     }
   }
