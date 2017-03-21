@@ -22,12 +22,12 @@ import org.junit.Test
 class RxViperExtensionTest {
   @Test
   fun `check defaults`() {
-    with(RxViperExtension) {
+    with(RxViperExtension()) {
       assertThat(packageName).isEqualTo("generated")
       assertThat(useLambdas).isFalse()
       assertThat(includeInteractor).isTrue()
       assertThat(includeRouter).isTrue()
-      assertThat(split).isTrue()
+      assertThat(splitPackages).isTrue()
     }
   }
 

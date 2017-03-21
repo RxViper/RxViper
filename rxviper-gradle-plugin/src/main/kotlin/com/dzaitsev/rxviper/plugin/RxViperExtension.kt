@@ -20,23 +20,24 @@ import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import groovy.lang.Closure
 import org.gradle.api.NamedDomainObjectContainer
 
-open class RxViperExtension(val screens: NamedDomainObjectContainer<Screen>) {
+open class RxViperExtension {
+  lateinit var screens: NamedDomainObjectContainer<Screen>
+
+  var packageName = "generated"; @JvmName("packageName") set
+
+  var useLambdas = false; @JvmName("useLambdas") set
+
+  var includeInteractor = true; @JvmName("includeInteractor") set
+
+  var includeRouter = true; @JvmName("includeRouter") set
+
+  var addMetaInfo = true; @JvmName("addMetaInfo") set
+
+  var splitPackages = true; @JvmName("splitPackages") set
 
   fun screens(closure: Closure<NamedDomainObjectContainer<Screen>>) = screens.configure(closure)
 
   companion object {
     @JvmStatic val NAME = "rxViper"
-
-    @JvmStatic var packageName = "generated"; @JvmName("packageName") set
-
-    @JvmStatic var useLambdas = false; @JvmName("useLambdas") set
-
-    @JvmStatic var includeInteractor = true; @JvmName("includeInteractor") set
-
-    @JvmStatic var includeRouter = true; @JvmName("includeRouter") set
-
-    @JvmStatic var addMetaInfo = true; @JvmName("addMetaInfo") set
-
-    @JvmStatic var split = true; @JvmName("split") set
   }
 }
