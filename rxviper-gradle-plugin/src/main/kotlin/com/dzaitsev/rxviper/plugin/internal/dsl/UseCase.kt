@@ -21,7 +21,7 @@ import com.dzaitsev.rxviper.plugin.aClass
 class UseCase(_name: String) {
   internal val name = _name.capitalize()
 
-  var requestClass = aClass<Any>(); @JvmName("requestClass") set
+  var requestClass: Class<*> = aClass<Any>(); @JvmName("requestClass") set
 
-  var responseClass = aClass<Any>(); @JvmName("responseClass") set
+  var responseClass: Class<*> = aClass<Any>(); @JvmName("responseClass") set
 }

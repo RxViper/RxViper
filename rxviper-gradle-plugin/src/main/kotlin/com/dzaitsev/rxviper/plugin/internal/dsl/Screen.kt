@@ -20,24 +20,24 @@ import com.dzaitsev.rxviper.plugin.RxViperExtension
 import groovy.lang.Closure
 import org.gradle.api.NamedDomainObjectContainer
 
-class Screen(_name: String, internal val useCases: NamedDomainObjectContainer<UseCase>) {
+class Screen(_name: String, rxViper: RxViperExtension, val useCases: NamedDomainObjectContainer<UseCase>) {
   val name = _name.capitalize()
 
-  val fullPackage: String; get() = if (split) "$packageName.${name.toLowerCase()}" else packageName
+  val fullPackage: String; get() = if (splitPackages) "$packageName.${name.toLowerCase()}" else packageName
 
-  var packageName = RxViperExtension.packageName; @JvmName("packageName") set
+  var packageName = rxViper.packageName; @JvmName("packageName") set
 
-  var includeRouter = RxViperExtension.includeRouter; @JvmName("includeRouter") set
+  var includeRouter = rxViper.includeRouter; @JvmName("includeRouter") set
 
-  var useLambdas = RxViperExtension.useLambdas; @JvmName("useLambdas") set
+  var useLambdas = rxViper.useLambdas; @JvmName("useLambdas") set
 
-  var includeInteractor = RxViperExtension.includeInteractor; @JvmName("includeInteractor") set
+  var includeInteractor = rxViper.includeInteractor; @JvmName("includeInteractor") set
+
+  var addMetaInfo = rxViper.addMetaInfo; @JvmName("addMetaInfo") set
+
+  var splitPackages = rxViper.splitPackages; @JvmName("splitPackages") set
 
   var routesTo = emptyArray<String>(); @JvmName("routesTo") set
-
-  var addMetaInfo = RxViperExtension.addMetaInfo; @JvmName("addMetaInfo") set
-
-  var split = RxViperExtension.split; @JvmName("split") set
 
   fun useCases(closure: Closure<NamedDomainObjectContainer<UseCase>>) = useCases.configure(closure)
 }
