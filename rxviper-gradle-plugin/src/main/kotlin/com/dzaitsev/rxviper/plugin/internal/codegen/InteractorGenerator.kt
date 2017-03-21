@@ -30,12 +30,12 @@ internal class InteractorGenerator(screen: Screen) : Generator(screen) {
   override val typeName = "Interactor"
 
   override fun createSpec(): List<TypeSpec.Builder> = if (screen.useCases.isEmpty()) {
-    listOf(create(typeSpecName, aClass(), aClass()))
+    listOf(create(typeSpecName, aClass<Any>(), aClass<Any>()))
   } else {
     screen.useCases.map { create("${it.name}Interactor", it.requestClass, it.responseClass) }
   }
 
-  private fun create(name: String, requestClass: Class<Any>, responseClass: Class<Any>): TypeSpec.Builder {
+  private fun create(name: String, requestClass: Class<*>, responseClass: Class<*>): TypeSpec.Builder {
     val subscribeScheduler = "subscribeScheduler"
     val observeScheduler = "observeScheduler"
     return TypeSpec.classBuilder(name)

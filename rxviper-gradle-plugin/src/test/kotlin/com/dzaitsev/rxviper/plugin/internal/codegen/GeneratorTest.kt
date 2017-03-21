@@ -16,6 +16,7 @@
 
 package com.dzaitsev.rxviper.plugin.internal.codegen
 
+import com.dzaitsev.rxviper.plugin.RxViperExtension
 import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import com.dzaitsev.rxviper.plugin.internal.dsl.ScreenFactory
 import com.google.common.truth.Truth.assertThat
@@ -44,7 +45,7 @@ abstract class GeneratorTest {
 
   @Test
   fun `should generate code for default screen config`() {
-    val factory = ScreenFactory(project)
+    val factory = ScreenFactory(project, RxViperExtension())
     arrayOf(
         factory.create("Lorem"),
         factory.create("Ipsum").apply { routesTo = arrayOf("Foo", "Bar") }

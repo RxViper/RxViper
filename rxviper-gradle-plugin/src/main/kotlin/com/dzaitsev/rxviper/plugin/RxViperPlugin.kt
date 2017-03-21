@@ -20,14 +20,14 @@ import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import com.dzaitsev.rxviper.plugin.internal.dsl.ScreenFactory
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import com.dzaitsev.rxviper.plugin.RxViperExtension.Companion.NAME as RXVIPER_EXT
-import com.dzaitsev.rxviper.plugin.RxViperTask.Companion.NAME as RXVIPER_TASK
 
 class RxViperPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     with(project) {
-      extensions.add(RXVIPER_EXT, RxViperExtension(container(aClass<Screen>(), ScreenFactory(this))))
-      task(mapOf("type" to aClass<RxViperTask>()), RXVIPER_TASK)
+      val rxViper = RxViperExtension()
+      rxViper.screens = container(aClass<Screen>(), ScreenFactory(this, rxViper))
+      extensions.add(RxViperExtension.NAME, rxViper)
+      task(mapOf("type" to aClass<RxViperTask>()), RxViperTask.NAME)
     }
   }
 }
