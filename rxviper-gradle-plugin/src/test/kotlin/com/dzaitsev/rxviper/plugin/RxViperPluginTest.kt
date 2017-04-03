@@ -28,7 +28,7 @@ class RxViperPluginTest {
   @Before
   fun setUp() {
     project = ProjectBuilder().build()
-    project.apply(mapOf("plugin" to aClass<RxViperPlugin>()))
+    project.plugins.apply(aClass<RxViperPlugin>())
   }
 
   @Test
@@ -38,9 +38,6 @@ class RxViperPluginTest {
 
   @Test
   fun `plugin should add the task`() {
-    with(project.tasks.getByName(RxViperTask.NAME)) {
-      assertThat(this).isInstanceOf(aClass<RxViperTask>())
-      assertThat(this.group).isEqualTo(RxViperTask.GROUP)
-    }
+    assertThat(project.tasks.getByName(RxViperTask.NAME)).isInstanceOf(aClass<RxViperTask>())
   }
 }

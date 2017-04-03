@@ -24,10 +24,10 @@ import org.gradle.api.Project
 class RxViperPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     with(project) {
-      val rxViper = RxViperExtension()
+      val rxViper = RxViperExtension(this)
       rxViper.screens = container(aClass<Screen>(), ScreenFactory(this, rxViper))
       extensions.add(RxViperExtension.NAME, rxViper)
-      task(mapOf("type" to aClass<RxViperTask>()), RxViperTask.NAME)
+      tasks.create(RxViperTask.NAME, aClass<RxViperTask>())
     }
   }
 }

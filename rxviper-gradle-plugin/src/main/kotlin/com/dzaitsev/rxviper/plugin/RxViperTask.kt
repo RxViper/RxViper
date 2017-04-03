@@ -21,7 +21,6 @@ import com.dzaitsev.rxviper.plugin.internal.codegen.PresenterGenerator
 import com.dzaitsev.rxviper.plugin.internal.codegen.RouterGenerator
 import com.dzaitsev.rxviper.plugin.internal.codegen.ViewCallbacksGenerator
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME
 import org.gradle.api.tasks.TaskAction
 
 open class RxViperTask : DefaultTask() {
@@ -31,8 +30,9 @@ open class RxViperTask : DefaultTask() {
     description = DESCRIPTION
   }
 
-  var destinationDir = project.file("src/$MAIN_SOURCE_SET_NAME/java"); @JvmName("destinationDir") set
-  var screens = (project.extensions.getByName(RxViperExtension.NAME) as RxViperExtension).screens; @JvmName("screens") set
+  private val rxViper = project.extensions.getByName(RxViperExtension.NAME) as RxViperExtension
+  var destinationDir = rxViper.destinationDir; @JvmName("destinationDir") set
+  var screens = rxViper.screens; @JvmName("screens") set
 
   @TaskAction
   fun generateRxViper() {

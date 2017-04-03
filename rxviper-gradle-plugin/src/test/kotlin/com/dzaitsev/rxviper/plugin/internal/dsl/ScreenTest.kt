@@ -28,7 +28,7 @@ class ScreenTest {
   fun `check defaults`() {
     // arrange
     val project = ProjectBuilder().build()
-    val rxViper = RxViperExtension()
+    val rxViper = RxViperExtension(project)
     // act
     val screen = Screen("test", rxViper, project.container(aClass<UseCase>()))
     // assert
