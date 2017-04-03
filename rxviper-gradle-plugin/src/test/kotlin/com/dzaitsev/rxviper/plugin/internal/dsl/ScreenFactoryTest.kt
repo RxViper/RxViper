@@ -24,8 +24,9 @@ class ScreenFactoryTest {
   @Test
   fun `should create new screen`() {
     // arrange
-    val rxViper = RxViperExtension()
-    val factory = ScreenFactory(ProjectBuilder().build(), rxViper)
+    val project = ProjectBuilder().build()
+    val rxViper = RxViperExtension(project)
+    val factory = ScreenFactory(project, rxViper)
     // act
     val screen = factory.create("test")
     // assert

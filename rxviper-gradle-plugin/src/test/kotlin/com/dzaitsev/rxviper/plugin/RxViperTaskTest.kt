@@ -17,42 +17,61 @@
 package com.dzaitsev.rxviper.plugin
 
 import com.google.common.truth.Truth.assertThat
-import org.gradle.api.tasks.SourceSet
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Before
 import org.junit.Test
 
 class RxViperTaskTest {
-  private val rxViperTask by lazy {
-    with(ProjectBuilder.builder().build()) {
-      apply(mapOf("plugin" to aClass<RxViperPlugin>()))
+  private lateinit var rxViperTask: RxViperTask
+
+  @Before
+  fun setUp() {
+    rxViperTask = with(ProjectBuilder().build()) {
+      plugins.apply(aClass<RxViperPlugin>())
       tasks.findByName(RxViperTask.NAME) as RxViperTask
     }
   }
 
   @Test
   fun `group should be correct`() {
-    assertThat(RxViperTask.NAME).isEqualTo("generateRxViper")
     assertThat(RxViperTask.GROUP).isEqualTo("RxViper")
+  }
+
+  @Test
+  fun `name should be correct`() {
+    assertThat(RxViperTask.NAME).isEqualTo("generateRxViper")
+  }
+
+  @Test
+  fun `description should be correct`() {
     assertThat(RxViperTask.DESCRIPTION).isEqualTo("Generates VIPER modules adding them to right targets")
   }
 
   @Test
-  fun `group and description should be set`() {
-    with(rxViperTask) {
-      assertThat(group).isEqualTo(RxViperTask.GROUP)
-      assertThat(description).isEqualTo(RxViperTask.DESCRIPTION)
-    }
+  fun `group should be set`() {
+    assertThat(rxViperTask.group).isEqualTo(RxViperTask.GROUP)
   }
 
   @Test
-  fun `destinationDir and screens should be set`() {
+  fun `description should be set`() {
+    assertThat(rxViperTask.description).isEqualTo(RxViperTask.DESCRIPTION)
+  }
+
+  @Test
+  fun `destinationDir should be set`() {
     // arrange
     val project = rxViperTask.project
     val rxViperExtension = project.extensions.getByName(RxViperExtension.NAME) as RxViperExtension
     // assert
-    with(rxViperTask) {
-      assertThat(destinationDir).isEqualTo(project.file("src/${SourceSet.MAIN_SOURCE_SET_NAME}/java"))
-      assertThat(screens).isSameAs(rxViperExtension.screens)
-    }
+    assertThat(rxViperTask.destinationDir).isSameAs(rxViperExtension.destinationDir)
+  }
+
+  @Test
+  fun `screens should be set`() {
+    // arrange
+    val project = rxViperTask.project
+    val rxViperExtension = project.extensions.getByName(RxViperExtension.NAME) as RxViperExtension
+    // assert
+    assertThat(rxViperTask.screens).isSameAs(rxViperExtension.screens)
   }
 }

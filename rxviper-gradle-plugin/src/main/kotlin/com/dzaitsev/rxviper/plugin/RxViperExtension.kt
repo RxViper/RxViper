@@ -19,8 +19,10 @@ package com.dzaitsev.rxviper.plugin
 import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import groovy.lang.Closure
 import org.gradle.api.NamedDomainObjectContainer
+import org.gradle.api.Project
+import org.gradle.api.tasks.SourceSet
 
-open class RxViperExtension {
+open class RxViperExtension(internal val project: Project) {
   lateinit var screens: NamedDomainObjectContainer<Screen>
 
   var packageName = "generated"; @JvmName("packageName") set
@@ -34,6 +36,8 @@ open class RxViperExtension {
   var addMetaInfo = true; @JvmName("addMetaInfo") set
 
   var splitPackages = true; @JvmName("splitPackages") set
+
+  var destinationDir = project.file("src/${SourceSet.MAIN_SOURCE_SET_NAME}/java"); @JvmName("destinationDir") set
 
   fun screens(closure: Closure<NamedDomainObjectContainer<Screen>>) = screens.configure(closure)
 
