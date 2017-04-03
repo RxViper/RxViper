@@ -17,17 +17,20 @@
 package com.dzaitsev.rxviper.plugin
 
 import com.google.common.truth.Truth.assertThat
+import org.gradle.api.tasks.SourceSet
+import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Test
 
 class RxViperExtensionTest {
   @Test
   fun `check defaults`() {
-    with(RxViperExtension()) {
+    with(RxViperExtension(ProjectBuilder().build())) {
       assertThat(packageName).isEqualTo("generated")
       assertThat(useLambdas).isFalse()
       assertThat(includeInteractor).isTrue()
       assertThat(includeRouter).isTrue()
       assertThat(splitPackages).isTrue()
+      assertThat(destinationDir).isEqualTo(project.file("src/${SourceSet.MAIN_SOURCE_SET_NAME}/java"))
     }
   }
 

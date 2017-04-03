@@ -38,14 +38,14 @@ abstract class GeneratorTest {
 
   @Before
   fun setUp() {
-    project = ProjectBuilder.builder()
+    project = ProjectBuilder()
         .withProjectDir(temporaryFolder.newFolder())
         .build()
   }
 
   @Test
   fun `should generate code for default screen config`() {
-    val factory = ScreenFactory(project, RxViperExtension())
+    val factory = ScreenFactory(project, RxViperExtension(project))
     arrayOf(
         factory.create("Lorem"),
         factory.create("Ipsum").apply { routesTo = arrayOf("Foo", "Bar") }
@@ -58,7 +58,7 @@ abstract class GeneratorTest {
       // then
       with(File(sourceDir, "${path(screen)}${generator.typeSpecName}.java")) {
         assertThat(exists()).isTrue()
-        assertThat(readText(Charset.forName("UTF-8"))).isEqualTo(defaultSource(screen, generator))
+        assertThat(readText()).isEqualTo(defaultSource(screen, generator))
       }
     }
   }
