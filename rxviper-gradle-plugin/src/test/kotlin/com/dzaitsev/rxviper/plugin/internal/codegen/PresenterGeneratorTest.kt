@@ -26,8 +26,8 @@ class PresenterGeneratorTest : GeneratorTest() {
     return "${packageLine(screen)}\n" +
         "\n" +
         "import com.dzaitsev.rxviper.ViperPresenter;\n" +
+        "import io.reactivex.functions.Consumer;\n" +
         "import javax.annotation.Generated;\n" +
-        "import rx.functions.Action1;\n" +
         "\n" +
         "${generatedAnnotation(generator)}\n" +
         "public final class ${generator.typeSpecName} extends ViperPresenter<${screen.name}ViewCallbacks, ${screen.name}Router> {\n" +
@@ -38,14 +38,14 @@ class PresenterGeneratorTest : GeneratorTest() {
         "  }\n" +
         "\n" +
         "  public void do${screen.name}(Object requestModel) {\n" +
-        "    $interactorName.execute(new Action1<Object>() {\n" +
+        "    $interactorName.execute(new Consumer<Object>() {\n" +
         "      @Override\n" +
-        "      public void call(Object o) {\n" +
+        "      public void accept(Object o) {\n" +
         "        // TODO: Implement onNext here...\n" +
         "      }\n" +
-        "    }, new Action1<Throwable>() {\n" +
+        "    }, new Consumer<Throwable>() {\n" +
         "      @Override\n" +
-        "      public void call(Throwable t) {\n" +
+        "      public void accept(Throwable t) {\n" +
         "        // TODO: Implement onError here...\n" +
         "      }\n" +
         "    }, requestModel);\n" +
@@ -53,7 +53,7 @@ class PresenterGeneratorTest : GeneratorTest() {
         "\n" +
         "  @Override\n" +
         "  protected void onDropView(${screen.name}ViewCallbacks view) {\n" +
-        "    $interactorName.unsubscribe();\n" +
+        "    $interactorName.dispose();\n" +
         "  }\n" +
         "}\n"
   }
