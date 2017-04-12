@@ -26,7 +26,7 @@ import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
-import rx.functions.Action1
+import io.reactivex.functions.Consumer
 import javax.lang.model.element.Modifier
 
 internal class PresenterGenerator(screen: Screen) : Generator(screen) {
@@ -61,7 +61,7 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
             .addParameter(ClassName.get(screen.fullPackage, className), argName)
             .addStatement("this.\$1N = \$1N", argName)
 
-        onDropViewMethodBuilder.addStatement("\$N.unsubscribe()", argName)
+        onDropViewMethodBuilder.addStatement("\$N.dispose()", argName)
 
         presenterBuilder.addField(ClassName.get(screen.fullPackage, className), argName, Modifier.PRIVATE, Modifier.FINAL)
         presenterBuilder.addMethod(when {
@@ -89,8 +89,8 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
 
   private fun action1Anonymous(clazz: Class<*>, paramName: String, comment: String): TypeSpec {
     return TypeSpec.anonymousClassBuilder("")
-        .addSuperinterface(ParameterizedTypeName.get(aClass<Action1<*>>(), clazz))
-        .addMethod(MethodSpec.methodBuilder("call")
+        .addSuperinterface(ParameterizedTypeName.get(aClass<Consumer<*>>(), clazz))
+        .addMethod(MethodSpec.methodBuilder("accept")
             .addAnnotation(aClass<Override>())
             .addModifiers(Modifier.PUBLIC)
             .addParameter(clazz, paramName)

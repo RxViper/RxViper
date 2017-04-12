@@ -17,13 +17,13 @@
 package com.dzaitsev.rxviper.plugin.internal.codegen
 
 import com.dzaitsev.rxviper.Interactor
-import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import com.dzaitsev.rxviper.plugin.aClass
+import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeSpec
-import rx.Observable
-import rx.Scheduler
+import io.reactivex.Flowable
+import io.reactivex.Scheduler
 import javax.lang.model.element.Modifier
 
 internal class InteractorGenerator(screen: Screen) : Generator(screen) {
@@ -47,13 +47,13 @@ internal class InteractorGenerator(screen: Screen) : Generator(screen) {
             .addParameter(aClass<Scheduler>(), observeScheduler)
             .addStatement("super(\$N, \$N)", subscribeScheduler, observeScheduler)
             .build())
-        .addMethod(MethodSpec.methodBuilder("createObservable")
+        .addMethod(MethodSpec.methodBuilder("createFlowable")
             .addModifiers(Modifier.PROTECTED)
             .addAnnotation(aClass<Override>())
             .addParameter(requestClass, "requestModel")
             .addComment("TODO: Write your business logic here...")
-            .addStatement("return \$T.empty()", aClass<Observable<*>>())
-            .returns(ParameterizedTypeName.get(aClass<Observable<*>>(), responseClass))
+            .addStatement("return \$T.empty()", aClass<Flowable<*>>())
+            .returns(ParameterizedTypeName.get(aClass<Flowable<*>>(), responseClass))
             .build())
   }
 }

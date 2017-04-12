@@ -24,9 +24,9 @@ class InteractorGeneratorTest : GeneratorTest() {
     return "${packageLine(screen)}\n" +
         "\n" +
         "import com.dzaitsev.rxviper.Interactor;\n" +
+        "import io.reactivex.Flowable;\n" +
+        "import io.reactivex.Scheduler;\n" +
         "import javax.annotation.Generated;\n" +
-        "import rx.Observable;\n" +
-        "import rx.Scheduler;\n" +
         "\n" +
         "${generatedAnnotation(generator)}\n" +
         "public final class ${generator.typeSpecName} extends Interactor<Object, Object> {\n" +
@@ -35,9 +35,9 @@ class InteractorGeneratorTest : GeneratorTest() {
         "  }\n" +
         "\n" +
         "  @Override\n" +
-        "  protected Observable<Object> createObservable(Object requestModel) {\n" +
+        "  protected Flowable<Object> createFlowable(Object requestModel) {\n" +
         "    // TODO: Write your business logic here...\n" +
-        "    return Observable.empty();\n" +
+        "    return Flowable.empty();\n" +
         "  }\n" +
         "}\n"
   }

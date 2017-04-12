@@ -25,7 +25,7 @@ ext {
       aptPlugin        : '1.8',
       versionsPlugin   : '0.14.0',
       // Java libraries
-      rxJava           : '1.2.6',
+      rxJava           : '2.0.0',
       dagger           : '2.9',
       jsr250           : '1.0',
       junit            : '4.12',
@@ -33,7 +33,7 @@ ext {
       truth            : '0.31',
       javaPoet         : '1.8.0',
       // Android libraries
-      rxAndroid        : '1.2.1',
+      rxAndroid        : '2.0.0',
       support          : '25.0.0',
       constraintLayout : '1.0.0-beta4',
       // Kotlin
@@ -55,7 +55,7 @@ ext {
   libraries = [
       rxViper         : "com.dzaitsev.rxviper:rxviper:${versions.rxViper}",
       // Java
-      rxJava          : "io.reactivex:rxjava:${versions.rxJava}",
+      rxJava          : "io.reactivex.rxjava2:rxjava:${versions.rxJava}",
       dagger          : "com.google.dagger:dagger:${versions.dagger}",
       daggerCompiler  : "com.google.dagger:dagger-compiler:${versions.dagger}",
       jsr250          : "javax.annotation:jsr250-api:${versions.jsr250}",
@@ -65,7 +65,7 @@ ext {
       appCompat       : "com.android.support:appcompat-v7:${versions.support}",
       design          : "com.android.support:design:${versions.support}",
       cardView        : "com.android.support:cardview-v7:${versions.support}",
-      rxAndroid       : "io.reactivex:rxandroid:${versions.rxAndroid}",
+      rxAndroid       : "io.reactivex.rxjava2:rxandroid:${versions.rxAndroid}",
       // Test
       junit           : "junit:junit:${versions.junit}",
       mockito         : "org.mockito:mockito-inline:${versions.mockito}",

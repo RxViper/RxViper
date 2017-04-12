@@ -28,7 +28,7 @@ import com.dzaitsev.rxviper.sample.mainscreen.router.MainRouter;
 import com.dzaitsev.rxviper.sample.mainscreen.router.MainRouterImpl;
 import dagger.Module;
 import dagger.Provides;
-import rx.Scheduler;
+import io.reactivex.Scheduler;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~

@@ -18,18 +18,18 @@ package com.dzaitsev.rxviper.sample.data;
 
 import android.content.res.Resources;
 import com.dzaitsev.rxviper.sample.R;
+import io.reactivex.Flowable;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import rx.Observable;
 
+import static io.reactivex.Flowable.error;
+import static io.reactivex.Flowable.just;
+import static io.reactivex.Flowable.timer;
 import static java.lang.Math.min;
 import static java.util.Collections.shuffle;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static rx.Observable.error;
-import static rx.Observable.just;
-import static rx.Observable.timer;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -71,8 +71,8 @@ public final class CheeseStorage {
   /**
    * Emulates long operation
    */
-  public Observable<List<Cheese>> getCheeses(int count) {
-    final Observable<Long> timer = timer(random.nextInt(2) + 1, SECONDS);
+  public Flowable<List<Cheese>> getCheeses(int count) {
+    final Flowable<Long> timer = timer(random.nextInt(2) + 1, SECONDS);
     return count < 0 ? timer.concatMap(seconds -> error(new RuntimeException("Count cannot be less than zero. Given count = " + count)))
         : just(randomSublist(cheeses, count, random)).zipWith(timer, (cheeses, seconds) -> cheeses);
   }

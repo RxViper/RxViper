@@ -20,9 +20,9 @@ import android.app.Application;
 import android.content.res.Resources;
 import dagger.Module;
 import dagger.Provides;
-import rx.Scheduler;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~

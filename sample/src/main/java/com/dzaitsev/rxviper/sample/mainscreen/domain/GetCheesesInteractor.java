@@ -18,9 +18,9 @@ package com.dzaitsev.rxviper.sample.mainscreen.domain;
 
 import com.dzaitsev.rxviper.Interactor;
 import com.dzaitsev.rxviper.sample.data.CheeseStorage;
+import io.reactivex.Flowable;
+import io.reactivex.Scheduler;
 import java.util.Collection;
-import rx.Observable;
-import rx.Scheduler;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -39,7 +39,7 @@ public final class GetCheesesInteractor extends Interactor<Integer, Collection<C
   }
 
   @Override
-  protected Observable<Collection<CheeseViewModel>> createObservable(Integer amount) {
+  protected Flowable<Collection<CheeseViewModel>> createFlowable(Integer amount) {
     return storage.getCheeses(amount)
         .map(mapper::map);
   }
