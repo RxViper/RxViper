@@ -16,8 +16,11 @@
 import java.text.SimpleDateFormat
 
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 
 version = POM_VERSION
+group = POM_GROUP_ID
+
 Date buildTimeAndDate = new Date()
 ext {
   buildTime = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
@@ -51,9 +54,58 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
   from javadoc.destinationDir
 }
 
+def publicationName = POM_ARTIFACT_ID.split("-").collect { it.capitalize() }.join()
+
 artifacts {
   archives javadocJar
   archives sourcesJar
+}
+
+publishing {
+  def pomConfig = {
+    licenses {
+      license {
+        name POM_LICENSE_NAME
+        url POM_LICENSE_URL
+      }
+    }
+    developers {
+      developer {
+        id POM_DEVELOPER_ID
+        name POM_DEVELOPER_NAME
+        email POM_DEVELOPER_EMAIL
+      }
+    }
+    scm {
+      connection POM_GIT_URL
+      developerConnection POM_GIT_URL
+      url POM_SITE_URL
+    }
+  }
+
+  publications {
+    "$publicationName"(MavenPublication) {
+      from components.java
+      artifact sourcesJar
+      artifact javadocJar
+      groupId POM_GROUP_ID
+      artifactId POM_ARTIFACT_ID
+      version POM_VERSION
+      pom.withXml {
+        def root = asNode()
+        root.appendNode('description', POM_DESCRIPTION)
+        root.appendNode('name', POM_NAME)
+        root.appendNode('url', POM_SITE_URL)
+        root.children().last() + pomConfig
+
+        root.dependencies.'*'.findAll() {
+          it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+            dep.name == it.artifactId.text()
+          }
+        }.each { it.scope*.value = 'compile' }
+      }
+    }
+  }
 }
 
 bintray {
@@ -62,7 +114,7 @@ bintray {
   override = false // [Default: false] Whether to override version artifacts already published
   user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
   key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-
+  publications = [publicationName]
   configurations = ['archives']
   pkg {
     repo = BINTRAY_REPO
@@ -81,48 +133,6 @@ bintray {
         passphrase = project.hasProperty('bintrayGpgPassword') ? project.property('bintrayGpgPassword') :
             System.getenv('BINTRAY_GPG_PASSWORD')
         //Optional. The passphrase for GPG signing'
-      }
-    }
-  }
-}
-
-apply plugin: 'com.github.dcendents.android-maven'
-
-group = POM_GROUP_ID // Maven Group ID for the artifact
-
-install {
-  repositories.mavenInstaller {
-    // This generates POM.xml with proper parameters
-    pom {
-      project {
-        packaging POM_PACKAGING
-        groupId POM_GROUP_ID
-        artifactId POM_ARTIFACT_ID
-
-        // Add your description here
-        name POM_NAME
-        description POM_DESCRIPTION
-        url POM_SITE_URL
-
-        // Set your license
-        licenses {
-          license {
-            name POM_LICENSE_NAME
-            url POM_LICENSE_URL
-          }
-        }
-        developers {
-          developer {
-            id POM_DEVELOPER_ID
-            name POM_DEVELOPER_NAME
-            email POM_DEVELOPER_EMAIL
-          }
-        }
-        scm {
-          connection POM_GIT_URL
-          developerConnection POM_GIT_URL
-          url POM_SITE_URL
-        }
       }
     }
   }
