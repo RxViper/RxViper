@@ -17,9 +17,12 @@
 package com.dzaitsev.rxviper.plugin
 
 import com.google.common.truth.Truth.assertThat
+import org.gradle.api.tasks.TaskAction
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Before
 import org.junit.Test
+import java.io.File
+import java.nio.file.Files
 
 class RxViperTaskTest {
   private lateinit var rxViperTask: RxViperTask
@@ -73,5 +76,37 @@ class RxViperTaskTest {
     val rxViperExtension = project.extensions.getByName(RxViperExtension.NAME) as RxViperExtension
     // assert
     assertThat(rxViperTask.screens).isSameAs(rxViperExtension.screens)
+  }
+
+  @Test
+  fun `should have only one task action`() {
+    val taskActions = RxViperTask::class.java
+        .declaredMethods
+        .filter { it.isAnnotationPresent(aClass<TaskAction>()) }
+    assertThat(taskActions).hasSize(1)
+    assertThat(taskActions[0].name).isEqualTo("generateRxViper")
+  }
+
+  @Test
+  fun `task action should generate the code`() {
+    with(rxViperTask) {
+      // given
+      val screenName = "TestScreen"
+      val screen = screens.create(screenName)
+      destinationDir = Files.createTempDirectory("temp${System.nanoTime()}").toFile()
+      // when
+      generateRxViper()
+      // then
+      with(File(File(destinationDir, screen.packageName), screen.name.toLowerCase())) {
+        assertThat(exists()).isTrue()
+        assertThat(list().toList()).containsExactly(
+            "${screenName}Interactor.java",
+            "${screenName}Presenter.java",
+            "${screenName}Router.java",
+            "${screenName}ViewCallbacks.java"
+        )
+      }
+      destinationDir.deleteRecursively()
+    }
   }
 }
