@@ -17,19 +17,23 @@
 package com.dzaitsev.rxviper.plugin.internal.dsl
 
 import com.dzaitsev.rxviper.plugin.RxViperExtension
+import com.dzaitsev.rxviper.plugin.RxViperPlugin
+import com.dzaitsev.rxviper.plugin.aClass
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Test
 
 class ScreenFactoryTest {
+
   @Test
   fun `should create new screen`() {
-    // arrange
-    val project = ProjectBuilder().build()
-    val rxViper = RxViperExtension(project)
-    val factory = ScreenFactory(project, rxViper)
-    // act
-    val screen = factory.create("test")
-    // assert
-    ScreenTest.verify(screen, rxViper)
+    with(ProjectBuilder().build()) {
+      // arrange
+      plugins.apply(aClass<RxViperPlugin>())
+      val factory = ScreenFactory(this)
+      // act
+      val screen = factory.create("test")
+      // assert
+      ScreenTest.verify(screen, extensions.findByType(aClass<RxViperExtension>()))
+    }
   }
 }

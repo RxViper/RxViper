@@ -16,7 +16,8 @@
 
 package com.dzaitsev.rxviper.plugin.internal.codegen
 
-import com.dzaitsev.rxviper.plugin.RxViperExtension
+import com.dzaitsev.rxviper.plugin.RxViperPlugin
+import com.dzaitsev.rxviper.plugin.aClass
 import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import com.dzaitsev.rxviper.plugin.internal.dsl.ScreenFactory
 import com.google.common.truth.Truth.assertThat
@@ -27,7 +28,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
-import java.nio.charset.Charset
 
 abstract class GeneratorTest {
   @Rule
@@ -41,11 +41,12 @@ abstract class GeneratorTest {
     project = ProjectBuilder()
         .withProjectDir(temporaryFolder.newFolder())
         .build()
+    project.plugins.apply(aClass<RxViperPlugin>())
   }
 
   @Test
   fun `should generate code for default screen config`() {
-    val factory = ScreenFactory(project, RxViperExtension(project))
+    val factory = ScreenFactory(project)
     arrayOf(
         factory.create("Lorem"),
         factory.create("Ipsum").apply { routesTo = arrayOf("Foo", "Bar") }
