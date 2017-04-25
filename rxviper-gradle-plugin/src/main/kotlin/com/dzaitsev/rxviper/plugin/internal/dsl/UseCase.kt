@@ -17,11 +17,14 @@
 package com.dzaitsev.rxviper.plugin.internal.dsl
 
 import com.dzaitsev.rxviper.plugin.aClass
+import org.gradle.api.tasks.Optional
 
 class UseCase(_name: String) {
   internal val name = _name.capitalize()
 
+  @Optional
   var requestClass: Class<*> = aClass<Any>(); @JvmName("requestClass") set
 
+  @Optional
   var responseClass: Class<*> = aClass<Any>(); @JvmName("responseClass") set
 }

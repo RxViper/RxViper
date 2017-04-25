@@ -21,23 +21,31 @@ import com.dzaitsev.rxviper.plugin.internal.dsl.ScreenFactory
 import groovy.lang.Closure
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.SourceSet
 
 open class RxViperExtension(internal val project: Project) {
   var screens: NamedDomainObjectContainer<Screen> = project.container(aClass<Screen>(), ScreenFactory(project))
 
+  @Optional
   var packageName = "generated"; @JvmName("packageName") set
 
+  @Optional
   var useLambdas = false; @JvmName("useLambdas") set
 
+  @Optional
   var includeInteractor = true; @JvmName("includeInteractor") set
 
+  @Optional
   var includeRouter = true; @JvmName("includeRouter") set
 
+  @Optional
   var addMetaInfo = true; @JvmName("addMetaInfo") set
 
+  @Optional
   var splitPackages = true; @JvmName("splitPackages") set
 
+  @Optional
   var destinationDir = project.file("src/${SourceSet.MAIN_SOURCE_SET_NAME}/java"); @JvmName("destinationDir") set
 
   fun screens(closure: Closure<NamedDomainObjectContainer<Screen>>) = screens.configure(closure)
