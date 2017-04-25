@@ -30,7 +30,7 @@ open class RxViperTask : DefaultTask() {
     description = DESCRIPTION
   }
 
-  private val rxViper = project.extensions.getByName(RxViperExtension.NAME) as RxViperExtension
+  private val rxViper = project.extensions.getByType(aClass<RxViperExtension>())
   var destinationDir = rxViper.destinationDir; @JvmName("destinationDir") set
   var screens = rxViper.screens; @JvmName("screens") set
 

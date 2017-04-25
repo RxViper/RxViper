@@ -16,17 +16,13 @@
 
 package com.dzaitsev.rxviper.plugin
 
-import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
-import com.dzaitsev.rxviper.plugin.internal.dsl.ScreenFactory
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 class RxViperPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     with(project) {
-      val rxViper = RxViperExtension(this)
-      rxViper.screens = container(aClass<Screen>(), ScreenFactory(this, rxViper))
-      extensions.add(RxViperExtension.NAME, rxViper)
+      extensions.add(RxViperExtension.NAME, RxViperExtension(this))
       tasks.create(RxViperTask.NAME, aClass<RxViperTask>())
     }
   }

@@ -17,13 +17,14 @@
 package com.dzaitsev.rxviper.plugin
 
 import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
+import com.dzaitsev.rxviper.plugin.internal.dsl.ScreenFactory
 import groovy.lang.Closure
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
 
 open class RxViperExtension(internal val project: Project) {
-  lateinit var screens: NamedDomainObjectContainer<Screen>
+  var screens: NamedDomainObjectContainer<Screen> = project.container(aClass<Screen>(), ScreenFactory(project))
 
   var packageName = "generated"; @JvmName("packageName") set
 
