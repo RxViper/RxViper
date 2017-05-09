@@ -38,7 +38,7 @@ class ScreenTest {
   companion object {
     fun verify(screen: Screen, rxViper: RxViperExtension) {
       with(screen) {
-        assertThat(name).isEqualTo("Test")
+        assertThat(name).isEqualTo("test")
         assertThat(useCases).isEmpty()
         assertThat(fullPackage).isEqualTo("$packageName.${name.toLowerCase()}")
         assertThat(packageName).isSameAs(rxViper.packageName)
