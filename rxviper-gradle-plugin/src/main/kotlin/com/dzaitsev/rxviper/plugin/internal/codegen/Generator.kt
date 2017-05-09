@@ -54,7 +54,7 @@ internal abstract class Generator(protected val screen: Screen) {
           .skipJavaLangImports(true)
           .build()
           .writeTo(directory)
-      println("Generated ${typeSpec.name}")
+      println("Generated ${screen.fullPackage}.$typeSpecName")
     }
   }
 
