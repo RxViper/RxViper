@@ -19,6 +19,7 @@ package com.dzaitsev.rxviper.plugin.internal.dsl
 import com.dzaitsev.rxviper.plugin.RxViperExtension
 import groovy.lang.Closure
 import org.gradle.api.NamedDomainObjectContainer
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 
 class Screen(_name: String, rxViper: RxViperExtension, val useCases: NamedDomainObjectContainer<UseCase>) {
@@ -26,24 +27,31 @@ class Screen(_name: String, rxViper: RxViperExtension, val useCases: NamedDomain
 
   val fullPackage: String; get() = if (splitPackages) "$packageName.${name.toLowerCase()}" else packageName
 
+  @Input
   @Optional
   var packageName = rxViper.packageName; @JvmName("packageName") set
 
+  @Input
   @Optional
   var includeRouter = rxViper.includeRouter; @JvmName("includeRouter") set
 
+  @Input
   @Optional
   var useLambdas = rxViper.useLambdas; @JvmName("useLambdas") set
 
+  @Input
   @Optional
   var includeInteractor = rxViper.includeInteractor; @JvmName("includeInteractor") set
 
+  @Input
   @Optional
   var addMetaInfo = rxViper.addMetaInfo; @JvmName("addMetaInfo") set
 
+  @Input
   @Optional
   var splitPackages = rxViper.splitPackages; @JvmName("splitPackages") set
 
+  @Input
   @Optional
   var routesTo = emptyArray<String>(); @JvmName("routesTo") set
 
