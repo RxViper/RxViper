@@ -22,9 +22,7 @@ import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 
-class Screen(_name: String, rxViper: RxViperExtension, val useCases: NamedDomainObjectContainer<UseCase>) {
-  val name = _name.capitalize()
-
+class Screen(val name: String, rxViper: RxViperExtension, val useCases: NamedDomainObjectContainer<UseCase>) {
   val fullPackage: String; get() = if (splitPackages) "$packageName.${name.toLowerCase()}" else packageName
 
   @Input

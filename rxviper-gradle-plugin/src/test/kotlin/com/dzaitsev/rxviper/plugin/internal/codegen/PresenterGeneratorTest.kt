@@ -21,7 +21,8 @@ import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 class PresenterGeneratorTest : GeneratorTest() {
 
   override fun defaultSource(screen: Screen, generator: Generator): String {
-    val interactorClass = "${screen.name}Interactor"
+    val screenName = screen.name.capitalize()
+    val interactorClass = "${screenName}Interactor"
     val interactorName = interactorClass.decapitalize()
     return "${packageLine(screen)}\n" +
         "\n" +
@@ -30,14 +31,14 @@ class PresenterGeneratorTest : GeneratorTest() {
         "import rx.functions.Action1;\n" +
         "\n" +
         "${generatedAnnotation(generator)}\n" +
-        "public final class ${generator.typeSpecName} extends ViperPresenter<${screen.name}ViewCallbacks, ${screen.name}Router> {\n" +
+        "public final class ${generator.typeSpecName} extends ViperPresenter<${screenName}ViewCallbacks, ${screenName}Router> {\n" +
         "  private final $interactorClass $interactorName;\n" +
         "\n" +
         "  public ${generator.typeSpecName}($interactorClass $interactorName) {\n" +
         "    this.$interactorName = $interactorName;\n" +
         "  }\n" +
         "\n" +
-        "  public void do${screen.name}(Object requestModel) {\n" +
+        "  public void do$screenName(Object requestModel) {\n" +
         "    $interactorName.execute(new Action1<Object>() {\n" +
         "      @Override\n" +
         "      public void call(Object o) {\n" +
@@ -52,7 +53,7 @@ class PresenterGeneratorTest : GeneratorTest() {
         "  }\n" +
         "\n" +
         "  @Override\n" +
-        "  protected void onDropView(${screen.name}ViewCallbacks view) {\n" +
+        "  protected void onDropView(${screenName}ViewCallbacks view) {\n" +
         "    $interactorName.unsubscribe();\n" +
         "  }\n" +
         "}\n"

@@ -30,7 +30,9 @@ import javax.annotation.Generated
 internal abstract class Generator(protected val screen: Screen) {
   protected abstract val typeName: String
 
-  internal val typeSpecName: String get() = "${screen.name}$typeName"
+  protected val screenName = screen.name.capitalize()
+
+  internal val typeSpecName: String get() = "$screenName$typeName"
 
   protected abstract fun createSpec(): List<TypeSpec.Builder>
 
