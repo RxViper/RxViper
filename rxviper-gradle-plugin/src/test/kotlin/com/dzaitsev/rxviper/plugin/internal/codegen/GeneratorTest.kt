@@ -52,8 +52,10 @@ abstract class GeneratorTest {
         factory.create("Ipsum").apply { routesTo = arrayOf("Foo", "Bar") }
     ).forEach { screen ->
       // given
-      val generator = createGenerator(screen)
       val sourceDir = temporaryFolder.newFolder()
+      val printer = TestLog(screen.name)
+      val generator = createGenerator(screen)
+      generator.log = printer
       // when
       generator.saveTo(sourceDir)
       // then
@@ -62,6 +64,20 @@ abstract class GeneratorTest {
         assertThat(readText()).isEqualTo(defaultSource(screen, generator))
       }
     }
+  }
+
+  @Test
+  fun `should print correct log`() {
+    // given
+    val screen = ScreenFactory(project).create("Lorem")
+    val sourceDir = temporaryFolder.newFolder()
+    val printer = TestLog(screen.name)
+    val generator = createGenerator(screen)
+    generator.log = printer
+    // when
+    generator.saveTo(sourceDir)
+    // then
+    assertThat(printer.message).isEqualTo("Generated ${screen.fullPackage}.${generator.typeSpecName}")
   }
 
   internal abstract fun defaultSource(screen: Screen, generator: Generator): String

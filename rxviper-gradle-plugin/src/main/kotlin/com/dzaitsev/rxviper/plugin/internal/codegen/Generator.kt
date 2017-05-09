@@ -21,13 +21,15 @@ import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.impl.SimpleLog
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.annotation.Generated
 
-internal abstract class Generator(protected val screen: Screen) {
+internal abstract class Generator(protected val screen: Screen, internal var log: Log = SimpleLog(screen.name)) {
   protected abstract val typeName: String
 
   protected val screenName = screen.name.capitalize()
@@ -48,13 +50,12 @@ internal abstract class Generator(protected val screen: Screen) {
             .addMember("comments", "\$S", "Created by RxViper Gradle Plugin")
             .build())
       }
-      val typeSpec = builder.build()
 
-      JavaFile.builder(screen.fullPackage, typeSpec)
+      JavaFile.builder(screen.fullPackage, builder.build())
           .skipJavaLangImports(true)
           .build()
           .writeTo(directory)
-      println("Generated ${screen.fullPackage}.$typeSpecName")
+      log.info("Generated ${screen.fullPackage}.$typeSpecName")
     }
   }
 
