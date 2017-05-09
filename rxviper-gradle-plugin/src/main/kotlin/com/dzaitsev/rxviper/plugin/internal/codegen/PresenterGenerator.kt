@@ -37,12 +37,12 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
         .addModifiers(Modifier.PUBLIC)
     val onDropViewMethodBuilder = MethodSpec.methodBuilder("onDropView")
         .addModifiers(Modifier.PROTECTED)
-        .addParameter(ClassName.get(screen.fullPackage, "${screen.name}ViewCallbacks"), "view")
+        .addParameter(ClassName.get(screen.fullPackage, "${screenName}ViewCallbacks"), "view")
         .addAnnotation(aClass<Override>())
     val presenterBuilder = TypeSpec.classBuilder(typeSpecName)
         .superclass(superClass())
         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-    val useCases = if (screen.useCases.isEmpty()) listOf(UseCase(screen.name)) else screen.useCases.map { it }
+    val useCases = if (screen.useCases.isEmpty()) listOf(UseCase(screenName)) else screen.useCases.map { it }
 
     if (useCases.isEmpty()) {
       onDropViewMethodBuilder.addComment("TODO: Release your resources here...")
@@ -100,11 +100,11 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
   }
 
   private fun superClass(): TypeName {
-    val viewCallbacks = ClassName.get(screen.fullPackage, "${screen.name}ViewCallbacks")
+    val viewCallbacks = ClassName.get(screen.fullPackage, "${screenName}ViewCallbacks")
 
     return when {
       screen.includeRouter -> ParameterizedTypeName.get(
-          ClassName.get(aClass<ViperPresenter<*, *>>()), viewCallbacks, ClassName.get(screen.fullPackage, "${screen.name}Router"))
+          ClassName.get(aClass<ViperPresenter<*, *>>()), viewCallbacks, ClassName.get(screen.fullPackage, "${screenName}Router"))
       else -> ParameterizedTypeName.get(ClassName.get(aClass<Presenter<*>>()), viewCallbacks)
     }
   }

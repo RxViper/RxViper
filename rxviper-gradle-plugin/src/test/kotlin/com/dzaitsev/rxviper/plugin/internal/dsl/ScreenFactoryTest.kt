@@ -33,7 +33,7 @@ class ScreenFactoryTest {
       // act
       val screen = factory.create("test")
       // assert
-      ScreenTest.verify(screen, extensions.findByType(aClass<RxViperExtension>()))
+      ScreenTest.verify(screen, extensions.getByType(aClass<RxViperExtension>()))
     }
   }
 }
