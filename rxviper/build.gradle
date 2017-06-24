@@ -14,19 +14,10 @@
  * limitations under the License.
  */
 apply plugin: 'java-library'
+apply plugin: 'me.tatarka.retrolambda'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
-compileJava {
-  sourceCompatibility = 1.7
-  targetCompatibility = 1.7
-}
-
-compileTestJava {
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
-}
 
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])

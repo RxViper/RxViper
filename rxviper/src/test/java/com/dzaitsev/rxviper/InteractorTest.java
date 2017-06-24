@@ -16,14 +16,12 @@
 
 package com.dzaitsev.rxviper;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.junit.Before;
 import org.junit.Test;
 import rx.Observable;
 import rx.Subscriber;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.functions.Actions;
-import rx.internal.util.ActionSubscriber;
 import rx.schedulers.Schedulers;
 
 import static com.dzaitsev.rxviper.TestUtil.checkIllegalArgumentException;
@@ -40,10 +38,10 @@ import static rx.Observable.just;
  */
 public final class InteractorTest {
   private static final int                PARAM        = 1;
-  private static final Action1<String>    ON_NEXT      = Actions.empty();
-  private static final Action1<Throwable> ON_ERROR     = Actions.empty();
-  private static final Action0            ON_COMPLETED = Actions.empty();
-  private static final Subscriber<String> SUBSCRIBER   = new ActionSubscriber<>(ON_NEXT, ON_ERROR, ON_COMPLETED);
+  private static final OnNext<String>     ON_NEXT      = (String s) -> { };
+  private static final OnError            ON_ERROR     = (Throwable t) -> { };
+  private static final OnComplete         ON_COMPLETED = () -> { };
+  private static final Subscriber<String> SUBSCRIBER   = RxViperSubscriber.of(ON_NEXT, ON_ERROR, ON_COMPLETED);
 
   private Interactor<Integer, String> interactor;
 
@@ -130,17 +128,17 @@ public final class InteractorTest {
 
   @Test
   public void onNextShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute((Action1) null));
+    checkIllegalArgumentException(() -> interactor.execute((OnNext) null));
   }
 
   @Test
   public void onNextParamShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute((Action1) null, PARAM));
+    checkIllegalArgumentException(() -> interactor.execute((OnNext) null, PARAM));
   }
 
   @Test
   public void onErrorShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute(ON_NEXT, (Action1) null));
+    checkIllegalArgumentException(() -> interactor.execute(ON_NEXT, (OnError) null));
   }
 
   @Test
@@ -150,7 +148,7 @@ public final class InteractorTest {
 
   @Test
   public void onCompletedShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute(ON_NEXT, ON_ERROR, (Action0) null));
+    checkIllegalArgumentException(() -> interactor.execute(ON_NEXT, ON_ERROR, (OnComplete) null));
   }
 
   @Test
@@ -176,5 +174,21 @@ public final class InteractorTest {
         return null;
       }
     });
+  }
+
+  @Test
+  public void testSubscribersInProgress() {
+    interactor = new Interactor<Integer, String>(Schedulers.newThread(), Schedulers.trampoline()) {
+      @Nonnull
+      @Override
+      protected Observable<String> createObservable(@Nullable Integer integer) {
+        return Observable.just("");
+      }
+    };
+    assertThat(interactor.inProgress()).isEqualTo(0);
+    for (int i = 0; i < 5; i++) {
+      final int finalI = i;
+      interactor.execute(item -> assertThat(interactor.inProgress()).isEqualTo(finalI + 1));
+    }
   }
 }

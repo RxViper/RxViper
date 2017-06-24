@@ -27,8 +27,9 @@ class PresenterGeneratorTest : GeneratorTest() {
     return "${packageLine(screen)}\n" +
         "\n" +
         "import com.dzaitsev.rxviper.ViperPresenter;\n" +
+        "import com.dzaitsev.rxviper.callback.OnError;\n" +
+        "import com.dzaitsev.rxviper.callback.OnNext;\n" +
         "import javax.annotation.Generated;\n" +
-        "import rx.functions.Action1;\n" +
         "\n" +
         "${generatedAnnotation(generator)}\n" +
         "public final class ${generator.typeSpecName} extends ViperPresenter<${screenName}ViewCallbacks, ${screenName}Router> {\n" +
@@ -39,14 +40,14 @@ class PresenterGeneratorTest : GeneratorTest() {
         "  }\n" +
         "\n" +
         "  public void do$screenName(Object requestModel) {\n" +
-        "    $interactorName.execute(new Action1<Object>() {\n" +
+        "    $interactorName.execute(new OnNext<Object>() {\n" +
         "      @Override\n" +
-        "      public void call(Object o) {\n" +
+        "      public void onNext(Object o) {\n" +
         "        // TODO: Implement onNext here...\n" +
         "      }\n" +
-        "    }, new Action1<Throwable>() {\n" +
+        "    }, new OnError() {\n" +
         "      @Override\n" +
-        "      public void call(Throwable t) {\n" +
+        "      public void onError(Throwable t) {\n" +
         "        // TODO: Implement onError here...\n" +
         "      }\n" +
         "    }, requestModel);\n" +
