@@ -18,7 +18,10 @@ package com.dzaitsev.rxviper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import javax.annotation.Nonnull;
 import rx.functions.Func1;
+
+import static com.dzaitsev.rxviper.RxViper.requireNotNull;
 
 /**
  * Converts entities to basic model objects used by the {@link Interactor}.
@@ -49,7 +52,8 @@ public abstract class Mapper<From, To> implements Func1<From, To> {
    * @since 0.10.0
    */
   @Override
-  public final To call(From from) {
+  public final To call(@Nonnull From from) {
+    requireNotNull(from);
     return map(from);
   }
 
@@ -63,7 +67,8 @@ public abstract class Mapper<From, To> implements Func1<From, To> {
    *
    * @since 0.1.0
    */
-  public Collection<To> map(Collection<From> entities) {
+  public Collection<To> map(@Nonnull Collection<From> entities) {
+    requireNotNull(entities);
     final Collection<To> result = new ArrayList<>(entities.size());
     //noinspection Convert2streamapi
     for (From from : entities) {

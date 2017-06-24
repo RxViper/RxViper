@@ -16,9 +16,11 @@
 
 package com.dzaitsev.rxviper;
 
+import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.dzaitsev.rxviper.TestUtil.checkIllegalArgumentException;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -31,11 +33,11 @@ import static org.mockito.Mockito.verify;
  */
 public final class MapperTest {
 
-  private Mapper<Integer, String> spyMapper;
+  private Mapper<Integer, String> mapper;
 
   @Before
   public void setUp() {
-    spyMapper = spy(new Mapper<Integer, String>() {
+    mapper = spy(new Mapper<Integer, String>() {
       @Override
       public String map(final Integer entity) {
         return String.valueOf(entity);
@@ -45,17 +47,27 @@ public final class MapperTest {
 
   @Test
   public void shouldCallOverloadedMethod() {
-    spyMapper.map(asList(1, 2, 3));
+    mapper.map(asList(1, 2, 3));
 
-    verify(spyMapper).map(1);
-    verify(spyMapper).map(2);
-    verify(spyMapper).map(3);
+    verify(mapper).map(1);
+    verify(mapper).map(2);
+    verify(mapper).map(3);
   }
 
   @Test
   public void shouldCallMap() {
-    spyMapper.call(42);
+    mapper.call(42);
 
-    verify(spyMapper).map(42);
+    verify(mapper).map(42);
+  }
+
+  @Test
+  public void callShouldNotRespectNulls() {
+    checkIllegalArgumentException(() -> mapper.call(null));
+  }
+
+  @Test
+  public void shouldNotRespectNullCollections() {
+    checkIllegalArgumentException(() -> mapper.map((Collection<Integer>) null));
   }
 }

@@ -16,6 +16,9 @@
 
 package com.dzaitsev.rxviper;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import static com.dzaitsev.rxviper.RxViper.getProxy;
 import static com.dzaitsev.rxviper.RxViper.requireNotNull;
 
@@ -29,7 +32,7 @@ import static com.dzaitsev.rxviper.RxViper.requireNotNull;
  * @since 0.10.0
  */
 public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> extends Presenter<V> {
-  private final R routerProxy = RxViper.createRouter(null, getClass());
+  @Nonnull private final R routerProxy = RxViper.createRouter(null, getClass());
 
   /**
    * Creates a presenter with pre-attached view and router.
@@ -43,7 +46,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    *
    * @since 0.11.0
    */
-  protected ViperPresenter(V view, R router) {
+  protected ViperPresenter(@Nonnull V view, @Nonnull R router) {
     super(view);
     requireNotNull(router);
     getProxy(routerProxy).set(router);
@@ -59,7 +62,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    *
    * @since 0.11.0
    */
-  protected ViperPresenter(V view) {
+  protected ViperPresenter(@Nonnull V view) {
     super(view);
   }
 
@@ -73,7 +76,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    *
    * @since 0.11.0
    */
-  protected ViperPresenter(R router) {
+  protected ViperPresenter(@Nonnull R router) {
     requireNotNull(router);
     getProxy(routerProxy).set(router);
   }
@@ -98,7 +101,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    *
    * @since 0.1.0
    */
-  public final void dropRouter(R router) {
+  public final void dropRouter(@Nonnull R router) {
     requireNotNull(router);
 
     if (currentRouter() == router) {
@@ -130,7 +133,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @see #dropRouter(Router)
    * @since 0.1.0
    */
-  public final void takeRouter(R router) {
+  public final void takeRouter(@Nonnull R router) {
     requireNotNull(router);
 
     final R currentRouter = currentRouter();
@@ -152,6 +155,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @see #takeRouter(Router)
    * @since 0.1.0
    */
+  @Nonnull
   protected final R getRouter() {
     return routerProxy;
   }
@@ -165,7 +169,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @see #dropRouter(Router)
    * @since 0.7.0
    */
-  protected void onDropRouter(R router) {
+  protected void onDropRouter(@Nonnull R router) {
   }
 
   /**
@@ -177,9 +181,10 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @see #takeRouter(Router)
    * @since 0.6.0
    */
-  protected void onTakeRouter(R router) {
+  protected void onTakeRouter(@Nonnull R router) {
   }
 
+  @Nullable
   private R currentRouter() {
     return getProxy(routerProxy).get();
   }

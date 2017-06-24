@@ -38,8 +38,9 @@ ext {
       rxJava           : '1.2.4',
       dagger           : '2.8',
       jsr250           : '1.0',
+      jsr305           : '3.0.2',
       junit            : '4.12',
-      mockito          : '2.3.6',
+      mockito          : '2.7.11',
       truth            : '0.31',
       // Android libraries
       rxAndroid        : '1.2.1',
@@ -63,6 +64,7 @@ ext {
       dagger          : "com.google.dagger:dagger:${versions.dagger}",
       daggerCompiler  : "com.google.dagger:dagger-compiler:${versions.dagger}",
       jsr250          : "javax.annotation:jsr250-api:${versions.jsr250}",
+      jsr305          : "com.google.code.findbugs:jsr305:${versions.jsr305}",
       // Android
       constraintLayout: "com.android.support.constraint:constraint-layout:${versions.constraintLayout}",
       appCompat       : "com.android.support:appcompat-v7:${versions.support}",
@@ -71,7 +73,7 @@ ext {
       rxAndroid       : "io.reactivex:rxandroid:${versions.rxAndroid}",
       // Test
       junit           : "junit:junit:${versions.junit}",
-      mockito         : "org.mockito:mockito-core:${versions.mockito}",
+      mockito         : "org.mockito:mockito-inline:${versions.mockito}",
       truth           : "com.google.truth:truth:${versions.truth}",
   ]
 }

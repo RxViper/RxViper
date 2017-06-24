@@ -19,6 +19,7 @@ package com.dzaitsev.rxviper;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import javax.annotation.Nullable;
 
 /**
  * Implementation of <a href="https://en.wikipedia.org/wiki/Null_Object_pattern">Null Object pattern</a>.
@@ -29,7 +30,7 @@ import java.lang.reflect.Method;
 final class NullObject<T> implements InvocationHandler {
   private WeakReference<T> targetRef;
 
-  NullObject(T target) {
+  NullObject(@Nullable T target) {
     set(target);
   }
 
@@ -46,11 +47,13 @@ final class NullObject<T> implements InvocationHandler {
     }
   }
 
+  @Nullable
   T get() {
     return targetRef == null ? null : targetRef.get();
   }
 
-  void set(T target) {
-    targetRef = new WeakReference<>(target);
+  void set(@Nullable T target) {
+    clear();
+    targetRef = target == null ? null : new WeakReference<>(target);
   }
 }

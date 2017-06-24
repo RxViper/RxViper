@@ -18,10 +18,9 @@ package com.dzaitsev.rxviper;
 
 import java.lang.reflect.Proxy;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
+import static com.dzaitsev.rxviper.TestUtil.checkIllegalArgumentException;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -35,7 +34,6 @@ import static org.mockito.Mockito.verify;
  * @since 2016-May-13, 12:31
  */
 public final class PresenterTest {
-  @Rule public final ExpectedException thrown = ExpectedException.none();
   private TestViewCallbacks view;
   private TestPresenter     presenter;
 
@@ -128,20 +126,17 @@ public final class PresenterTest {
 
   @Test
   public void takenViewShouldNotBeNull() {
-    thrown.expect(IllegalArgumentException.class);
-    presenter.takeView(null);
+    checkIllegalArgumentException(() -> presenter.takeView(null));
   }
 
   @Test
   public void droppedViewShouldNotBeNull() {
-    thrown.expect(IllegalArgumentException.class);
-    presenter.dropView(null);
+    checkIllegalArgumentException(() -> presenter.dropView(null));
   }
 
   @Test
   public void constructorViewShouldNotBeNull() {
-    thrown.expect(IllegalArgumentException.class);
-    new TestPresenter(null);
+    checkIllegalArgumentException(() -> new TestPresenter(null));
   }
 
   @Test

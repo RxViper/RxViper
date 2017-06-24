@@ -18,10 +18,10 @@ package com.dzaitsev.rxviper;
 
 import java.lang.reflect.Proxy;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
+import static com.dzaitsev.rxviper.TestUtil.assertNotThrows;
+import static com.dzaitsev.rxviper.TestUtil.checkIllegalArgumentException;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -35,7 +35,6 @@ import static org.mockito.Mockito.verify;
  * @since 2016-Jun-30, 11:01
  */
 public final class ViperPresenterTest {
-  @Rule public final ExpectedException thrown = ExpectedException.none();
   private TestRouter         router;
   private TestViperPresenter presenter;
 
@@ -128,14 +127,12 @@ public final class ViperPresenterTest {
 
   @Test
   public void takenRouterShouldNotBeNull() {
-    thrown.expect(IllegalArgumentException.class);
-    presenter.takeRouter(null);
+    checkIllegalArgumentException(() -> presenter.takeRouter(null));
   }
 
   @Test
   public void droppedRouterShouldNotBeNull() {
-    thrown.expect(IllegalArgumentException.class);
-    presenter.dropRouter(null);
+    checkIllegalArgumentException(() -> presenter.dropRouter(null));
   }
 
   @Test
@@ -145,17 +142,17 @@ public final class ViperPresenterTest {
 
   @Test
   public void constructorArgsShouldNotBeNull() {
-    TestUtil.check(() -> new TestViperPresenter((TestRouter) null), true, IllegalArgumentException.class);
-    TestUtil.check(() -> new TestViperPresenter((TestViewCallbacks) null), true, IllegalArgumentException.class);
-    TestUtil.check(() -> new TestViperPresenter(null, router), true, IllegalArgumentException.class);
-    TestUtil.check(() -> new TestViperPresenter(mock(TestViewCallbacks.class), null), true, IllegalArgumentException.class);
+    checkIllegalArgumentException(() -> new TestViperPresenter((TestRouter) null));
+    checkIllegalArgumentException(() -> new TestViperPresenter((TestViewCallbacks) null));
+    checkIllegalArgumentException(() -> new TestViperPresenter(null, router));
+    checkIllegalArgumentException(() -> new TestViperPresenter(mock(TestViewCallbacks.class), null));
   }
 
   @Test
   public void constructorShouldSetArgs() {
-    TestUtil.check(() -> new TestViperPresenter(router), false, IllegalArgumentException.class);
-    TestUtil.check(() -> new TestViperPresenter(mock(TestViewCallbacks.class)), false, IllegalArgumentException.class);
-    TestUtil.check(() -> new TestViperPresenter(mock(TestViewCallbacks.class), router), false, IllegalArgumentException.class);
+    assertNotThrows(IllegalArgumentException.class, () -> new TestViperPresenter(router));
+    assertNotThrows(IllegalArgumentException.class, () -> new TestViperPresenter(mock(TestViewCallbacks.class)));
+    assertNotThrows(IllegalArgumentException.class, () -> new TestViperPresenter(mock(TestViewCallbacks.class), router));
   }
 
   @Test

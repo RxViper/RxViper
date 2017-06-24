@@ -16,6 +16,9 @@
 
 package com.dzaitsev.rxviper;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import static com.dzaitsev.rxviper.RxViper.getProxy;
 import static com.dzaitsev.rxviper.RxViper.requireNotNull;
 
@@ -27,7 +30,7 @@ import static com.dzaitsev.rxviper.RxViper.requireNotNull;
  * @since 0.1.0
  */
 public abstract class Presenter<V extends ViewCallbacks> {
-  private final V viewProxy = RxViper.createView(null, getClass());
+  @Nonnull private final V viewProxy = RxViper.createView(null, getClass());
 
   /**
    * Creates a presenter with pre-attached view.
@@ -39,7 +42,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    *
    * @since 0.11.0
    */
-  protected Presenter(V view) {
+  protected Presenter(@Nonnull V view) {
     requireNotNull(view);
     getProxy(viewProxy).set(view);
   }
@@ -64,7 +67,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    *
    * @since 0.1.0
    */
-  public final void dropView(V view) {
+  public final void dropView(@Nonnull V view) {
     requireNotNull(view);
 
     if (currentView() == view) {
@@ -96,7 +99,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @see #dropView(ViewCallbacks)
    * @since 0.1.0
    */
-  public final void takeView(V view) {
+  public final void takeView(@Nonnull V view) {
     requireNotNull(view);
 
     final V currentView = currentView();
@@ -118,6 +121,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @see #takeView(ViewCallbacks)
    * @since 0.1.0
    */
+  @Nonnull
   protected final V getView() {
     return viewProxy;
   }
@@ -131,7 +135,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @see #dropView(ViewCallbacks)
    * @since 0.7.0
    */
-  protected void onDropView(final V view) {
+  protected void onDropView(@Nonnull V view) {
   }
 
   /**
@@ -143,9 +147,10 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @see #takeView(ViewCallbacks)
    * @since 0.6.0
    */
-  protected void onTakeView(V view) {
+  protected void onTakeView(@Nonnull V view) {
   }
 
+  @Nullable
   private V currentView() {
     return getProxy(viewProxy).get();
   }

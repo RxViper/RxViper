@@ -26,11 +26,23 @@ import static com.google.common.truth.Truth.assertThat;
  */
 
 final class TestUtil {
-  static void check(Runnable r, boolean shouldThrow, Class<? extends Throwable> throwableClass) {
+  static void assertThrows(Class<? extends Throwable> throwableClass, Runnable action) {
+    check(action, true, throwableClass);
+  }
+
+  static void assertNotThrows(Class<? extends Throwable> throwableClass, Runnable action) {
+    check(action, false, throwableClass);
+  }
+
+  static void checkIllegalArgumentException(Runnable action) {
+    assertThrows(IllegalArgumentException.class, action);
+  }
+
+  private static void check(Runnable action, boolean shouldThrow, Class<? extends Throwable> throwableClass) {
     boolean thrown = false;
     try {
       thrown = false;
-      r.run();
+      action.run();
     } catch (Throwable t) {
       if (throwableClass.isInstance(t)) {
         thrown = true;

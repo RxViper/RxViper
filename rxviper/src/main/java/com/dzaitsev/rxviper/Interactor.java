@@ -16,6 +16,8 @@
 
 package com.dzaitsev.rxviper;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
@@ -26,6 +28,8 @@ import rx.functions.Actions;
 import rx.internal.util.ActionSubscriber;
 import rx.internal.util.InternalObservableUtils;
 import rx.subscriptions.CompositeSubscription;
+
+import static com.dzaitsev.rxviper.RxViper.requireNotNull;
 
 /**
  * Contains the business logic as specified by a use case
@@ -39,9 +43,9 @@ import rx.subscriptions.CompositeSubscription;
  * @since 0.1.0
  */
 public abstract class Interactor<RequestModel, ResponseModel> implements Subscription {
-  private final Scheduler             subscribeScheduler;
-  private final Scheduler             observeScheduler;
-  private final CompositeSubscription subscriptions;
+  @Nonnull private final Scheduler             subscribeScheduler;
+  @Nonnull private final Scheduler             observeScheduler;
+  @Nonnull private final CompositeSubscription subscriptions;
 
   /**
    * @param subscribeScheduler
@@ -51,9 +55,9 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    *
    * @since 0.1.0
    */
-  protected Interactor(Scheduler subscribeScheduler, Scheduler observeScheduler) {
-    RxViper.requireNotNull(subscribeScheduler);
-    RxViper.requireNotNull(observeScheduler);
+  protected Interactor(@Nonnull Scheduler subscribeScheduler, @Nonnull Scheduler observeScheduler) {
+    requireNotNull(subscribeScheduler);
+    requireNotNull(observeScheduler);
 
     this.subscribeScheduler = subscribeScheduler;
     this.observeScheduler = observeScheduler;
@@ -80,8 +84,8 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @see Observable#subscribe(Subscriber)
    * @since 0.1.0
    */
-  public final void execute(Subscriber<? super ResponseModel> subscriber, RequestModel requestModel) {
-    RxViper.requireNotNull(subscriber);
+  public final void execute(@Nonnull Subscriber<? super ResponseModel> subscriber, @Nullable RequestModel requestModel) {
+    requireNotNull(subscriber);
 
     subscriptions.add(createObservable(requestModel).subscribeOn(subscribeScheduler)
         .observeOn(observeScheduler)
@@ -98,7 +102,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @see #execute(Subscriber, Object)
    * @since 0.2.0
    */
-  public final void execute(Subscriber<? super ResponseModel> subscriber) {
+  public final void execute(@Nonnull Subscriber<? super ResponseModel> subscriber) {
     execute(subscriber, null);
   }
 
@@ -115,7 +119,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @see #execute(Action1, Object)
    * @since 0.4.0
    */
-  public final void execute(Action1<? super ResponseModel> onNext) {
+  public final void execute(@Nonnull Action1<? super ResponseModel> onNext) {
     execute(onNext, (RequestModel) null);
   }
 
@@ -134,8 +138,8 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @see Observable#subscribe(Action1)
    * @since 0.4.0
    */
-  public final void execute(Action1<? super ResponseModel> onNext, RequestModel requestModel) {
-    RxViper.requireNotNull(onNext);
+  public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nullable RequestModel requestModel) {
+    requireNotNull(onNext);
 
     execute(new ActionSubscriber<>(onNext, InternalObservableUtils.ERROR_NOT_IMPLEMENTED, Actions.empty()), requestModel);
   }
@@ -153,7 +157,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @see #execute(Action1, Object)
    * @since 0.4.0
    */
-  public final void execute(Action1<? super ResponseModel> onNext, Action1<Throwable> onError) {
+  public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nonnull Action1<Throwable> onError) {
     execute(onNext, onError, (RequestModel) null);
   }
 
@@ -172,9 +176,10 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @see Observable#subscribe(Action1, Action1)
    * @since 0.4.0
    */
-  public final void execute(Action1<? super ResponseModel> onNext, Action1<Throwable> onError, RequestModel requestModel) {
-    RxViper.requireNotNull(onNext);
-    RxViper.requireNotNull(onError);
+  public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nonnull Action1<Throwable> onError,
+      @Nullable RequestModel requestModel) {
+    requireNotNull(onNext);
+    requireNotNull(onError);
 
     execute(new ActionSubscriber<>(onNext, onError, Actions.empty()), requestModel);
   }
@@ -194,7 +199,8 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @see #execute(Action1, Action1, Action0, Object)
    * @since 0.4.0
    */
-  public final void execute(Action1<? super ResponseModel> onNext, Action1<Throwable> onError, Action0 onCompleted) {
+  public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nonnull Action1<Throwable> onError,
+      @Nonnull Action0 onCompleted) {
     execute(onNext, onError, onCompleted, null);
   }
 
@@ -215,11 +221,11 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @see Observable#subscribe(Action1, Action1, Action0)
    * @since 0.4.0
    */
-  public final void execute(Action1<? super ResponseModel> onNext, Action1<Throwable> onError, Action0 onCompleted,
-      RequestModel requestModel) {
-    RxViper.requireNotNull(onNext);
-    RxViper.requireNotNull(onError);
-    RxViper.requireNotNull(onCompleted);
+  public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nonnull Action1<Throwable> onError,
+      @Nonnull Action0 onCompleted, @Nullable RequestModel requestModel) {
+    requireNotNull(onNext);
+    requireNotNull(onError);
+    requireNotNull(onCompleted);
 
     execute(new ActionSubscriber<>(onNext, onError, onCompleted), requestModel);
   }
@@ -270,5 +276,6 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @see #execute(Action1, Action1, Action0, Object)
    * @since 0.1.0
    */
-  protected abstract Observable<ResponseModel> createObservable(RequestModel requestModel);
+  @Nonnull
+  protected abstract Observable<ResponseModel> createObservable(@Nullable RequestModel requestModel);
 }
