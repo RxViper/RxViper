@@ -22,14 +22,9 @@ import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.functions.Actions;
-import rx.internal.util.ActionSubscriber;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.dzaitsev.rxviper.RxViper.requireNotNull;
-import static rx.internal.util.InternalObservableUtils.ERROR_NOT_IMPLEMENTED;
 
 /**
  * Contains the business logic as specified by a use case
@@ -42,7 +37,7 @@ import static rx.internal.util.InternalObservableUtils.ERROR_NOT_IMPLEMENTED;
  * @author Dmytro Zaitsev
  * @since 0.1.0
  */
-public abstract class Interactor<RequestModel, ResponseModel> implements Subscription {
+public abstract class Interactor<RequestModel, ResponseModel> implements Subscription, RxViperInteractor<RequestModel, ResponseModel> {
   @Nonnull private final Scheduler             subscribeScheduler;
   @Nonnull private final Scheduler             observeScheduler;
   @Nonnull private final CompositeSubscription subscriptions;
@@ -82,12 +77,15 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    *     if the {@link Subscriber}'s {@code onError} method is null
    * @throws RuntimeException
    *     if the {@link Subscriber}'s {@code onError} method itself threw a {@code Throwable}
-   * @see Observable#subscribe(Subscriber)
    * @since 0.1.0
    */
   @SuppressWarnings("WeakerAccess")
   public final void execute(@Nonnull Subscriber<? super ResponseModel> subscriber, @Nullable RequestModel requestModel) {
     requireNotNull(subscriber);
+
+    if (!(subscriber instanceof RxViperSubscriber)) {
+      subscriber = RxViperSubscriber.of(subscriber);
+    }
 
     subscriptions.add(createObservable(requestModel).subscribeOn(subscribeScheduler)
         .observeOn(observeScheduler)
@@ -113,17 +111,17 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * Subscribes to an Observable and provides a callback to handle the items it emits.
    *
    * @param onNext
-   *     the {@code Action1<ResponseModel>} you have designed to accept emissions from the Observable
+   *     the {@code OnNext<ResponseModel>} you have designed to accept emissions from the Observable
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null
    * @throws rx.exceptions.OnErrorNotImplementedException
    *     if the Observable calls {@code onError}
-   * @see #execute(Action1, Object)
+   * @see #execute(OnNext, Object)
    * @since 0.4.0
    */
-  @SuppressWarnings("WeakerAccess")
-  public final void execute(@Nonnull Action1<? super ResponseModel> onNext) {
+  @Override
+  public final void execute(@Nonnull OnNext<? super ResponseModel> onNext) {
     execute(onNext, (RequestModel) null);
   }
 
@@ -131,7 +129,7 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * Subscribes to an Observable and provides a callback to handle the items it emits.
    *
    * @param onNext
-   *     the {@code Action1<ResponseModel>} you have designed to accept emissions from the Observable
+   *     the {@code OnNext<ResponseModel>} you have designed to accept emissions from the Observable
    * @param requestModel
    *     parameter which will be passed to {@link #createObservable(Object)}.
    *
@@ -139,31 +137,30 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    *     if {@code onNext} is null
    * @throws rx.exceptions.OnErrorNotImplementedException
    *     if the Observable calls {@code onError}
-   * @see Observable#subscribe(Action1)
    * @since 0.4.0
    */
-  @SuppressWarnings("WeakerAccess")
-  public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nullable RequestModel requestModel) {
+  @Override
+  public final void execute(@Nonnull OnNext<? super ResponseModel> onNext, @Nullable RequestModel requestModel) {
     requireNotNull(onNext);
 
-    execute(new ActionSubscriber<>(onNext, ERROR_NOT_IMPLEMENTED, Actions.empty()), requestModel);
+    execute(RxViperSubscriber.of(onNext, OnError.NOT_IMPLEMENTED, OnComplete.EMPTY), requestModel);
   }
 
   /**
    * Subscribes to an Observable and provides callbacks to handle the items it emits and any error notification it issues.
    *
    * @param onNext
-   *     the {@code Action1<ResponseModel>} you have designed to accept emissions from the Observable
+   *     the {@code OnNext<ResponseModel>} you have designed to accept emissions from the Observable
    * @param onError
-   *     the {@code Action1<Throwable>} you have designed to accept any error notification from the Observable
+   *     the {@code OnError} you have designed to accept any error notification from the Observable
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null, or if {@code onError} is null
-   * @see #execute(Action1, Object)
+   * @see #execute(OnNext, Object)
    * @since 0.4.0
    */
-  @SuppressWarnings("WeakerAccess")
-  public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nonnull Action1<Throwable> onError) {
+  @Override
+  public final void execute(@Nonnull OnNext<? super ResponseModel> onNext, @Nonnull OnError onError) {
     execute(onNext, onError, (RequestModel) null);
   }
 
@@ -171,72 +168,69 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * Subscribes to an Observable and provides callbacks to handle the items it emits and any error notification it issues.
    *
    * @param onNext
-   *     the {@code Action1<ResponseModel>} you have designed to accept emissions from the Observable
+   *     the {@code OnNext<ResponseModel>} you have designed to accept emissions from the Observable
    * @param onError
-   *     the {@code Action1<Throwable>} you have designed to accept any error notification from the Observable
+   *     the {@code OnError} you have designed to accept any error notification from the Observable
    * @param requestModel
    *     parameter which will be passed to {@link #createObservable(Object)}.
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null, or if {@code onError} is null
-   * @see Observable#subscribe(Action1, Action1)
    * @since 0.4.0
    */
-  @SuppressWarnings("WeakerAccess")
-  public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nonnull Action1<Throwable> onError,
+  @Override
+  public final void execute(@Nonnull OnNext<? super ResponseModel> onNext, @Nonnull OnError onError,
       @Nullable RequestModel requestModel) {
     requireNotNull(onNext);
     requireNotNull(onError);
 
-    execute(new ActionSubscriber<>(onNext, onError, Actions.empty()), requestModel);
+    execute(RxViperSubscriber.of(onNext, onError, OnComplete.EMPTY), requestModel);
   }
 
   /**
    * Subscribes to an Observable and provides callbacks to handle the items it emits and any error or completion notification it issues.
    *
    * @param onNext
-   *     the {@code Action1<ResponseModel>} you have designed to accept emissions from the Observable
+   *     the {@code OnNext<ResponseModel>} you have designed to accept emissions from the Observable
    * @param onError
-   *     the {@code Action1<Throwable>} you have designed to accept any error notification from the Observable
-   * @param onCompleted
-   *     the {@code Action0} you have designed to accept a completion notification from the Observable
+   *     the {@code OnError} you have designed to accept any error notification from the Observable
+   * @param onComplete
+   *     the {@code OnComplete} you have designed to accept a completion notification from the Observable
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null, or if {@code onError} is null, or if {@code onComplete} is null
-   * @see #execute(Action1, Action1, Action0, Object)
+   * @see #execute(OnNext, OnError, OnComplete, Object)
    * @since 0.4.0
    */
-  @SuppressWarnings("WeakerAccess")
-  public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nonnull Action1<Throwable> onError,
-      @Nonnull Action0 onCompleted) {
-    execute(onNext, onError, onCompleted, null);
+  @Override
+  public final void execute(@Nonnull OnNext<? super ResponseModel> onNext, @Nonnull OnError onError, @Nonnull OnComplete onComplete) {
+    execute(onNext, onError, onComplete, null);
   }
 
   /**
    * Subscribes to an Observable and provides callbacks to handle the items it emits and any error or completion notification it issues.
    *
    * @param onNext
-   *     the {@code Action1<ResponseModel>} you have designed to accept emissions from the Observable
+   *     the {@code OnNext<ResponseModel>} you have designed to accept emissions from the Observable
    * @param onError
-   *     the {@code Action1<Throwable>} you have designed to accept any error notification from the Observable
-   * @param onCompleted
-   *     the {@code Action0} you have designed to accept a completion notification from the Observable
+   *     the {@code OnError} you have designed to accept any error notification from the Observable
+   * @param onComplete
+   *     the {@code OnComplete} you have designed to accept a completion notification from the Observable
    * @param requestModel
    *     parameter which will be passed to {@link #createObservable(Object)}.
    *
    * @throws IllegalArgumentException
    *     if {@code onNext} is null, or if {@code onError} is null, or if {@code onComplete} is null
-   * @see Observable#subscribe(Action1, Action1, Action0)
    * @since 0.4.0
    */
-  @SuppressWarnings("WeakerAccess")
-  public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nonnull Action1<Throwable> onError,
-      @Nonnull Action0 onCompleted, @Nullable RequestModel requestModel) {
+  @Override
+  public final void execute(@Nonnull OnNext<? super ResponseModel> onNext, @Nonnull OnError onError, @Nonnull OnComplete onComplete,
+      @Nullable RequestModel requestModel) {
     requireNotNull(onNext);
     requireNotNull(onError);
-    requireNotNull(onCompleted);
+    requireNotNull(onComplete);
 
-    execute(new ActionSubscriber<>(onNext, onError, onCompleted), requestModel);
+    execute(RxViperSubscriber.of(onNext, onError, onComplete), requestModel);
   }
 
   /**
@@ -277,12 +271,12 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    *
    * @see #execute(Subscriber)
    * @see #execute(Subscriber, Object)
-   * @see #execute(Action1)
-   * @see #execute(Action1, Object)
-   * @see #execute(Action1, Action1)
-   * @see #execute(Action1, Action1, Object)
-   * @see #execute(Action1, Action1, Action0)
-   * @see #execute(Action1, Action1, Action0, Object)
+   * @see #execute(OnNext)
+   * @see #execute(OnNext, Object)
+   * @see #execute(OnNext, OnError)
+   * @see #execute(OnNext, OnError, Object)
+   * @see #execute(OnNext, OnError, OnComplete)
+   * @see #execute(OnNext, OnError, OnComplete, Object)
    * @since 0.1.0
    */
   @SuppressWarnings("NullableProblems")

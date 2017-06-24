@@ -18,6 +18,8 @@ package com.dzaitsev.rxviper.plugin.internal.codegen
 
 import com.dzaitsev.rxviper.Presenter
 import com.dzaitsev.rxviper.ViperPresenter
+import com.dzaitsev.rxviper.OnError
+import com.dzaitsev.rxviper.OnNext
 import com.dzaitsev.rxviper.plugin.aClass
 import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 import com.dzaitsev.rxviper.plugin.internal.dsl.UseCase
@@ -26,7 +28,6 @@ import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
-import rx.functions.Action1
 import javax.lang.model.element.Modifier
 
 internal class PresenterGenerator(screen: Screen) : Generator(screen) {
@@ -72,8 +73,17 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
               "}, \$N)", argName, useCase.responseClass.simpleName.first().toLowerCase().toString(), "requestModel").build()
           else -> methodBuilder.addStatement("\$N.execute(\$L, \$L, \$N)",
               argName,
-              action1Anonymous(useCase.responseClass, useCase.responseClass.simpleName.first().toLowerCase().toString(), "TODO: Implement onNext here..."),
-              action1Anonymous(aClass<Throwable>(), "t", "TODO: Implement onError here..."),
+              typeSpec(
+                  builder = TypeSpec.anonymousClassBuilder("").addSuperinterface(ParameterizedTypeName.get(aClass<OnNext<*>>(), useCase.responseClass)),
+                  methodArgType = useCase.responseClass,
+                  methodName = "onNext",
+                  comment = "TODO: Implement onNext here..."),
+              typeSpec(
+                  builder = TypeSpec.anonymousClassBuilder("").addSuperinterface(TypeName.get(aClass<OnError>())),
+                  methodArgType = aClass<Throwable>(),
+                  methodName = "onError",
+                  comment = "TODO: Implement onError here..."
+              ),
               "requestModel")
               .build()
         })
@@ -87,17 +97,14 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
         .addMethod(onDropViewMethodBuilder.build()))
   }
 
-  private fun action1Anonymous(clazz: Class<*>, paramName: String, comment: String): TypeSpec {
-    return TypeSpec.anonymousClassBuilder("")
-        .addSuperinterface(ParameterizedTypeName.get(aClass<Action1<*>>(), clazz))
-        .addMethod(MethodSpec.methodBuilder("call")
-            .addAnnotation(aClass<Override>())
-            .addModifiers(Modifier.PUBLIC)
-            .addParameter(clazz, paramName)
-            .addComment(comment)
-            .build())
-        .build()
-  }
+  private fun typeSpec(builder: TypeSpec.Builder, methodArgType: Class<*>, methodName: String, comment: String)
+      = builder.addMethod(MethodSpec.methodBuilder(methodName)
+      .addAnnotation(aClass<Override>())
+      .addModifiers(Modifier.PUBLIC)
+      .addParameter(methodArgType, methodArgType.simpleName.first().toLowerCase().toString())
+      .addComment(comment)
+      .build())
+      .build()
 
   private fun superClass(): TypeName {
     val viewCallbacks = ClassName.get(screen.fullPackage, "${screenName}ViewCallbacks")

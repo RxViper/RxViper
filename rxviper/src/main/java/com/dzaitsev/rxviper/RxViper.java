@@ -32,6 +32,7 @@ import static java.lang.String.format;
  * @since 2016-May-14, 15:26
  */
 final class RxViper {
+
   private RxViper() {
     throw new AssertionError("No instances please!");
   }
