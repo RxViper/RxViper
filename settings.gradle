@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-def configureGradleScriptKotlinOn(ProjectDescriptor project) {
-  project.buildFileName = 'build.gradle.kts'
-  project.children.each { configureGradleScriptKotlinOn(it) }
-}
+rootProject.buildFileName = 'build.gradle.kts'
 
 include ':rxviper'
 include ':rxviper-gradle-plugin'
-include ':sample'
-
-configureGradleScriptKotlinOn rootProject
+//include ':sample'

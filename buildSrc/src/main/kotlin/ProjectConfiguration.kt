@@ -1,0 +1,51 @@
+object Versions {
+  const val PLUGIN_ANDROID = "2.2.2"
+  const val PLUGIN_BINTRAY = "1.7.3"
+  const val PLUGIN_MAVEN = "1.4.1"
+  const val PLUGIN_LICENSE = "0.13.1"
+  const val PLUGIN_RETROLAMBDA = "3.5.0"
+  const val PLUGIN_APT = "1.8"
+  const val PLUGIN_VERSIONS = "0.14.0"
+  const val RX_VIPER = "1.0.0-rc1"
+  const val RX_JAVA = "1.2.6"
+  const val DAGGER = "2.9"
+  const val JSR_250 = "1.0"
+  const val JUNIT = "4.12"
+  const val MOCKITO = "2.7.11"
+  const val TRUTH = "0.31"
+  const val JAVA_POET = "1.8.0"
+  const val RX_ANDROID = "1.2.1"
+  const val SUPPORT = "25.0.0"
+  const val CONSTRAINT_LAYOUT = "1.0.2"
+  const val KOTLIN = "1.1.0"
+}
+
+object GradlePlugins {
+  const val RX_VIPER = "com.dzaitsev.rxviper:rxviper-gradle-plugin:${Versions.RX_VIPER}"
+  const val ANDROID = "com.android.tools.build:gradle:${Versions.PLUGIN_ANDROID}"
+  const val BINTRAY = "com.jfrog.bintray.gradle:gradle-bintray-plugin:${Versions.PLUGIN_BINTRAY}"
+  const val MAVEN = "com.github.dcendents:android-maven-gradle-plugin:${Versions.PLUGIN_MAVEN}"
+  const val LICENSE = "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${Versions.PLUGIN_LICENSE}",
+  const val RETROLAMBDA = "me.tatarka:gradle-retrolambda:${Versions.PLUGIN_RETROLAMBDA}"
+  const val APT = "com.neenbedankt.gradle.plugins:android-apt:${Versions.PLUGIN_APT}"
+  const val VERSIONS = "com.github.ben-manes:gradle-versions-plugin:${Versions.PLUGIN_VERSIONS}"
+  const val KOTLIN = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.KOTLIN}"
+}
+
+object Libraries {
+  const val rxViper = "com.dzaitsev.rxviper:rxviper:${Versions.RX_VIPER}"
+  const val rxJava = "io.reactivex:rxjava:${Versions.RX_JAVA}"
+  const val dagger = "com.google.dagger:dagger:${Versions.DAGGER}"
+  const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.DAGGER}"
+  const val jsr250 = "javax.annotation:jsr250-api:${Versions.JSR_250}"
+  const val javaPoet = "com.squareup:javapoet:${Versions.JAVA_POET}"
+  const val constraintLayout = "com.android.support.constraint:constraint-layout:${Versions.CONSTRAINT_LAYOUT}"
+  const val appCompat = "com.android.support:appcompat-v7:${Versions.SUPPORT}"
+  const val design = "com.android.support:design:${Versions.SUPPORT}"
+  const val cardView = "com.android.support:cardview-v7:${Versions.SUPPORT}"
+  const val rxAndroid = "io.reactivex:rxandroid:${Versions.RX_ANDROID}"
+  const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.KOTLIN}"
+  const val junit = "junit:junit:${Versions.JUNIT}"
+  const val mockito = "org.mockito:mockito-inline:${Versions.MOCKITO}"
+  const val truth = "com.google.truth:truth:${Versions.TRUTH}"
+}

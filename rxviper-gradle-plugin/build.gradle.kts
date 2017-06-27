@@ -4,13 +4,11 @@ apply {
 
 dependencies {
   compile(gradleApi())
-  compile(libraries("kotlin"))
-  compile(libraries("javaPoet"))
+  compile(Libraries.kotlin)
+  compile(Libraries.javaPoet)
   compile(project(":rxviper"))
-  testCompile(libraries("junit"))
-  testCompile(libraries("truth"))
+  testCompile(Libraries.junit)
+  testCompile(Libraries.truth)
 }
 
 applyFrom(rootProject.file("publish.gradle"))
-
-fun libraries(name: String) = (extra.properties["libraries"] as Map<String, Any>)[name]!!

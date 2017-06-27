@@ -1,7 +1,9 @@
+import org.gradle.api.JavaVersion
+import org.gradle.api.Project
 import org.gradle.api.tasks.compile.JavaCompile
 
 plugins {
-  java
+  `java-library`
 }
 
 configure<JavaPluginConvention> {
@@ -15,12 +17,10 @@ compileTestJava {
 }
 
 dependencies {
-  compile(libraries("rxJava"))
-  testCompile(libraries("junit"))
-  testCompile(libraries("mockito"))
-  testCompile(libraries("truth"))
+  compile(Libraries.rxJava)
+  testCompile(Libraries.junit)
+  testCompile(Libraries.mockito)
+  testCompile(Libraries.truth)
 }
 
-fun libraries(name: String) = (extra.properties["libraries"] as Map<String, Any>)[name]!!
-
-fun Project.compileTestJava(block: JavaCompile.() -> Unit) = (tasks["compileTestJava"] as JavaCompile).apply { block.invoke(this) }
+fun Project.compileTestJava(block: JavaCompile.() -> Unit) = (tasks["compileTestJava"] as JavaCompile).apply { block(this) }

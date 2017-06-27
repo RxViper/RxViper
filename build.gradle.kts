@@ -1,4 +1,5 @@
 import nl.javadude.gradle.plugins.license.License
+import org.gradle.script.lang.kotlin.repositories
 
 apply {
   plugin("com.github.ben-manes.versions")
@@ -6,24 +7,22 @@ apply {
 
 buildscript {
   applyFrom(rootProject.file("dependencies.gradle"))
-  fun gradlePlugins(name: String) = (extra.properties["gradlePlugins"] as Map<String, Any>)[name]!!
 
   repositories {
-    gradleScriptKotlin()
     jcenter()
     maven { setUrl("https://plugins.gradle.org/m2/") }
   }
 
   dependencies {
-    classpath(gradlePlugins("android"))
-    classpath(gradlePlugins("bintray"))
-    classpath(gradlePlugins("maven"))
-    classpath(gradlePlugins("license"))
-    classpath(gradlePlugins("apt"))
-    classpath(gradlePlugins("retrolambda"))
-    classpath(gradlePlugins("versions"))
-    classpath(gradlePlugins("kotlin"))
-    classpath(gradlePlugins("rxViper"))
+    classpath(GradlePlugins.ANDROID)
+    classpath(GradlePlugins.BINTRAY)
+    classpath(GradlePlugins.MAVEN)
+    classpath(GradlePlugins.LICENSE)
+    classpath(GradlePlugins.APT)
+    classpath(GradlePlugins.RETROLAMBDA)
+    classpath(GradlePlugins.VERSIONS)
+    classpath(GradlePlugins.KOTLIN)
+    classpath(GradlePlugins.RX_VIPER)
   }
 }
 

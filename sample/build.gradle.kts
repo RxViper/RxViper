@@ -2,6 +2,7 @@ import com.android.build.gradle.AppExtension
 import com.android.builder.core.DefaultApiVersion
 import com.android.builder.core.DefaultProductFlavor
 import com.android.builder.model.ApiVersion
+import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper
 
@@ -10,7 +11,7 @@ apply {
   plugin("com.neenbedankt.android-apt")
   plugin("me.tatarka.retrolambda")
   plugin("com.dzaitsev.rxviper")
-  plugin<KotlinAndroidPluginWrapper>()
+//  plugin<KotlinAndroidPluginWrapper>()
 }
 
 buildscript {
@@ -26,7 +27,7 @@ android {
     setMinSdkVersion(9)
     setTargetSdkVersion(24)
     versionCode = 1
-    versionName = extra.properties["POM_VERSION"] as String
+    versionName = extra.properties["POM_VERSION"]
   }
 
   compileOptions.setSourceCompatibility(JavaVersion.VERSION_1_8)
