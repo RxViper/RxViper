@@ -42,6 +42,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    *
    * @since 0.11.0
    */
+  @SuppressWarnings("WeakerAccess")
   protected Presenter(@Nonnull V view) {
     requireNotNull(view);
     getProxy(viewProxy).set(view);
@@ -52,6 +53,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    *
    * @since 0.11.0
    */
+  @SuppressWarnings("WeakerAccess")
   protected Presenter() {}
 
   /**
@@ -67,6 +69,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    *
    * @since 0.1.0
    */
+  @SuppressWarnings("WeakerAccess")
   public final void dropView(@Nonnull V view) {
     requireNotNull(view);
 
@@ -84,6 +87,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @see #getView()
    * @since 0.7.0
    */
+  @SuppressWarnings("WeakerAccess")
   public final boolean hasView() {
     return currentView() != null;
   }
@@ -99,6 +103,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @see #dropView(ViewCallbacks)
    * @since 0.1.0
    */
+  @SuppressWarnings("WeakerAccess")
   public final void takeView(@Nonnull V view) {
     requireNotNull(view);
 
@@ -121,6 +126,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @see #takeView(ViewCallbacks)
    * @since 0.1.0
    */
+  @SuppressWarnings("WeakerAccess")
   @Nonnull
   protected final V getView() {
     return viewProxy;
@@ -135,7 +141,8 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @see #dropView(ViewCallbacks)
    * @since 0.7.0
    */
-  protected void onDropView(@Nonnull V view) {
+  @SuppressWarnings("WeakerAccess")
+  protected void onDropView(@SuppressWarnings("NullableProblems") @Nonnull V view) {
   }
 
   /**
@@ -147,7 +154,8 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @see #takeView(ViewCallbacks)
    * @since 0.6.0
    */
-  protected void onTakeView(@Nonnull V view) {
+  @SuppressWarnings("WeakerAccess")
+  protected void onTakeView(@SuppressWarnings("NullableProblems") @Nonnull V view) {
   }
 
   @Nullable

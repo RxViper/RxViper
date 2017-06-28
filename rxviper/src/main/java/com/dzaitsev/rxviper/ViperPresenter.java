@@ -46,6 +46,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    *
    * @since 0.11.0
    */
+  @SuppressWarnings("WeakerAccess")
   protected ViperPresenter(@Nonnull V view, @Nonnull R router) {
     super(view);
     requireNotNull(router);
@@ -62,6 +63,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    *
    * @since 0.11.0
    */
+  @SuppressWarnings("WeakerAccess")
   protected ViperPresenter(@Nonnull V view) {
     super(view);
   }
@@ -76,6 +78,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    *
    * @since 0.11.0
    */
+  @SuppressWarnings("WeakerAccess")
   protected ViperPresenter(@Nonnull R router) {
     requireNotNull(router);
     getProxy(routerProxy).set(router);
@@ -86,6 +89,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    *
    * @since 0.11.0
    */
+  @SuppressWarnings("WeakerAccess")
   protected ViperPresenter() {}
 
   /**
@@ -101,6 +105,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    *
    * @since 0.1.0
    */
+  @SuppressWarnings("WeakerAccess")
   public final void dropRouter(@Nonnull R router) {
     requireNotNull(router);
 
@@ -118,6 +123,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @see #getRouter()
    * @since 0.7.0
    */
+  @SuppressWarnings("WeakerAccess")
   public final boolean hasRouter() {
     return currentRouter() != null;
   }
@@ -133,6 +139,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @see #dropRouter(Router)
    * @since 0.1.0
    */
+  @SuppressWarnings("WeakerAccess")
   public final void takeRouter(@Nonnull R router) {
     requireNotNull(router);
 
@@ -155,6 +162,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @see #takeRouter(Router)
    * @since 0.1.0
    */
+  @SuppressWarnings("WeakerAccess")
   @Nonnull
   protected final R getRouter() {
     return routerProxy;
@@ -169,7 +177,8 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @see #dropRouter(Router)
    * @since 0.7.0
    */
-  protected void onDropRouter(@Nonnull R router) {
+  @SuppressWarnings("WeakerAccess")
+  protected void onDropRouter(@SuppressWarnings("NullableProblems") @Nonnull R router) {
   }
 
   /**
@@ -181,7 +190,8 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @see #takeRouter(Router)
    * @since 0.6.0
    */
-  protected void onTakeRouter(@Nonnull R router) {
+  @SuppressWarnings("WeakerAccess")
+  protected void onTakeRouter(@SuppressWarnings("NullableProblems") @Nonnull R router) {
   }
 
   @Nullable
