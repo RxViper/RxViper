@@ -17,7 +17,6 @@
 -->
 <resources>
   <string name="app_name">RxViperSample</string>
-  <string name="loading">Loading…</string>
   <string name="error">Error</string>
 
   <string-array name="hard_cheeses">

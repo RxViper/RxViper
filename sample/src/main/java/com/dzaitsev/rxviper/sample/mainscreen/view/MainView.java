@@ -16,7 +16,6 @@
 
 package com.dzaitsev.rxviper.sample.mainscreen.view;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,7 +35,6 @@ import javax.inject.Inject;
  * @since 2016-Jun-07, 12:33
  */
 public final class MainView extends ConstraintLayout implements MainViewCallbacks {
-  private ProgressDialog  progressDialog;
   private CheeseAdapter   adapter;
   private ViewMainBinding binding;
 
@@ -50,20 +48,11 @@ public final class MainView extends ConstraintLayout implements MainViewCallback
 
   public MainView(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
-    if (!isInEditMode()) {
-      progressDialog = new ProgressDialog(context);
-      progressDialog.setIndeterminate(true);
-      progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-      progressDialog.setCancelable(false);
-      progressDialog.setMessage(getResources().getString(R.string.loading));
-    }
   }
 
   @Override
   public void hideProgress() {
-    if (progressDialog.isShowing()) {
-      progressDialog.dismiss();
-    }
+    binding.progressBar.setVisibility(GONE);
   }
 
   @Override
@@ -80,9 +69,7 @@ public final class MainView extends ConstraintLayout implements MainViewCallback
 
   @Override
   public void showProgress() {
-    if (!progressDialog.isShowing()) {
-      progressDialog.show();
-    }
+    binding.progressBar.setVisibility(VISIBLE);
   }
 
   @Override
