@@ -34,7 +34,7 @@ import rx.schedulers.Schedulers;
 public final class AppModule {
   private final Application app;
 
-  public AppModule(Application app) {
+  AppModule(Application app) {
     this.app = app;
   }
 

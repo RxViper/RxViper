@@ -21,6 +21,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
 import android.widget.Toast;
+import com.dzaitsev.rxviper.sample.StartStop;
 import com.dzaitsev.rxviper.sample.R;
 import com.dzaitsev.rxviper.sample.databinding.ViewMainBinding;
 import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseViewModel;
@@ -34,9 +35,10 @@ import javax.inject.Inject;
  * @author Dmytro Zaitsev
  * @since 2016-Jun-07, 12:33
  */
-public final class MainView extends ConstraintLayout implements MainViewCallbacks {
+public final class MainView extends ConstraintLayout implements MainViewCallbacks, StartStop {
   private CheeseAdapter   adapter;
   private ViewMainBinding binding;
+  private MainPresenter   presenter;
 
   public MainView(Context context) {
     this(context, null);
@@ -62,6 +64,16 @@ public final class MainView extends ConstraintLayout implements MainViewCallback
   }
 
   @Override
+  public void onStart() {
+    presenter.takeView(this);
+  }
+
+  @Override
+  public void onStop(boolean isChangingConfigurations) {
+    presenter.dropView(this, isChangingConfigurations);
+  }
+
+  @Override
   public void showError() {
     Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT)
         .show();
@@ -83,6 +95,7 @@ public final class MainView extends ConstraintLayout implements MainViewCallback
 
   @Inject
   void setPresenter(MainPresenter presenter) {
+    this.presenter = presenter;
     binding.btnLoadDataSuccess.setOnClickListener(v -> presenter.fetchCheeses(40));
     binding.btnLoadDataError.setOnClickListener(v -> presenter.fetchCheeses(-1));
     adapter = new CheeseAdapter(presenter);

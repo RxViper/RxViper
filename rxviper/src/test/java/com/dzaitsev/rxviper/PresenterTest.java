@@ -90,7 +90,7 @@ public final class PresenterTest {
   @Test
   public void shouldNotCallOnDropIfViewIsNotAttached() {
     presenter.dropView(view);
-    verify(presenter, never()).onDropView(view);
+    verify(presenter, never()).onDropView(view, false);
   }
 
   @Test
@@ -99,7 +99,7 @@ public final class PresenterTest {
 
     final TestViewCallbacks anotherView = mock(TestViewCallbacks.class);
     presenter.dropView(anotherView);
-    verify(presenter, never()).onDropView(view);
+    verify(presenter, never()).onDropView(view, false);
   }
 
   @Test
@@ -108,7 +108,7 @@ public final class PresenterTest {
 
     final TestViewCallbacks newView = mock(TestViewCallbacks.class);
     presenter.takeView(newView);
-    verify(presenter).onDropView(view);
+    verify(presenter).onDropView(view, false);
   }
 
   @Test

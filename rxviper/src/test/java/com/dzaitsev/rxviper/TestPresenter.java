@@ -37,8 +37,8 @@ final class TestPresenter extends Presenter<TestViewCallbacks> {
   }
 
   @Override
-  protected void onDropView(TestViewCallbacks view) {
-    super.onDropView(view);
+  protected void onDropView(TestViewCallbacks view, boolean isChangingConfigurations) {
+    super.onDropView(view, isChangingConfigurations);
     assertThatViewIsSet(false);
   }
 

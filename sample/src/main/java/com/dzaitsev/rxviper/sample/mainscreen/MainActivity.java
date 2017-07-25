@@ -22,17 +22,11 @@ import com.dzaitsev.rxviper.sample.App;
 import com.dzaitsev.rxviper.sample.R;
 import com.dzaitsev.rxviper.sample.mainscreen.di.MainScreenModule;
 import com.dzaitsev.rxviper.sample.mainscreen.di.MainScreenSubcomponent;
-import com.dzaitsev.rxviper.sample.mainscreen.presenter.MainPresenter;
-import com.dzaitsev.rxviper.sample.mainscreen.router.MainRouter;
 import com.dzaitsev.rxviper.sample.mainscreen.view.MainView;
 
 public final class MainActivity extends AppCompatActivity {
-  public  MainView               mainView;
-  private ScopeHolder            holder;
-  private MainScreenModule       module;
-  private MainScreenSubcomponent subcomponent;
-  private MainPresenter          presenter;
-  private MainRouter             router;
+  public  MainView    mainView;
+  private ScopeHolder scope;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -40,49 +34,35 @@ public final class MainActivity extends AppCompatActivity {
     setContentView(R.layout.view_main);
     mainView = (MainView) findViewById(R.id.view_main);
 
-    holder = (ScopeHolder) getLastCustomNonConfigurationInstance();
+    scope = (ScopeHolder) getLastCustomNonConfigurationInstance();
 
-    if (holder == null) {
-      module = new MainScreenModule();
-      subcomponent = ((App) getApplication()).getComponent()
-          .plus(module);
-      holder = new ScopeHolder(module, subcomponent);
-    } else {
-      module = holder.module;
-      subcomponent = holder.subcomponent;
+    if (scope == null) {
+      final MainScreenModule module = new MainScreenModule();
+      scope = new ScopeHolder(module, ((App) getApplication()).getComponent().plus(module));
     }
 
-    module.setMainActivity(this);
-    subcomponent.inject(mainView);
-    presenter = subcomponent.mainPresenter();
-    router = subcomponent.mainRouter();
+    scope.module.setMainActivity(this);
+    scope.subcomponent.inject(mainView);
   }
 
   @Override
   public ScopeHolder onRetainCustomNonConfigurationInstance() {
-    return holder;
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    if (isFinishing()) {
-      module.setMainActivity(null);
-    }
+    return scope;
   }
 
   @Override
   protected void onStart() {
     super.onStart();
-    presenter.takeView(mainView);
-    presenter.takeRouter(router);
+    mainView.onStart();
   }
 
   @Override
   protected void onStop() {
     super.onStop();
-    presenter.dropView(mainView);
-    presenter.dropRouter(router);
+    mainView.onStop(isChangingConfigurations());
+    if (isFinishing()) {
+      scope.module.setMainActivity(null);
+    }
   }
 
   final static class ScopeHolder {
