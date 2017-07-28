@@ -18,80 +18,37 @@ package com.dzaitsev.rxviper.sample.mainscreen;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import com.dzaitsev.rxviper.sample.App;
 import com.dzaitsev.rxviper.sample.R;
-import com.dzaitsev.rxviper.sample.mainscreen.di.MainScreenModule;
-import com.dzaitsev.rxviper.sample.mainscreen.di.MainScreenSubcomponent;
-import com.dzaitsev.rxviper.sample.mainscreen.presenter.MainPresenter;
-import com.dzaitsev.rxviper.sample.mainscreen.router.MainRouter;
-import com.dzaitsev.rxviper.sample.mainscreen.view.MainView;
+import com.dzaitsev.rxviper.sample.StartStop;
+import dagger.android.AndroidInjection;
+import java.util.Set;
+import javax.inject.Inject;
 
 public final class MainActivity extends AppCompatActivity {
-  public  MainView               mainView;
-  private ScopeHolder            holder;
-  private MainScreenModule       module;
-  private MainScreenSubcomponent subcomponent;
-  private MainPresenter          presenter;
-  private MainRouter             router;
+  @Inject Set<StartStop> startStopListeners;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.view_main);
-    mainView = (MainView) findViewById(R.id.view_main);
-
-    holder = (ScopeHolder) getLastCustomNonConfigurationInstance();
-
-    if (holder == null) {
-      module = new MainScreenModule();
-      subcomponent = ((App) getApplication()).getComponent()
-          .plus(module);
-      holder = new ScopeHolder(module, subcomponent);
-    } else {
-      module = holder.module;
-      subcomponent = holder.subcomponent;
-    }
-
-    module.setMainActivity(this);
-    subcomponent.inject(mainView);
-    presenter = subcomponent.mainPresenter();
-    router = subcomponent.mainRouter();
-  }
-
-  @Override
-  public ScopeHolder onRetainCustomNonConfigurationInstance() {
-    return holder;
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    if (isFinishing()) {
-      module.setMainActivity(null);
-    }
   }
 
   @Override
   protected void onStart() {
     super.onStart();
-    presenter.takeView(mainView);
-    presenter.takeRouter(router);
+    //noinspection Convert2streamapi
+    for (StartStop listener : startStopListeners) {
+      listener.onStart();
+    }
   }
 
   @Override
   protected void onStop() {
     super.onStop();
-    presenter.dropView(mainView);
-    presenter.dropRouter(router);
-  }
-
-  final static class ScopeHolder {
-    final MainScreenModule       module;
-    final MainScreenSubcomponent subcomponent;
-
-    ScopeHolder(MainScreenModule module, MainScreenSubcomponent subcomponent) {
-      this.module = module;
-      this.subcomponent = subcomponent;
+    //noinspection Convert2streamapi
+    for (StartStop listener : startStopListeners) {
+      listener.onStop();
     }
   }
 }

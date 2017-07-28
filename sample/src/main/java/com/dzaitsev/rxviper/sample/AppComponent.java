@@ -16,9 +16,9 @@
 
 package com.dzaitsev.rxviper.sample;
 
-import com.dzaitsev.rxviper.sample.mainscreen.di.MainScreenModule;
-import com.dzaitsev.rxviper.sample.mainscreen.di.MainScreenSubcomponent;
+import dagger.BindsInstance;
 import dagger.Component;
+import dagger.android.support.AndroidSupportInjectionModule;
 import javax.inject.Singleton;
 
 /**
@@ -28,7 +28,15 @@ import javax.inject.Singleton;
  * @since 2016-Jun-07, 12:21
  */
 @Singleton
-@Component(modules = AppModule.class)
-public interface AppComponent {
-  MainScreenSubcomponent plus(MainScreenModule module);
+@Component(modules = { AppModule.class, AndroidSupportInjectionModule.class, BuildersModule.class })
+interface AppComponent {
+  void inject(App app);
+
+  @Component.Builder
+  interface Builder {
+    @BindsInstance
+    Builder app(App app);
+
+    AppComponent build();
+  }
 }

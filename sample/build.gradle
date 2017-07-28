@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.dzaitsev.rxviper'
 
@@ -24,7 +23,7 @@ android {
 
   defaultConfig {
     applicationId "com.dzaitsev.rxviper.sample"
-    minSdkVersion 9
+    minSdkVersion 14
     targetSdkVersion 24
     versionCode 1
     versionName POM_VERSION
@@ -39,17 +38,21 @@ android {
 }
 
 dependencies {
-  apt libraries.daggerCompiler
   compile fileTree(dir: 'libs', include: ['*.jar'])
   compile project(':rxviper')
   compile libraries.rxAndroid
   compile libraries.dagger
+  annotationProcessor libraries.daggerCompiler
+  compile libraries.daggerAndroid
+  compile libraries.daggerAndroidSupport
+  annotationProcessor libraries.daggerAndroidProcessor
   provided libraries.jsr250
   compile libraries.appCompat
   compile libraries.design
   compile libraries.cardView
   compile libraries.constraintLayout
   testCompile libraries.junit
+  compile 'com.dzaitsev.rxviper:rxviper:1.0.0-rc2'
 }
 
 rxViper {
@@ -84,9 +87,9 @@ rxViper {
       useLambdas false
       includeRouter false
       useCases {
-          login
-          post
-          createUser
+        login
+        post
+        createUser
       }
       routesTo "Auth", "Main", "UserProfile"
     }

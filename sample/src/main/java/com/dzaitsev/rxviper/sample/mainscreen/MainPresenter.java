@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.mainscreen.presenter;
+package com.dzaitsev.rxviper.sample.mainscreen;
 
+import android.support.annotation.NonNull;
 import com.dzaitsev.rxviper.ViperPresenter;
-import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseViewModel;
-import com.dzaitsev.rxviper.sample.mainscreen.domain.GetCheesesInteractor;
-import com.dzaitsev.rxviper.sample.mainscreen.router.MainRouter;
-import com.dzaitsev.rxviper.sample.mainscreen.view.MainViewCallbacks;
 import java.util.Collection;
 
 /**
@@ -29,22 +26,22 @@ import java.util.Collection;
  * @author Dmytro Zaitsev
  * @since 2016-Jun-07, 10:34
  */
-public final class MainPresenter extends ViperPresenter<MainViewCallbacks, MainRouter> {
+final class MainPresenter extends ViperPresenter<MainViewCallbacks, MainRouter> {
   private final GetCheesesInteractor        interactor;
   private       Collection<CheeseViewModel> cachedData;
 
-  public MainPresenter(GetCheesesInteractor getCheesesInteractor) {
+  MainPresenter(GetCheesesInteractor getCheesesInteractor) {
     interactor = getCheesesInteractor;
   }
 
   @Override
-  protected void onDropView(MainViewCallbacks view) {
+  protected void onDropView(@NonNull MainViewCallbacks view) {
     /* The best place to unsubscribe all your interactors */
     interactor.unsubscribe();
   }
 
   @Override
-  protected void onTakeView(MainViewCallbacks view) {
+  protected void onTakeView(@NonNull MainViewCallbacks view) {
     /* The place where you can set cached data */
     if (cachedData != null) {
       view.onNewCheeses(cachedData);
@@ -58,7 +55,7 @@ public final class MainPresenter extends ViperPresenter<MainViewCallbacks, MainR
    * @throws RuntimeException
    *     if amount < 0
    */
-  public void fetchCheeses(int count) {
+  void fetchCheeses(int count) {
     getView().showProgress();
     interactor.execute(
         // onNext
@@ -76,7 +73,7 @@ public final class MainPresenter extends ViperPresenter<MainViewCallbacks, MainR
         count);
   }
 
-  public void onItemClicked(CheeseViewModel model) {
+  void onItemClicked(CheeseViewModel model) {
     getRouter().navigateToDetails(model);
   }
 }

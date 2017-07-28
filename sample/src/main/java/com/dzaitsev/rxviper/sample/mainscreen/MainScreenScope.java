@@ -14,24 +14,20 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.mainscreen.view;
+package com.dzaitsev.rxviper.sample.mainscreen;
 
-import com.dzaitsev.rxviper.ViewCallbacks;
-import java.util.Collection;
-import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseViewModel;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import javax.inject.Scope;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Jun-07, 10:35
+ * @since 2016-Dec-17, 15:37
  */
-public interface MainViewCallbacks extends ViewCallbacks {
-  void hideProgress();
-
-  void onNewCheeses(Collection<CheeseViewModel> cheeses);
-
-  void showError();
-
-  void showProgress();
-}
+@Scope
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@interface MainScreenScope {}

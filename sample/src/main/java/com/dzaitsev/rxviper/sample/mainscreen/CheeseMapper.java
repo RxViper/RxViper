@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.mainscreen.di;
+package com.dzaitsev.rxviper.sample.mainscreen;
 
-import com.dzaitsev.rxviper.sample.mainscreen.presenter.MainPresenter;
-import com.dzaitsev.rxviper.sample.mainscreen.router.MainRouter;
-import com.dzaitsev.rxviper.sample.mainscreen.view.MainView;
-import dagger.Subcomponent;
+import com.dzaitsev.rxviper.Mapper;
+import com.dzaitsev.rxviper.sample.data.Cheese;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Dec-08, 00:22
+ * @since 2016-Jun-07, 11:18
  */
-@MainScreenScope
-@Subcomponent(modules = MainScreenModule.class)
-public interface MainScreenSubcomponent {
-  void inject(MainView view);
+final class CheeseMapper extends Mapper<Cheese, CheeseViewModel> {
 
-  MainPresenter mainPresenter();
-
-  MainRouter mainRouter();
+  @Override
+  public CheeseViewModel map(Cheese cheese) {
+    final CheeseViewModel model = new CheeseViewModel(cheese.getName(), cheese.getId(), cheese.getType()
+        .name());
+    model.setChecked(true);
+    return model;
+  }
 }

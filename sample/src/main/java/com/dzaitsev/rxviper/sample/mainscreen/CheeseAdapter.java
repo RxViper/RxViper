@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.mainscreen.view;
+package com.dzaitsev.rxviper.sample.mainscreen;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.dzaitsev.rxviper.sample.databinding.ListItemBinding;
-import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseViewModel;
-import com.dzaitsev.rxviper.sample.mainscreen.presenter.MainPresenter;
 import java.util.ArrayList;
 import java.util.Collection;
 

@@ -14,17 +14,26 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.mainscreen.router;
+package com.dzaitsev.rxviper.sample.mainscreen;
 
-import com.dzaitsev.rxviper.Router;
-import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseViewModel;
+import com.dzaitsev.rxviper.sample.data.DataModule;
+import dagger.BindsInstance;
+import dagger.Subcomponent;
+import dagger.android.AndroidInjector;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Jun-07, 14:39
+ * @since 2016-Dec-08, 00:22
  */
-public interface MainRouter extends Router {
-  void navigateToDetails(CheeseViewModel model);
+@MainScreenScope
+@Subcomponent(modules = { MainScreenModule.class, DataModule.class })
+public interface MainScreenSubcomponent extends AndroidInjector<MainActivity> {
+
+  @Subcomponent.Builder
+  abstract class Builder extends AndroidInjector.Builder<MainActivity> {
+    @BindsInstance
+    public abstract Builder mainView(MainView view);
+  }
 }

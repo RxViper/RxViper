@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.mainscreen.di;
+package com.dzaitsev.rxviper.sample.mainscreen;
 
 import com.dzaitsev.rxviper.sample.Job;
 import com.dzaitsev.rxviper.sample.Main;
+import com.dzaitsev.rxviper.sample.StartStop;
 import com.dzaitsev.rxviper.sample.data.CheeseStorage;
-import com.dzaitsev.rxviper.sample.data.DataModule;
-import com.dzaitsev.rxviper.sample.mainscreen.MainActivity;
-import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseMapper;
-import com.dzaitsev.rxviper.sample.mainscreen.domain.GetCheesesInteractor;
-import com.dzaitsev.rxviper.sample.mainscreen.presenter.MainPresenter;
-import com.dzaitsev.rxviper.sample.mainscreen.router.MainRouter;
-import com.dzaitsev.rxviper.sample.mainscreen.router.MainRouterImpl;
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import dagger.multibindings.IntoSet;
 import rx.Scheduler;
 
 /**
@@ -36,17 +32,14 @@ import rx.Scheduler;
  * @author Dmytro Zaitsev
  * @since 2016-Dec-08, 00:11
  */
-@Module(includes = DataModule.class)
-public final class MainScreenModule {
-  private MainActivity activity;
-
-  public void setMainActivity(MainActivity activity) {
-    this.activity = activity;
-  }
+@Module
+public abstract class MainScreenModule {
+  @Binds
+  abstract MainRouter bindMainRouter(MainRouterImpl router);
 
   @Provides
-  MainRouter provideMainRouter() {
-    return new MainRouterImpl(activity);
+  static MainRouterImpl provideMainRouterImpl(MainActivity activity, MainPresenter presenter) {
+    return new MainRouterImpl(activity, presenter);
   }
 
   @Provides
@@ -67,4 +60,8 @@ public final class MainScreenModule {
   static MainPresenter provideMainPresenter(GetCheesesInteractor interactor) {
     return new MainPresenter(interactor);
   }
+
+  @Binds
+  @IntoSet
+  abstract StartStop bindRouter(MainRouterImpl router);
 }

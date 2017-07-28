@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.mainscreen.domain;
+package com.dzaitsev.rxviper.sample.mainscreen;
 
 import com.dzaitsev.rxviper.Interactor;
 import com.dzaitsev.rxviper.sample.data.CheeseStorage;
@@ -28,11 +28,11 @@ import rx.Scheduler;
  * @author Dmytro Zaitsev
  * @since 2016-Jun-07, 10:32
  */
-public final class GetCheesesInteractor extends Interactor<Integer, Collection<CheeseViewModel>> {
+final class GetCheesesInteractor extends Interactor<Integer, Collection<CheeseViewModel>> {
   private final CheeseStorage storage;
   private final CheeseMapper  mapper;
 
-  public GetCheesesInteractor(Scheduler subscribeOn, Scheduler observeOn, CheeseStorage storage, CheeseMapper mapper) {
+  GetCheesesInteractor(Scheduler subscribeOn, Scheduler observeOn, CheeseStorage storage, CheeseMapper mapper) {
     super(subscribeOn, observeOn);
     this.storage = storage;
     this.mapper = mapper;

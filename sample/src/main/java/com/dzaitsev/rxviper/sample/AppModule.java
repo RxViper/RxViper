@@ -16,8 +16,8 @@
 
 package com.dzaitsev.rxviper.sample;
 
-import android.app.Application;
 import android.content.res.Resources;
+import com.dzaitsev.rxviper.sample.mainscreen.MainScreenSubcomponent;
 import dagger.Module;
 import dagger.Provides;
 import rx.Scheduler;
@@ -30,14 +30,8 @@ import rx.schedulers.Schedulers;
  * @author Dmytro Zaitsev
  * @since 2016-Jun-07, 12:24
  */
-@Module
-public final class AppModule {
-  private final Application app;
-
-  public AppModule(Application app) {
-    this.app = app;
-  }
-
+@Module(subcomponents = MainScreenSubcomponent.class)
+abstract class AppModule {
   @Provides
   @Job
   static Scheduler provideJobScheduler() {
@@ -51,7 +45,7 @@ public final class AppModule {
   }
 
   @Provides
-  Resources provideResources() {
+  static Resources provideResources(App app) {
     return app.getResources();
   }
 }

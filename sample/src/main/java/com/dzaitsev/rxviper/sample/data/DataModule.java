@@ -17,7 +17,6 @@
 package com.dzaitsev.rxviper.sample.data;
 
 import android.content.res.Resources;
-import com.dzaitsev.rxviper.sample.AppModule;
 import dagger.Module;
 import dagger.Provides;
 
@@ -27,8 +26,8 @@ import dagger.Provides;
  * @author Dmytro Zaitsev
  * @since 2016-Dec-17, 14:27
  */
-@Module(includes = AppModule.class)
-public final class DataModule {
+@Module
+public abstract class DataModule {
   @Provides
   static CheeseStorage provideCheeseStorage(Resources resources) {
     return new CheeseStorage(resources);

@@ -17,7 +17,7 @@
 -->
 <layout>
 
-  <com.dzaitsev.rxviper.sample.mainscreen.view.MainView
+  <com.dzaitsev.rxviper.sample.mainscreen.MainView
     android:id="@+id/view_main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -84,5 +84,5 @@
         android:layout_gravity="center"
         />
     </FrameLayout>
-  </com.dzaitsev.rxviper.sample.mainscreen.view.MainView>
+  </com.dzaitsev.rxviper.sample.mainscreen.MainView>
 </layout>

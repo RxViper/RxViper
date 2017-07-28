@@ -27,7 +27,6 @@ buildscript {
     classpath gradlePlugins.bintray
     classpath gradlePlugins.maven
     classpath gradlePlugins.license
-    classpath gradlePlugins.apt
     classpath gradlePlugins.retrolambda
     classpath gradlePlugins.versions
     classpath gradlePlugins.kotlin

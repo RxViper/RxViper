@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.mainscreen.router;
+package com.dzaitsev.rxviper.sample.mainscreen;
 
 import android.content.Intent;
-import com.dzaitsev.rxviper.sample.mainscreen.MainActivity;
 import com.dzaitsev.rxviper.sample.detailsscreen.DetailsActivity;
-import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseViewModel;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -27,19 +25,30 @@ import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseViewModel;
  * @author Dmytro Zaitsev
  * @since 2016-Dec-07, 22:54
  */
-public final class MainRouterImpl implements MainRouter {
-  private final MainActivity activity;
+final class MainRouterImpl implements MainRouter {
+  private final MainActivity  activity;
+  private final MainPresenter presenter;
 
-  public MainRouterImpl(MainActivity activity) {
+  MainRouterImpl(MainActivity activity, MainPresenter presenter) {
     this.activity = activity;
+    this.presenter = presenter;
   }
 
   @Override
   public void navigateToDetails(CheeseViewModel model) {
-    final Intent intent = new Intent(activity, DetailsActivity.class);
-    intent.putExtra(DetailsActivity.NAME, model.getName());
-    intent.putExtra(DetailsActivity.CHECKED, model.isChecked());
-    intent.putExtra(DetailsActivity.TYPE, model.getType());
-    activity.startActivity(intent);
+    activity.startActivity(new Intent(activity, DetailsActivity.class)
+    .putExtra(DetailsActivity.NAME, model.getName())
+    .putExtra(DetailsActivity.CHECKED, model.isChecked())
+    .putExtra(DetailsActivity.TYPE, model.getType()));
+  }
+
+  @Override
+  public void onStart() {
+    presenter.takeRouter(this);
+  }
+
+  @Override
+  public void onStop() {
+    presenter.dropRouter(this);
   }
 }

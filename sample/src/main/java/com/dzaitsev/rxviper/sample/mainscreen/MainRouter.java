@@ -14,43 +14,18 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.mainscreen.domain;
+package com.dzaitsev.rxviper.sample.mainscreen;
+
+import com.dzaitsev.rxviper.Router;
+import com.dzaitsev.rxviper.sample.StartStop;
+import com.dzaitsev.rxviper.sample.mainscreen.CheeseViewModel;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Jun-07, 11:51
+ * @since 2016-Jun-07, 14:39
  */
-public final class CheeseViewModel {
-  private final String  name;
-  private final long    id;
-  private final String  type;
-  private       boolean isChecked;
-
-  CheeseViewModel(String name, long id, String type) {
-    this.name = name;
-    this.id = id;
-    this.type = type;
-  }
-
-  public long getId() {
-    return id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public boolean isChecked() {
-    return isChecked;
-  }
-
-  public void setChecked(boolean checked) {
-    isChecked = checked;
-  }
-
-  public String getType() {
-    return type;
-  }
+interface MainRouter extends Router, StartStop {
+  void navigateToDetails(CheeseViewModel model);
 }

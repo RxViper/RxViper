@@ -14,24 +14,43 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.mainscreen.domain;
-
-import com.dzaitsev.rxviper.Mapper;
-import com.dzaitsev.rxviper.sample.data.Cheese;
+package com.dzaitsev.rxviper.sample.mainscreen;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Jun-07, 11:18
+ * @since 2016-Jun-07, 11:51
  */
-public final class CheeseMapper extends Mapper<Cheese, CheeseViewModel> {
+public final class CheeseViewModel {
+  private final String  name;
+  private final long    id;
+  private final String  type;
+  private       boolean isChecked;
 
-  @Override
-  public CheeseViewModel map(Cheese cheese) {
-    final CheeseViewModel model = new CheeseViewModel(cheese.getName(), cheese.getId(), cheese.getType()
-        .name());
-    model.setChecked(true);
-    return model;
+  CheeseViewModel(String name, long id, String type) {
+    this.name = name;
+    this.id = id;
+    this.type = type;
+  }
+
+  public long getId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public boolean isChecked() {
+    return isChecked;
+  }
+
+  public void setChecked(boolean checked) {
+    isChecked = checked;
+  }
+
+  public String getType() {
+    return type;
   }
 }

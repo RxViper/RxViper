@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.rxviper.sample.mainscreen.di;
+package com.dzaitsev.rxviper.sample.mainscreen;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import javax.inject.Scope;
+import com.dzaitsev.rxviper.ViewCallbacks;
+import com.dzaitsev.rxviper.sample.StartStop;
+import java.util.Collection;
+import com.dzaitsev.rxviper.sample.mainscreen.CheeseViewModel;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Dec-17, 15:37
+ * @since 2016-Jun-07, 10:35
  */
-@Scope
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@interface MainScreenScope {}
+interface MainViewCallbacks extends ViewCallbacks, StartStop {
+  void hideProgress();
+
+  void onNewCheeses(Collection<CheeseViewModel> cheeses);
+
+  void showError();
+
+  void showProgress();
+}

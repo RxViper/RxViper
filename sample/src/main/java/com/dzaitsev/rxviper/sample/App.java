@@ -16,7 +16,12 @@
 
 package com.dzaitsev.rxviper.sample;
 
+import android.app.Activity;
 import android.app.Application;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
+import javax.inject.Inject;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -24,17 +29,20 @@ import android.app.Application;
  * @author Dmytro Zaitsev
  * @since 2016-Jun-07, 12:22
  */
-public final class App extends Application {
-  private AppComponent component;
+public final class App extends Application implements HasActivityInjector {
+  @Inject DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
 
-  public AppComponent getComponent() {
-    return component;
+  @Override
+  public AndroidInjector<Activity> activityInjector() {
+    return dispatchingAndroidInjector;
   }
 
-  @Override public void onCreate() {
+  @Override
+  public void onCreate() {
     super.onCreate();
-    component = DaggerAppComponent.builder()
-        .appModule(new AppModule(this))
-        .build();
+    DaggerAppComponent.builder()
+        .app(this)
+        .build()
+        .inject(this);
   }
 }
