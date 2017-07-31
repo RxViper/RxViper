@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<template
+    format="5"
+    revision="1"
+    name="RxViper Module"
+    description="Creates new RxViper classes - ViewCallbacks, Interactor, Presenter and Router">
+
+    <category value="RxViper"/>
+
+    <parameter
+        id="name"
+        name="Module Name"
+        type="string"
+        constraints="class|unique|nonempty"
+        default="MyUseCase"
+        help="The name of the module that requires Viper"
+    />
+
+    <parameter
+       id="viewType"
+       name="View Type"
+       type="enum"
+       default="none">
+           <option id="activity">Activity</option>
+           <option id="fragment">Fragment</option>
+           <option id="view">View</option>
+           <option id="none">None</option>
+    </parameter>
+
+    <parameter
+        id="generateInteractor"
+        name="Generate Interactor"
+        type="boolean"
+        default="true"
+        help="If true, an Interactor file will be generated"
+    />
+
+    <parameter
+        id="generateRouter"
+        name="Generate Router"
+        type="boolean"
+        default="true"
+        help="If true, a Router will be generated"
+    />
+
+    <parameter
+        id="useInject"
+        name="Use @Inject annotation"
+        type="boolean"
+        default="false"
+        help="If true, an @Inject annotation will be used"
+    />
+
+    <parameter
+      id="supportKotlin"
+      name="Support Kotlin"
+      type="boolean"
+      default="false"
+      help="If true, Kotlin files will be created instead of Java"
+    />
+
+    <parameter
+        id="enableLambdas"
+        name="Enable lambda-expressions"
+        type="boolean"
+        default="false"
+        visibility="!supportKotlin"
+        help="If true, lambda-expressions will be used instead of anonymous classes"
+    />
+
+    <parameter
+        id="packageName"
+        name="Package name"
+        type="string"
+        constraints="package"
+        default="com.mycompany.myapp"
+    />
+
+    <thumbs>
+        <thumb>template_rxviper.png</thumb>
+    </thumbs>
+
+    <globals file="globals.xml.ftl" />
+
+    <execute file="recipe.xml.ftl" />
+
+</template>
