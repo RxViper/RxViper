@@ -18,6 +18,7 @@ package com.dzaitsev.rxviper.sample.mainscreen;
 
 import android.content.Intent;
 import com.dzaitsev.rxviper.sample.detailsscreen.DetailsActivity;
+import javax.inject.Provider;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -26,20 +27,20 @@ import com.dzaitsev.rxviper.sample.detailsscreen.DetailsActivity;
  * @since 2016-Dec-07, 22:54
  */
 final class MainRouterImpl implements MainRouter {
-  private final MainActivity  activity;
-  private final MainPresenter presenter;
+  private final Provider<MainActivity> activity;
+  private final MainPresenter          presenter;
 
-  MainRouterImpl(MainActivity activity, MainPresenter presenter) {
+  MainRouterImpl(Provider<MainActivity> activity, MainPresenter presenter) {
     this.activity = activity;
     this.presenter = presenter;
   }
 
   @Override
   public void navigateToDetails(CheeseViewModel model) {
-    activity.startActivity(new Intent(activity, DetailsActivity.class)
-    .putExtra(DetailsActivity.NAME, model.getName())
-    .putExtra(DetailsActivity.CHECKED, model.isChecked())
-    .putExtra(DetailsActivity.TYPE, model.getType()));
+    final MainActivity activity = this.activity.get();
+    activity.startActivity(new Intent(activity, DetailsActivity.class).putExtra(DetailsActivity.NAME, model.getName())
+        .putExtra(DetailsActivity.CHECKED, model.isChecked())
+        .putExtra(DetailsActivity.TYPE, model.getType()));
   }
 
   @Override

@@ -24,6 +24,7 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoSet;
+import javax.inject.Provider;
 import rx.Scheduler;
 
 /**
@@ -34,11 +35,9 @@ import rx.Scheduler;
  */
 @Module
 public abstract class MainScreenModule {
-  @Binds
-  abstract MainRouter bindMainRouter(MainRouterImpl router);
-
   @Provides
-  static MainRouterImpl provideMainRouterImpl(MainActivity activity, MainPresenter presenter) {
+  @MainScreenScope
+  static MainRouterImpl provideMainRouterImpl(Provider<MainActivity> activity, MainPresenter presenter) {
     return new MainRouterImpl(activity, presenter);
   }
 
@@ -60,6 +59,9 @@ public abstract class MainScreenModule {
   static MainPresenter provideMainPresenter(GetCheesesInteractor interactor) {
     return new MainPresenter(interactor);
   }
+
+  @Binds
+  abstract MainRouter bindMainRouter(MainRouterImpl router);
 
   @Binds
   @IntoSet
