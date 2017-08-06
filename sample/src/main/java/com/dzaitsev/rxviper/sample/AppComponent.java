@@ -28,10 +28,8 @@ import javax.inject.Singleton;
  * @since 2016-Jun-07, 12:21
  */
 @Singleton
-@Component(modules = { AppModule.class, AndroidSupportInjectionModule.class, BuildersModule.class })
+@Component(modules = { AndroidSupportInjectionModule.class, BuildersModule.class })
 interface AppComponent extends AndroidInjector<App> {
-  void inject(App app);
-
   @Component.Builder
   abstract class Builder extends AndroidInjector.Builder<App> {}
 }

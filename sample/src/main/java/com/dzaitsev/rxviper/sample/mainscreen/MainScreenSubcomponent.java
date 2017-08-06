@@ -16,7 +16,6 @@
 
 package com.dzaitsev.rxviper.sample.mainscreen;
 
-import com.dzaitsev.rxviper.sample.data.DataModule;
 import dagger.BindsInstance;
 import dagger.Subcomponent;
 import dagger.android.AndroidInjector;
@@ -28,7 +27,7 @@ import dagger.android.AndroidInjector;
  * @since 2016-Dec-08, 00:22
  */
 @MainScreenScope
-@Subcomponent(modules = { MainScreenModule.class, DataModule.class })
+@Subcomponent
 public interface MainScreenSubcomponent extends AndroidInjector<MainActivity> {
 
   @Subcomponent.Builder

@@ -61,9 +61,13 @@ public abstract class MainScreenModule {
   }
 
   @Binds
+  @MainScreenScope
   abstract MainRouter bindMainRouter(MainRouterImpl router);
 
-  @Binds
+  @Provides
   @IntoSet
-  abstract StartStop bindRouter(MainRouterImpl router);
+  @MainScreenScope
+  static StartStop bindRouter(MainRouterImpl router) {
+    return router;
+  }
 }

@@ -41,7 +41,6 @@ public final class App extends Application implements HasActivityInjector {
   public void onCreate() {
     super.onCreate();
     DaggerAppComponent.builder()
-        .app(this)
         .build()
         .inject(this);
   }
