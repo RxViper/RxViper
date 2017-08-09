@@ -20,6 +20,8 @@ import android.app.Application;
 import android.content.res.Resources;
 import dagger.Module;
 import dagger.Provides;
+import java.util.concurrent.Executor;
+import javax.inject.Singleton;
 import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -39,15 +41,23 @@ public final class AppModule {
   }
 
   @Provides
+  @Singleton
   @Job
   static Scheduler provideJobScheduler() {
     return Schedulers.computation();
   }
 
   @Provides
+  @Singleton
   @Main
   static Scheduler provideMainScheduler() {
     return AndroidSchedulers.mainThread();
+  }
+
+  @Provides
+  @Singleton
+  static Executor provideMainThreadExecutor() {
+    return LooperExecutor.mainThread();
   }
 
   @Provides

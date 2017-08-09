@@ -16,7 +16,7 @@
 
 package com.dzaitsev.rxviper.sample.mainscreen.presenter;
 
-import com.dzaitsev.rxviper.ViperPresenter;
+import com.dzaitsev.viper.ViperPresenter;
 import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseViewModel;
 import com.dzaitsev.rxviper.sample.mainscreen.domain.GetCheesesInteractor;
 import com.dzaitsev.rxviper.sample.mainscreen.router.MainRouter;

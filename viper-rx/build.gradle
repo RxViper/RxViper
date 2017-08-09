@@ -1,0 +1,21 @@
+apply plugin: 'java'
+
+compileJava {
+  sourceCompatibility = 1.7
+  targetCompatibility = 1.7
+}
+
+compileTestJava {
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile project(':viper-core')
+  compile libraries.rxJava
+  testCompile files(project(':viper-core').sourceSets.test.output)
+  testCompile libraries.junit
+  testCompile libraries.mockito
+  testCompile libraries.truth
+}

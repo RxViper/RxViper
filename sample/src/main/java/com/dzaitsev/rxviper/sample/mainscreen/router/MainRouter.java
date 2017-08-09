@@ -16,7 +16,7 @@
 
 package com.dzaitsev.rxviper.sample.mainscreen.router;
 
-import com.dzaitsev.rxviper.Router;
+import com.dzaitsev.viper.Router;
 import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseViewModel;
 
 /**

@@ -16,8 +16,8 @@
 
 package com.dzaitsev.rxviper.sample.mainscreen.domain;
 
-import com.dzaitsev.rxviper.Interactor;
 import com.dzaitsev.rxviper.sample.data.CheeseStorage;
+import com.dzaitsev.viper.Interactor;
 import java.util.Collection;
 import rx.Observable;
 import rx.Scheduler;

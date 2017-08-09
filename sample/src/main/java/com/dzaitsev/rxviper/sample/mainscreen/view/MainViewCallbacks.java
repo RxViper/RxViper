@@ -16,7 +16,7 @@
 
 package com.dzaitsev.rxviper.sample.mainscreen.view;
 
-import com.dzaitsev.rxviper.ViewCallbacks;
+import com.dzaitsev.viper.ViewCallbacks;
 import java.util.Collection;
 import com.dzaitsev.rxviper.sample.mainscreen.domain.CheeseViewModel;
 
