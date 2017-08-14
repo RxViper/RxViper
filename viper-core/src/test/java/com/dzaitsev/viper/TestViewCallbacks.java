@@ -22,6 +22,6 @@ package com.dzaitsev.viper;
  * @author Dmytro Zaitsev
  * @since 2016-Nov-19, 21:58
  */
-interface TestViewCallbacks extends com.dzaitsev.viper.ViewCallbacks {
+interface TestViewCallbacks extends ViewCallbacks {
   void doJob();
 }

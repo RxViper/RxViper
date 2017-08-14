@@ -19,6 +19,7 @@ package com.dzaitsev.viper;
 import com.dzaitsev.nullobject.NullObject;
 import java.lang.reflect.Proxy;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -174,5 +175,17 @@ public final class ViperPresenterTest {
 
     presenter.dropRouter(router);
     assertThat(nullObject.get()).isNull();
+  }
+
+  @Ignore("Probably should be moved to null-object")
+  @Test
+  public void shouldCreateProxyRouter() {
+    class TestRouterImpl implements TestRouter {}
+    final TestRouter router = new TestRouterImpl();
+    final TestRouter proxyRouter = NullObject.createProxy(router, ViperPresenter.class, TestViperPresenter.class, 1);
+    assertThat(NullObject.isWrapped(proxyRouter.getClass())).isTrue();
+    final NullObject handler = NullObject.unwrap(proxyRouter);
+    assertThat(handler).isInstanceOf(NullObject.class);
+    assertThat(handler.get()).isSameAs(router);
   }
 }

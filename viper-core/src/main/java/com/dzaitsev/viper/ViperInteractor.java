@@ -16,21 +16,25 @@
 
 package com.dzaitsev.viper;
 
-import com.dzaitsev.viper.callbacks.OnSuccess;
 import com.dzaitsev.viper.callbacks.OnFailure;
+import com.dzaitsev.viper.callbacks.OnSuccess;
 import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import static com.dzaitsev.viper.internal.Preconditions.requireNotNull;
 
 /**
  * @author Dmytro Zaitsev
  * @since 2017-Jul-16, 18:50
  */
 abstract class ViperInteractor<RequestModel, ResponseModel> extends Interactor<RequestModel, ResponseModel> {
-  private final Executor jobExecutor;
-  private final Executor resultExecutor;
+  @Nonnull private final Executor jobExecutor;
+  @Nonnull private final Executor resultExecutor;
 
-  protected ViperInteractor(Executor jobExecutor, Executor resultExecutor) {
+  protected ViperInteractor(@Nonnull Executor jobExecutor, @Nonnull Executor resultExecutor) {
+    requireNotNull(jobExecutor);
+    requireNotNull(resultExecutor);
     this.jobExecutor = jobExecutor;
     this.resultExecutor = resultExecutor;
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Dmytro Zaitsev
+ * Copyright 2017 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.viper;
+package com.dzaitsev.viper.internal;
 
-import com.dzaitsev.nullobject.NullObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -50,27 +49,6 @@ public final class PreconditionsTest {
   }
 
   @Test
-  public void shouldCreateProxyRouter() {
-    class TestRouterImpl implements TestRouter {}
-    final TestRouter router = new TestRouterImpl();
-    final TestRouter proxyRouter = NullObject.createProxy(router, ViperPresenter.class, TestViperPresenter.class, 1);
-    assertThat(NullObject.isWrapped(proxyRouter.getClass())).isTrue();
-    final NullObject handler = NullObject.unwrap(proxyRouter);
-    assertThat(handler).isInstanceOf(NullObject.class);
-    assertThat(handler.get()).isSameAs(router);
-  }
-
-  @Test
-  public void shouldCreateProxyView() {
-    final TestViewCallbacks view = new TestViewCallbacksImpl();
-    final TestViewCallbacks proxyView = NullObject.createProxy(view, Presenter.class, TestPresenter.class, 0);
-    assertThat(NullObject.isWrapped(proxyView.getClass())).isTrue();
-    final NullObject handler = NullObject.unwrap(proxyView);
-    assertThat(handler).isInstanceOf(NullObject.class);
-    assertThat(handler.get()).isSameAs(view);
-  }
-
-  @Test
   public void shouldNotCreateInstances() throws Throwable {
     try {
       final Constructor<?>[] constructors = Preconditions.class.getDeclaredConstructors();
@@ -85,13 +63,5 @@ public final class PreconditionsTest {
       thrown.expectMessage("No instances please!");
       throw cause;
     }
-  }
-
-  @Test
-  public void shouldReturnNullObject() {
-    final TestPresenter presenter = new TestPresenter(new TestViewCallbacksImpl());
-    final TestViewCallbacks proxyView = presenter.getView();
-    final NullObject<TestViewCallbacks> nullObject = NullObject.unwrap(proxyView);
-    assertThat(NullObject.unwrap(proxyView)).isSameAs(nullObject);
   }
 }

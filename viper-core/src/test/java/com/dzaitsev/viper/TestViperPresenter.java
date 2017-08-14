@@ -24,7 +24,7 @@ import static com.google.common.truth.Truth.assertThat;
  * @author Dmytro Zaitsev
  * @since 2016-Nov-14, 02:08
  */
-final class TestViperPresenter extends com.dzaitsev.viper.ViperPresenter<TestViewCallbacks, TestRouter> {
+final class TestViperPresenter extends ViperPresenter<TestViewCallbacks, TestRouter> {
   boolean dummy = true;
 
   TestViperPresenter(TestViewCallbacks view, TestRouter router) {

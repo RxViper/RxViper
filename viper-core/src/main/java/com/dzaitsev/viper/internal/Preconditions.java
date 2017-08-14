@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Dmytro Zaitsev
+ * Copyright 2017 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.viper;
+package com.dzaitsev.viper.internal;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
- * @since 2016-Nov-20, 14:16
+ * @since 2016-May-14, 15:26
  */
+public final class Preconditions {
 
-final class TestViewCallbacksImpl implements TestViewCallbacks {
-  @Override
-  public void doJob() {
-    // no op
+  private Preconditions() {
+    throw new AssertionError("No instances please!");
+  }
+
+  public static <T> T requireNotNull(T arg) {
+    if (arg == null) {
+      throw new IllegalArgumentException("Argument can not be null");
+    }
+    return arg;
   }
 }

@@ -16,6 +16,7 @@
 
 package com.dzaitsev.viper;
 
+import com.dzaitsev.viper.internal.Preconditions;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.annotation.Nonnull;

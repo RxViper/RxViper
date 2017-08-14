@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 
 import static com.dzaitsev.nullobject.NullObject.createProxy;
 import static com.dzaitsev.nullobject.NullObject.unwrap;
-import static com.dzaitsev.viper.Preconditions.requireNotNull;
+import static com.dzaitsev.viper.internal.Preconditions.requireNotNull;
 
 /**
  * Contains view logic for preparing content for display (as received from the {@link Interactor}) and for reacting to user inputs (by

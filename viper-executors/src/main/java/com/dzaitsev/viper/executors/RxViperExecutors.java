@@ -16,7 +16,7 @@
 
 package com.dzaitsev.viper.executors;
 
-import com.dzaitsev.viper.Preconditions;
+import com.dzaitsev.viper.internal.Preconditions;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;

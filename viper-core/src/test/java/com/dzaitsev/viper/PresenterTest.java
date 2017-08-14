@@ -19,6 +19,7 @@ package com.dzaitsev.viper;
 import com.dzaitsev.nullobject.NullObject;
 import java.lang.reflect.Proxy;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -164,5 +165,24 @@ public final class PresenterTest {
 
     presenter.dropView(view);
     assertThat(nullObject.get()).isNull();
+  }
+
+  @Ignore("Probably should be moved to null-object")
+  @Test
+  public void shouldCreateProxyView() {
+    final TestViewCallbacks proxyView = NullObject.createProxy(view, Presenter.class, TestPresenter.class, 0);
+    assertThat(NullObject.isWrapped(proxyView.getClass())).isTrue();
+    final NullObject handler = NullObject.unwrap(proxyView);
+    assertThat(handler).isInstanceOf(NullObject.class);
+    assertThat(handler.get()).isSameAs(view);
+  }
+
+  @Ignore("Probably should be moved to null-object")
+  @Test
+  public void shouldReturnNullObject() {
+    final TestPresenter presenter = new TestPresenter(view);
+    final TestViewCallbacks proxyView = presenter.getView();
+    final NullObject<TestViewCallbacks> nullObject = NullObject.unwrap(proxyView);
+    assertThat(NullObject.unwrap(proxyView)).isSameAs(nullObject);
   }
 }

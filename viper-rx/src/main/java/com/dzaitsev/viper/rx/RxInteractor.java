@@ -28,7 +28,7 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-import static com.dzaitsev.viper.Preconditions.requireNotNull;
+import static com.dzaitsev.viper.internal.Preconditions.requireNotNull;
 
 public abstract class RxInteractor<RequestModel, ResponseModel> extends Interactor<RequestModel, ResponseModel> implements Subscription {
   @Nonnull private final Scheduler             subscribeScheduler;

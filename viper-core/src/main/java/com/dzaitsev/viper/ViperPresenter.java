@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 
 import static com.dzaitsev.nullobject.NullObject.createProxy;
 import static com.dzaitsev.nullobject.NullObject.unwrap;
-import static com.dzaitsev.viper.Preconditions.requireNotNull;
+import static com.dzaitsev.viper.internal.Preconditions.requireNotNull;
 
 /**
  * Contains view logic for preparing content for display (as received from the {@link Interactor}) and for reacting to user inputs (by
@@ -32,7 +32,7 @@ import static com.dzaitsev.viper.Preconditions.requireNotNull;
  * @author Dmytro Zaitsev
  * @since 0.10.0
  */
-public abstract class ViperPresenter<V extends ViewCallbacks, R extends com.dzaitsev.viper.Router> extends Presenter<V> {
+public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> extends Presenter<V> {
   @Nonnull private final R routerProxy = createProxy(null, ViperPresenter.class, getClass(), 1);
 
   /**

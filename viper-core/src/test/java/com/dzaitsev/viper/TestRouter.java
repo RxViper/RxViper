@@ -22,4 +22,4 @@ package com.dzaitsev.viper;
  * @author Dmytro Zaitsev
  * @since 2016-Nov-19, 22:00
  */
-interface TestRouter extends com.dzaitsev.viper.Router {}
+interface TestRouter extends Router {}

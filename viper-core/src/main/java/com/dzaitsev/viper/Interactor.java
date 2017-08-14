@@ -21,7 +21,7 @@ import com.dzaitsev.viper.callbacks.OnSuccess;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.dzaitsev.viper.Preconditions.requireNotNull;
+import static com.dzaitsev.viper.internal.Preconditions.requireNotNull;
 
 /**
  * Contains the business logic as specified by a use case
