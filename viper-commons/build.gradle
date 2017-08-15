@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.viper.internal;
+apply plugin: 'java-library'
 
-/**
- * ~ ~ ~ ~ Description ~ ~ ~ ~
- *
- * @author Dmytro Zaitsev
- * @since 2016-May-14, 15:26
- */
-public final class Preconditions {
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
 
-  private Preconditions() {
-    throw new AssertionError("No instances please!");
-  }
+dependencies {
+  compile libraries.jsr305
 
-  public static <T> T requireNotNull(T arg) {
-    if (arg == null) {
-      throw new IllegalArgumentException("Argument can not be null");
-    }
-    return arg;
-  }
+  testCompile libraries.junit
+  testCompile libraries.truth
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Dmytro Zaitsev
+ * Copyright 2017 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-apply plugin: 'java-library'
 
-compileJava {
-  sourceCompatibility = 1.7
-  targetCompatibility = 1.7
+package com.dzaitsev.viper.executors;
+
+import java.util.concurrent.Executor;
+import javax.annotation.Nonnull;
+
+import static com.dzaitsev.viper.Preconditions.requireNotNull;
+
+/**
+ * ~ ~ ~ ~ Description ~ ~ ~ ~
+ *
+ * @author Dmytro Zaitsev
+ * @since 2017-Aug-15, 13:27
+ */
+class InstantExecutor implements Executor {
+  @Override
+  public void execute(@Nonnull Runnable runnable) {
+    requireNotNull(runnable);
+    runnable.run();
+  }
 }
-
-compileTestJava {
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
-}
-
-dependencies {
-  compile libraries.jsr305
-  compile project(':viper-commons')
-  compile project(':null-object')
-
-  testCompile files(project(':viper-commons').sourceSets.test.output)
-  testCompile libraries.junit
-  testCompile libraries.mockito
-  testCompile libraries.truth
-}
-
-apply from: rootProject.file('publish.gradle')

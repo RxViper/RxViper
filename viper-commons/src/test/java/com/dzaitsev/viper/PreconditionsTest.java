@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.viper.internal;
+package com.dzaitsev.viper;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

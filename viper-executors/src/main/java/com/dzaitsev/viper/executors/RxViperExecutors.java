@@ -16,11 +16,7 @@
 
 package com.dzaitsev.viper.executors;
 
-import com.dzaitsev.viper.internal.Preconditions;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 
@@ -32,56 +28,33 @@ import javax.annotation.Nonnull;
  */
 public final class RxViperExecutors {
   private static final AtomicReference<RxViperExecutors> SELF = new AtomicReference<>();
-  private final Executor instantExecutor;
-  private final Executor alternateExecutor;
+  @Nonnull private final Executor instantExecutor;
+  @Nonnull private final Executor alternateExecutor;
 
+  @Nonnull
   public static Executor instant() {
     return getSelf().instantExecutor;
   }
 
+  @Nonnull
   public static Executor alternate() {
     return getSelf().alternateExecutor;
   }
 
   private RxViperExecutors() {
-    instantExecutor = new Executor() {
-      @Override
-      public void execute(@Nonnull Runnable runnable) {
-        Preconditions.requireNotNull(runnable);
-        runnable.run();
-      }
-    };
-
-    alternateExecutor = new Executor() {
-      private final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(4);
-      private final AtomicInteger counter = new AtomicInteger();
-
-      @Override
-      public void execute(@Nonnull Runnable runnable) {
-        Preconditions.requireNotNull(runnable);
-        counter.incrementAndGet();
-        queue.add(runnable);
-        if (counter.getAndIncrement() == 0) {
-          do {
-            final Runnable head = queue.poll();
-            if (head != null) {
-              head.run();
-            }
-          } while (counter.decrementAndGet() > 0);
-        }
-      }
-    };
+    instantExecutor = new InstantExecutor();
+    alternateExecutor = new AlternateExecutor();
   }
 
   private static RxViperExecutors getSelf() {
-    for (; ; ) {
-      RxViperExecutors current = SELF.get();
-      if (current != null) {
-        return current;
+    while (true) {
+      RxViperExecutors self = SELF.get();
+      if (self != null) {
+        return self;
       }
-      current = new RxViperExecutors();
-      if (SELF.compareAndSet(null, current)) {
-        return current;
+      self = new RxViperExecutors();
+      if (SELF.compareAndSet(null, self)) {
+        return self;
       }
     }
   }

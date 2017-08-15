@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include ':viper-core'
+include ':viper-core', ':viper-commons'
 include ':viper-executors'
 include ':viper-rx'
 include ':viper-rx2'

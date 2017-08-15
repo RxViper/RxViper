@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Dmytro Zaitsev
+ * Copyright 2017 Dmytro Zaitsev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-apply plugin: 'java-library'
 
-compileJava {
-  sourceCompatibility = 1.7
-  targetCompatibility = 1.7
+package com.dzaitsev.viper;
+
+/**
+ * ~ ~ ~ ~ Description ~ ~ ~ ~
+ *
+ * @author Dmytro Zaitsev
+ * @since 2016-May-14, 15:26
+ */
+public final class Preconditions {
+
+  private Preconditions() {
+    throw new AssertionError("No instances please!");
+  }
+
+  public static <T> T requireNotNull(T arg) {
+    if (arg == null) {
+      throw new IllegalArgumentException("Argument can not be null");
+    }
+    return arg;
+  }
 }
-
-compileTestJava {
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
-}
-
-dependencies {
-  compile libraries.jsr305
-  compile project(':viper-commons')
-  compile project(':null-object')
-
-  testCompile files(project(':viper-commons').sourceSets.test.output)
-  testCompile libraries.junit
-  testCompile libraries.mockito
-  testCompile libraries.truth
-}
-
-apply from: rootProject.file('publish.gradle')

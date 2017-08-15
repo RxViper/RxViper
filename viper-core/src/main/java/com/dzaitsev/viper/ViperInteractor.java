@@ -22,7 +22,7 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.dzaitsev.viper.internal.Preconditions.requireNotNull;
+import static com.dzaitsev.viper.Preconditions.requireNotNull;
 
 /**
  * @author Dmytro Zaitsev

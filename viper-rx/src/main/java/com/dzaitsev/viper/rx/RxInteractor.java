@@ -28,7 +28,7 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-import static com.dzaitsev.viper.internal.Preconditions.requireNotNull;
+import static com.dzaitsev.viper.Preconditions.requireNotNull;
 
 public abstract class RxInteractor<RequestModel, ResponseModel> extends Interactor<RequestModel, ResponseModel> implements Subscription {
   @Nonnull private final Scheduler             subscribeScheduler;
@@ -196,8 +196,10 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
   protected abstract Observable<ResponseModel> createObservable(@Nullable RequestModel requestModel);
 
   @Override
-  protected void execInternal(@Nonnull OnSuccess<? super ResponseModel> onSuccess, @Nonnull OnFailure onFailure,
+  protected final void execInternal(@Nonnull OnSuccess<? super ResponseModel> onSuccess, @Nonnull OnFailure onFailure,
       @Nullable RequestModel model) {
-
+    requireNotNull(onSuccess);
+    requireNotNull(onFailure);
+    execute(onSuccess, onFailure, OnComplete.EMPTY, model);
   }
 }

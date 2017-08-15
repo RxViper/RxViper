@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static com.dzaitsev.viper.TestUtil.checkIllegalArgumentException;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -127,17 +128,17 @@ public final class PresenterTest {
 
   @Test
   public void takenViewShouldNotBeNull() {
-    TestUtil.checkIllegalArgumentException(() -> presenter.takeView(null));
+    checkIllegalArgumentException(() -> presenter.takeView(null));
   }
 
   @Test
   public void droppedViewShouldNotBeNull() {
-    TestUtil.checkIllegalArgumentException(() -> presenter.dropView(null));
+    checkIllegalArgumentException(() -> presenter.dropView(null));
   }
 
   @Test
   public void constructorViewShouldNotBeNull() {
-    TestUtil.checkIllegalArgumentException(() -> new TestPresenter(null));
+    checkIllegalArgumentException(() -> new TestPresenter(null));
   }
 
   @Test

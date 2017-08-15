@@ -21,7 +21,7 @@ import com.dzaitsev.viper.callbacks.OnSuccess;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.dzaitsev.viper.internal.Preconditions.requireNotNull;
+import static com.dzaitsev.viper.Preconditions.requireNotNull;
 
 /**
  * Contains the business logic as specified by a use case
@@ -64,8 +64,6 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    *
    * @param onSuccess
    *     the {@code OnSuccess<ResponseModel>} you have designed to accept emissions from the Observable
-   * @param requestModel
-   *     parameter which will be passed to {@link #createObservable(Object)}.
    *
    * @throws IllegalArgumentException
    *     if {@code onSuccess} is null
@@ -101,8 +99,6 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    *     the {@code OnSuccess<ResponseModel>} you have designed to accept emissions from the Observable
    * @param onFailure
    *     the {@code OnFailure} you have designed to accept any error notification from the Observable
-   * @param requestModel
-   *     parameter which will be passed to {@link #createObservable(Object)}.
    *
    * @throws IllegalArgumentException
    *     if {@code onSuccess} is null, or if {@code onFailure} is null

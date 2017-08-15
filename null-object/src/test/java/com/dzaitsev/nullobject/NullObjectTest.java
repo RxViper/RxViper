@@ -38,7 +38,7 @@ import static org.mockito.Mockito.verify;
  * @since 2016-Nov-20, 11:15
  */
 public final class NullObjectTest {
-  @Rule ExpectedException thrown = ExpectedException.none();
+  @Rule public ExpectedException thrown = ExpectedException.none();
   private Target target;
 
   @Before
