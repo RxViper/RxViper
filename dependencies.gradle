@@ -38,7 +38,7 @@ ext {
       support          : '25.0.0',
       constraintLayout : '1.0.0-beta4',
       // Kotlin
-      kotlin           : '1.1.3'
+      kotlin           : '1.1.4'
   ]
 
   gradlePlugins = [
