@@ -31,27 +31,27 @@ import static com.google.common.truth.Truth.assertThat;
  * @author Dmytro Zaitsev
  * @since 2016-Nov-04, 01:08
  */
-public final class PreconditionsTest {
+public final class IntrinsicsTest {
   @Rule public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void requiredArgShouldBeTheSame() {
     final Object actual = new Object();
-    final Object expected = Preconditions.requireNotNull(actual);
+    final Object expected = Intrinsics.requireNotNull(actual, "actual");
     assertThat(actual).isSameAs(expected);
   }
 
   @Test
   public void requiredArgShouldNotBeNull() {
     thrown.expect(IllegalArgumentException.class);
-    thrown.expectMessage("Argument can not be null");
-    Preconditions.requireNotNull(null);
+    thrown.expectMessage("Argument must not be null");
+    Intrinsics.requireNotNull(null, "Argument");
   }
 
   @Test
   public void shouldNotCreateInstances() throws Throwable {
     try {
-      final Constructor<?>[] constructors = Preconditions.class.getDeclaredConstructors();
+      final Constructor<?>[] constructors = Intrinsics.class.getDeclaredConstructors();
       assertThat(constructors).hasLength(1);
       final Constructor<?> constructor = constructors[0];
       assertThat(Modifier.isPrivate(constructor.getModifiers())).isTrue();

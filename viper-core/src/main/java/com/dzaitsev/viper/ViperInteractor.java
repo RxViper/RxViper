@@ -22,7 +22,7 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.dzaitsev.viper.Preconditions.requireNotNull;
+import static com.dzaitsev.viper.Intrinsics.requireNotNull;
 
 /**
  * @author Dmytro Zaitsev
@@ -33,8 +33,8 @@ abstract class ViperInteractor<RequestModel, ResponseModel> extends Interactor<R
   @Nonnull private final Executor resultExecutor;
 
   protected ViperInteractor(@Nonnull Executor jobExecutor, @Nonnull Executor resultExecutor) {
-    requireNotNull(jobExecutor);
-    requireNotNull(resultExecutor);
+    requireNotNull(jobExecutor, "jobExecutor");
+    requireNotNull(resultExecutor, "resultExecutor");
     this.jobExecutor = jobExecutor;
     this.resultExecutor = resultExecutor;
   }

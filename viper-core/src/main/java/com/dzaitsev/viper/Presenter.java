@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 
 import static com.dzaitsev.nullobject.NullObject.createProxy;
 import static com.dzaitsev.nullobject.NullObject.unwrap;
-import static com.dzaitsev.viper.Preconditions.requireNotNull;
+import static com.dzaitsev.viper.Intrinsics.requireNotNull;
 
 /**
  * Contains view logic for preparing content for display (as received from the {@link Interactor}) and for reacting to user inputs (by
@@ -45,7 +45,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    */
   @SuppressWarnings("WeakerAccess")
   protected Presenter(@Nonnull V view) {
-    requireNotNull(view);
+    requireNotNull(view, "view");
     unwrap(viewProxy).set(view);
   }
 
@@ -72,7 +72,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    */
   @SuppressWarnings("WeakerAccess")
   public final void dropView(@Nonnull V view) {
-    requireNotNull(view);
+    requireNotNull(view, "view");
 
     if (currentView() == view) {
       onDropView(view);
@@ -106,7 +106,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    */
   @SuppressWarnings("WeakerAccess")
   public final void takeView(@Nonnull V view) {
-    requireNotNull(view);
+    requireNotNull(view, "view");
 
     final V currentView = currentView();
     if (currentView != view) {

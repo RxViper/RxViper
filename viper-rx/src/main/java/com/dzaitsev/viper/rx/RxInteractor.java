@@ -28,7 +28,7 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-import static com.dzaitsev.viper.Preconditions.requireNotNull;
+import static com.dzaitsev.viper.Intrinsics.requireNotNull;
 
 public abstract class RxInteractor<RequestModel, ResponseModel> extends Interactor<RequestModel, ResponseModel> implements Subscription {
   @Nonnull private final Scheduler             subscribeScheduler;
@@ -45,8 +45,8 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    */
   @SuppressWarnings("WeakerAccess")
   protected RxInteractor(@Nonnull Scheduler subscribeScheduler, @Nonnull Scheduler observeScheduler) {
-    requireNotNull(subscribeScheduler);
-    requireNotNull(observeScheduler);
+    requireNotNull(subscribeScheduler, "subscribeScheduler");
+    requireNotNull(observeScheduler, "observeScheduler");
 
     this.subscribeScheduler = subscribeScheduler;
     this.observeScheduler = observeScheduler;
@@ -74,7 +74,7 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    */
   @SuppressWarnings("WeakerAccess")
   public final void execute(@Nonnull Subscriber<? super ResponseModel> subscriber, @Nullable RequestModel requestModel) {
-    requireNotNull(subscriber);
+    requireNotNull(subscriber, "subscriber");
 
     if (!(subscriber instanceof RxViperSubscriber)) {
       subscriber = RxViperSubscriber.of(subscriber);
@@ -138,9 +138,9 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    */
   public final void execute(@Nonnull OnSuccess<? super ResponseModel> onSuccess, @Nonnull OnFailure onFailure,
       @Nonnull OnComplete onComplete, @Nullable RequestModel requestModel) {
-    requireNotNull(onSuccess);
-    requireNotNull(onFailure);
-    requireNotNull(onComplete);
+    requireNotNull(onSuccess, "onSuccess");
+    requireNotNull(onFailure, "onFailure");
+    requireNotNull(onComplete, "onComplete");
 
     execute(RxViperSubscriber.of(onSuccess, onFailure, onComplete), requestModel);
   }
@@ -198,8 +198,8 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
   @Override
   protected final void execInternal(@Nonnull OnSuccess<? super ResponseModel> onSuccess, @Nonnull OnFailure onFailure,
       @Nullable RequestModel model) {
-    requireNotNull(onSuccess);
-    requireNotNull(onFailure);
+    requireNotNull(onSuccess, "onSuccess");
+    requireNotNull(onFailure, "onFailure");
     execute(onSuccess, onFailure, OnComplete.EMPTY, model);
   }
 }

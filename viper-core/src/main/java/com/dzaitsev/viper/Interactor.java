@@ -21,7 +21,7 @@ import com.dzaitsev.viper.callbacks.OnSuccess;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.dzaitsev.viper.Preconditions.requireNotNull;
+import static com.dzaitsev.viper.Intrinsics.requireNotNull;
 
 /**
  * Contains the business logic as specified by a use case
@@ -106,8 +106,8 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    */
   public final void execute(@Nonnull OnSuccess<? super ResponseModel> onSuccess, @Nonnull OnFailure onFailure,
       @Nullable RequestModel requestModel) {
-    requireNotNull(onSuccess);
-    requireNotNull(onFailure);
+    requireNotNull(onSuccess, "onSuccess");
+    requireNotNull(onFailure, "onFailure");
 
     execInternal(onSuccess, onFailure, requestModel);
   }

@@ -16,22 +16,25 @@
 
 package com.dzaitsev.viper;
 
+import static java.lang.String.format;
+import static java.lang.String.valueOf;
+
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
  *
  * @author Dmytro Zaitsev
  * @since 2016-May-14, 15:26
  */
-public final class Preconditions {
+public final class Intrinsics {
 
-  private Preconditions() {
+  private Intrinsics() {
     throw new AssertionError("No instances please!");
   }
 
-  public static <T> T requireNotNull(T arg) {
-    if (arg == null) {
-      throw new IllegalArgumentException("Argument can not be null");
+  public static <T> T requireNotNull(T obj, Object expression) {
+    if (obj == null) {
+      throw new IllegalArgumentException(format("%s must not be null", valueOf(expression)));
     }
-    return arg;
+    return obj;
   }
 }

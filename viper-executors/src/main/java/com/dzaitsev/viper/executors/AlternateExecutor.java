@@ -22,7 +22,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnull;
 
-import static com.dzaitsev.viper.Preconditions.requireNotNull;
+import static com.dzaitsev.viper.Intrinsics.requireNotNull;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -36,7 +36,7 @@ class AlternateExecutor implements Executor {
 
   @Override
   public void execute(@Nonnull Runnable runnable) {
-    requireNotNull(runnable);
+    requireNotNull(runnable, "runnable");
     counter.incrementAndGet();
     queue.add(runnable);
     if (counter.getAndIncrement() == 0) {
