@@ -13,12 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include ':viper-core', ':viper-commons'
-include ':viper-executors'
-include ':viper-rx1'
-include ':viper-rx2'
-//include ':viper-executors-android'
-include ':null-object'
-//include ':viper-gradle-plugin'
-//include ':sample'
-include ':viper-rx1-coroutines'
+
+apply plugin: 'kotlin'
+
+kotlin {
+  experimental {
+    coroutines 'enable'
+  }
+}
+
+dependencies {
+  compile project(':viper-rx1')
+  compile libraries.kotlinStdLib
+  compile libraries.kotlinxCoroutinesCore
+}

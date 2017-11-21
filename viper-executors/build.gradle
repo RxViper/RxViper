@@ -6,5 +6,4 @@ targetCompatibility = "1.7"
 dependencies {
   compile libraries.jsr305
   compile project(':viper-commons')
-  compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.18'
 }
