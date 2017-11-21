@@ -26,8 +26,8 @@ import javax.annotation.Nonnull;
  * @author Dmytro Zaitsev
  * @since 2017-Aug-07, 16:53
  */
-public final class RxViperExecutors {
-  private static final AtomicReference<RxViperExecutors> SELF = new AtomicReference<>();
+public final class ViperExecutors {
+  private static final AtomicReference<ViperExecutors> SELF = new AtomicReference<>();
   @Nonnull private final Executor instantExecutor;
   @Nonnull private final Executor alternateExecutor;
 
@@ -41,18 +41,19 @@ public final class RxViperExecutors {
     return getSelf().alternateExecutor;
   }
 
-  private RxViperExecutors() {
+  private ViperExecutors() {
     instantExecutor = new InstantExecutor();
     alternateExecutor = new AlternateExecutor();
   }
 
-  private static RxViperExecutors getSelf() {
+  @Nonnull
+  private static ViperExecutors getSelf() {
     while (true) {
-      RxViperExecutors self = SELF.get();
+      ViperExecutors self = SELF.get();
       if (self != null) {
         return self;
       }
-      self = new RxViperExecutors();
+      self = new ViperExecutors();
       if (SELF.compareAndSet(null, self)) {
         return self;
       }

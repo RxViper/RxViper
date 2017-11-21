@@ -18,7 +18,6 @@ package com.dzaitsev.viper;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import javax.annotation.Nonnull;
 
 import static com.dzaitsev.viper.Intrinsics.requireNotNull;
 
@@ -57,7 +56,7 @@ public abstract class Mapper<From, To> {
    *
    * @since 0.1.0
    */
-  public Collection<To> map(@Nonnull Collection<From> entities) {
+  public Collection<To> map(Collection<From> entities) {
     requireNotNull(entities, "entities");
     final Collection<To> result = new ArrayList<>(entities.size());
     //noinspection Convert2streamapi

@@ -16,7 +16,8 @@
 
 package com.dzaitsev.viper;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNullableByDefault;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -24,19 +25,22 @@ import javax.annotation.Nullable;
  * @author Dmytro Zaitsev
  * @since 2017-Aug-07, 16:58
  */
+@ParametersAreNullableByDefault
 final class Result<T> {
-  @Nullable final T         value;
-  @Nullable final Throwable throwable;
+  final T         value;
+  final Throwable throwable;
 
-  private Result(@Nullable T value, @Nullable Throwable throwable) {
+  private Result(T value, Throwable throwable) {
     this.value = value;
     this.throwable = throwable;
   }
 
+  @Nonnull
   static <T> Result<T> success(T value) {
     return new Result<>(value, null);
   }
 
+  @Nonnull
   static <T> Result<T> error(Throwable throwable) {
     return new Result<>(null, throwable);
   }

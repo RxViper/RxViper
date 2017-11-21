@@ -18,7 +18,6 @@ package com.dzaitsev.viper;
 
 import com.dzaitsev.viper.callbacks.OnFailure;
 import com.dzaitsev.viper.callbacks.OnSuccess;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.dzaitsev.viper.Intrinsics.requireNotNull;
@@ -55,7 +54,7 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    * @see #execute(OnSuccess, Object)
    * @since 0.4.0
    */
-  public final void execute(@Nonnull OnSuccess<? super ResponseModel> onSuccess) {
+  public final void execute(OnSuccess<? super ResponseModel> onSuccess) {
     execute(onSuccess, ON_FAILURE_NOT_IMPLEMENTED, null);
   }
 
@@ -71,7 +70,7 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    *     if the Observable calls {@code onFailure}
    * @since 0.4.0
    */
-  public final void execute(@Nonnull OnSuccess<? super ResponseModel> onSuccess, @Nullable RequestModel requestModel) {
+  public final void execute(OnSuccess<? super ResponseModel> onSuccess, @Nullable RequestModel requestModel) {
     execute(onSuccess, ON_FAILURE_NOT_IMPLEMENTED, requestModel);
   }
 
@@ -88,7 +87,7 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    * @see #execute(OnSuccess, Object)
    * @since 0.4.0
    */
-  public final void execute(@Nonnull OnSuccess<? super ResponseModel> onSuccess, @Nonnull OnFailure onFailure) {
+  public final void execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure) {
     execute(onSuccess, onFailure, null);
   }
 
@@ -104,14 +103,13 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    *     if {@code onSuccess} is null, or if {@code onFailure} is null
    * @since 0.4.0
    */
-  public final void execute(@Nonnull OnSuccess<? super ResponseModel> onSuccess, @Nonnull OnFailure onFailure,
-      @Nullable RequestModel requestModel) {
+  public final void execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, @Nullable RequestModel requestModel) {
     requireNotNull(onSuccess, "onSuccess");
     requireNotNull(onFailure, "onFailure");
 
     execInternal(onSuccess, onFailure, requestModel);
   }
 
-  protected abstract void execInternal(@Nonnull OnSuccess<? super ResponseModel> onSuccess, @Nonnull OnFailure onFailure,
+  protected abstract void execInternal(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure,
       @Nullable RequestModel requestModel);
 }

@@ -19,7 +19,6 @@ package com.dzaitsev.viper.rx;
 import com.dzaitsev.viper.callbacks.OnComplete;
 import com.dzaitsev.viper.callbacks.OnFailure;
 import com.dzaitsev.viper.callbacks.OnSuccess;
-import javax.annotation.Nonnull;
 import rx.Subscriber;
 import rx.functions.Action0;
 import rx.functions.Action1;
@@ -29,12 +28,11 @@ import rx.observers.SafeSubscriber;
 final class RxViperSubscriber<I> extends SafeSubscriber<I> {
   private boolean isDone;
 
-  private RxViperSubscriber(@Nonnull Subscriber<? super I> subscriber) {
+  private RxViperSubscriber(Subscriber<? super I> subscriber) {
     super(subscriber);
   }
 
-  static <I> RxViperSubscriber<I> of(@Nonnull final OnSuccess<? super I> onSuccess, @Nonnull final OnFailure onFailure,
-      @Nonnull final OnComplete onComplete) {
+  static <I> RxViperSubscriber<I> of(final OnSuccess<? super I> onSuccess, final OnFailure onFailure, final OnComplete onComplete) {
     return new RxViperSubscriber<>(new ActionSubscriber<>(new Action1<I>() {
       @Override
       public void call(I item) {
@@ -53,7 +51,7 @@ final class RxViperSubscriber<I> extends SafeSubscriber<I> {
     }));
   }
 
-  static <I> RxViperSubscriber<I> of(@Nonnull Subscriber<? super I> subscriber) {
+  static <I> RxViperSubscriber<I> of(Subscriber<? super I> subscriber) {
     return new RxViperSubscriber<>(subscriber);
   }
 

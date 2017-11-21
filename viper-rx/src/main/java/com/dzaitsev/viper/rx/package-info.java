@@ -14,22 +14,5 @@
  * limitations under the License.
  */
 
-package com.dzaitsev.viper.executors;
-
-import java.util.concurrent.Executor;
-
-import static com.dzaitsev.viper.Intrinsics.requireNotNull;
-
-/**
- * ~ ~ ~ ~ Description ~ ~ ~ ~
- *
- * @author Dmytro Zaitsev
- * @since 2017-Aug-15, 13:27
- */
-class InstantExecutor implements Executor {
-  @Override
-  public void execute(Runnable runnable) {
-    requireNotNull(runnable, "runnable");
-    runnable.run();
-  }
-}
+@javax.annotation.ParametersAreNonnullByDefault
+package com.dzaitsev.viper.rx;

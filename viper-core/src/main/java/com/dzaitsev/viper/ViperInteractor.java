@@ -32,7 +32,7 @@ abstract class ViperInteractor<RequestModel, ResponseModel> extends Interactor<R
   @Nonnull private final Executor jobExecutor;
   @Nonnull private final Executor resultExecutor;
 
-  protected ViperInteractor(@Nonnull Executor jobExecutor, @Nonnull Executor resultExecutor) {
+  protected ViperInteractor(Executor jobExecutor, Executor resultExecutor) {
     requireNotNull(jobExecutor, "jobExecutor");
     requireNotNull(resultExecutor, "resultExecutor");
     this.jobExecutor = jobExecutor;
@@ -40,7 +40,7 @@ abstract class ViperInteractor<RequestModel, ResponseModel> extends Interactor<R
   }
 
   @Override
-  protected final void execInternal(@Nonnull final OnSuccess<? super ResponseModel> onSuccess, @Nonnull final OnFailure onFailure,
+  protected final void execInternal(final OnSuccess<? super ResponseModel> onSuccess, final OnFailure onFailure,
       @Nullable final RequestModel requestModel) {
     jobExecutor.execute(new Runnable() {
       @Override

@@ -44,7 +44,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.11.0
    */
   @SuppressWarnings("WeakerAccess")
-  protected Presenter(@Nonnull V view) {
+  protected Presenter(V view) {
     requireNotNull(view, "view");
     unwrap(viewProxy).set(view);
   }
@@ -71,7 +71,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.1.0
    */
   @SuppressWarnings("WeakerAccess")
-  public final void dropView(@Nonnull V view) {
+  public final void dropView(V view) {
     requireNotNull(view, "view");
 
     if (currentView() == view) {
@@ -105,7 +105,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.1.0
    */
   @SuppressWarnings("WeakerAccess")
-  public final void takeView(@Nonnull V view) {
+  public final void takeView(V view) {
     requireNotNull(view, "view");
 
     final V currentView = currentView();
@@ -143,7 +143,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.7.0
    */
   @SuppressWarnings("WeakerAccess")
-  protected void onDropView(@SuppressWarnings("NullableProblems") @Nonnull V view) {
+  protected void onDropView(V view) {
   }
 
   /**
@@ -156,7 +156,7 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @since 0.6.0
    */
   @SuppressWarnings("WeakerAccess")
-  protected void onTakeView(@SuppressWarnings("NullableProblems") @Nonnull V view) {
+  protected void onTakeView(V view) {
   }
 
   @Nullable

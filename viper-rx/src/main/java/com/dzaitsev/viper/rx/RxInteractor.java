@@ -44,7 +44,7 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    * @since 0.1.0
    */
   @SuppressWarnings("WeakerAccess")
-  protected RxInteractor(@Nonnull Scheduler subscribeScheduler, @Nonnull Scheduler observeScheduler) {
+  protected RxInteractor(Scheduler subscribeScheduler, Scheduler observeScheduler) {
     requireNotNull(subscribeScheduler, "subscribeScheduler");
     requireNotNull(observeScheduler, "observeScheduler");
 
@@ -73,7 +73,7 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    * @since 0.1.0
    */
   @SuppressWarnings("WeakerAccess")
-  public final void execute(@Nonnull Subscriber<? super ResponseModel> subscriber, @Nullable RequestModel requestModel) {
+  public final void execute(Subscriber<? super ResponseModel> subscriber, @Nullable RequestModel requestModel) {
     requireNotNull(subscriber, "subscriber");
 
     if (!(subscriber instanceof RxViperSubscriber)) {
@@ -96,7 +96,7 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    * @since 0.2.0
    */
   @SuppressWarnings("WeakerAccess")
-  public final void execute(@Nonnull Subscriber<? super ResponseModel> subscriber) {
+  public final void execute(Subscriber<? super ResponseModel> subscriber) {
     execute(subscriber, null);
   }
 
@@ -115,8 +115,7 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    * @see #execute(OnSuccess, OnFailure, OnComplete, Object)
    * @since 0.4.0
    */
-  public final void execute(@Nonnull OnSuccess<? super ResponseModel> onSuccess, @Nonnull OnFailure onFailure,
-      @Nonnull OnComplete onComplete) {
+  public final void execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, OnComplete onComplete) {
     execute(onSuccess, onFailure, onComplete, null);
   }
 
@@ -136,8 +135,8 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    *     if {@code onSuccess} is null, or if {@code onFailure} is null, or if {@code onComplete} is null
    * @since 0.4.0
    */
-  public final void execute(@Nonnull OnSuccess<? super ResponseModel> onSuccess, @Nonnull OnFailure onFailure,
-      @Nonnull OnComplete onComplete, @Nullable RequestModel requestModel) {
+  public final void execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, OnComplete onComplete,
+      @Nullable RequestModel requestModel) {
     requireNotNull(onSuccess, "onSuccess");
     requireNotNull(onFailure, "onFailure");
     requireNotNull(onComplete, "onComplete");
@@ -171,6 +170,13 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
     return !subscriptions.hasSubscriptions();
   }
 
+  @Override
+  protected final void execInternal(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, @Nullable RequestModel model) {
+    requireNotNull(onSuccess, "onSuccess");
+    requireNotNull(onFailure, "onFailure");
+    execute(onSuccess, onFailure, OnComplete.EMPTY, model);
+  }
+
   /**
    * Provides source Observable that will execute the specified parameter when {@code execute()} method is called.
    * <p>
@@ -194,12 +200,4 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
   @SuppressWarnings("NullableProblems")
   @Nonnull
   protected abstract Observable<ResponseModel> createObservable(@Nullable RequestModel requestModel);
-
-  @Override
-  protected final void execInternal(@Nonnull OnSuccess<? super ResponseModel> onSuccess, @Nonnull OnFailure onFailure,
-      @Nullable RequestModel model) {
-    requireNotNull(onSuccess, "onSuccess");
-    requireNotNull(onFailure, "onFailure");
-    execute(onSuccess, onFailure, OnComplete.EMPTY, model);
-  }
 }

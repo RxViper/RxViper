@@ -20,7 +20,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
-import javax.annotation.Nonnull;
 
 import static com.dzaitsev.viper.Intrinsics.requireNotNull;
 
@@ -35,7 +34,7 @@ class AlternateExecutor implements Executor {
   private final AtomicInteger           counter = new AtomicInteger();
 
   @Override
-  public void execute(@Nonnull Runnable runnable) {
+  public void execute(Runnable runnable) {
     requireNotNull(runnable, "runnable");
     counter.incrementAndGet();
     queue.add(runnable);

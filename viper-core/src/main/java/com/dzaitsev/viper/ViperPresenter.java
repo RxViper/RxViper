@@ -48,7 +48,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.11.0
    */
   @SuppressWarnings("WeakerAccess")
-  protected ViperPresenter(@Nonnull V view, @Nonnull R router) {
+  protected ViperPresenter(V view, R router) {
     super(view);
     requireNotNull(router, "router");
     unwrap(routerProxy).set(router);
@@ -65,7 +65,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.11.0
    */
   @SuppressWarnings("WeakerAccess")
-  protected ViperPresenter(@Nonnull V view) {
+  protected ViperPresenter(V view) {
     super(view);
   }
 
@@ -80,7 +80,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.11.0
    */
   @SuppressWarnings("WeakerAccess")
-  protected ViperPresenter(@Nonnull R router) {
+  protected ViperPresenter(R router) {
     requireNotNull(router, "router");
     unwrap(routerProxy).set(router);
   }
@@ -107,7 +107,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.1.0
    */
   @SuppressWarnings("WeakerAccess")
-  public final void dropRouter(@Nonnull R router) {
+  public final void dropRouter(R router) {
     requireNotNull(router, "router");
 
     if (currentRouter() == router) {
@@ -141,7 +141,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.1.0
    */
   @SuppressWarnings("WeakerAccess")
-  public final void takeRouter(@Nonnull R router) {
+  public final void takeRouter(R router) {
     requireNotNull(router, "router");
 
     final R currentRouter = currentRouter();
@@ -179,7 +179,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.7.0
    */
   @SuppressWarnings("WeakerAccess")
-  protected void onDropRouter(@SuppressWarnings("NullableProblems") @Nonnull R router) {
+  protected void onDropRouter(R router) {
   }
 
   /**
@@ -192,7 +192,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @since 0.6.0
    */
   @SuppressWarnings("WeakerAccess")
-  protected void onTakeRouter(@SuppressWarnings("NullableProblems") @Nonnull R router) {
+  protected void onTakeRouter(@SuppressWarnings("NullableProblems") R router) {
   }
 
   @Nullable
