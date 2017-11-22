@@ -1,7 +1,3 @@
-import com.dzaitsev.viper.rx.RxInteractor
-import rx.Subscriber
-import kotlin.coroutines.experimental.suspendCoroutine
-
 /*
  * Copyright 2017 Dmytro Zaitsev
  *
@@ -18,44 +14,30 @@ import kotlin.coroutines.experimental.suspendCoroutine
  * limitations under the License.
  */
 
-suspend fun <RequestModel, ResponseModel> RxInteractor<RequestModel, ResponseModel>.await(model: RequestModel? = null): ResponseModel =
-    suspendCoroutine { cont ->
-      execute(object : Subscriber<ResponseModel>() {
-        override fun onStart() {
-          request(1)
-        }
+package com.dzaitsev.viper.rx
 
-        override fun onNext(t: ResponseModel) {
-          cont.resume(t)
-        }
+import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import rx.Subscriber
 
-        override fun onCompleted() {
-        }
+suspend fun <RequestModel, ResponseModel> RxInteractor<RequestModel, ResponseModel>.await(model: RequestModel? = null): ResponseModel
+    = suspendCancellableCoroutine { cont ->
+  cont.invokeOnCompletion {
+    unsubscribe(execute(object : Subscriber<ResponseModel>() {
+      override fun onStart() {
+        request(1)
+      }
 
-        override fun onError(e: Throwable) {
-          cont.resumeWithException(e)
-        }
-      }, model)
-    }
+      override fun onNext(t: ResponseModel) {
+        cont.resume(t)
+      }
 
-//suspend fun <RequestModel, ResponseModel> RxInteractor<RequestModel, ResponseModel>.awaitOne(model: RequestModel? = null): ResponseModel
-//    = suspendCancellableCoroutine { cont ->
-//  execute(object : Subscriber<ResponseModel>() {
-//    override fun onStart() {
-//      request(1)
-//    }
-//
-//    override fun onNext(t: ResponseModel) {
-//      cont.resume(t)
-//    }
-//
-//    override fun onCompleted() {
-//      if (cont.isActive) cont.resumeWithException(IllegalStateException("Should have invoked onNext"))
-//    }
-//
-//    override fun onError(e: Throwable) {
-//      cont.resumeWithException(e)
-//    }
-//  }, model)
-//  cont.invokeOnCompletion { unsubscribe() }
-//}
+      override fun onCompleted() {
+        if (cont.isActive) cont.resumeWithException(IllegalStateException("Should have invoked onNext"))
+      }
+
+      override fun onError(e: Throwable) {
+        cont.resumeWithException(e)
+      }
+    }, model))
+  }
+}

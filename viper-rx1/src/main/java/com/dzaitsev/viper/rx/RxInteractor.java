@@ -26,31 +26,29 @@ import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
 
 import static com.dzaitsev.viper.Intrinsics.requireNotNull;
 
 public abstract class RxInteractor<RequestModel, ResponseModel> extends Interactor<RequestModel, ResponseModel> implements Subscription {
-  @Nonnull private final Scheduler             subscribeScheduler;
-  @Nonnull private final Scheduler             observeScheduler;
-  @Nonnull private final CompositeSubscription subscriptions;
+  @Nonnull private final Scheduler     subscribeOn;
+  @Nonnull private final Scheduler     observeOn;
+  @Nonnull private final Subscriptions subscriptions;
 
   /**
-   * @param subscribeScheduler
+   * @param subscribeOn
    *     the Scheduler that modifies source Observable returned from {@link #createObservable} to perform its emissions on.
-   * @param observeScheduler
+   * @param observeOn
    *     the Scheduler that modifies source Observable returned from {@link #createObservable} to notify its Observers on.
    *
    * @since 0.1.0
    */
-  @SuppressWarnings("WeakerAccess")
-  protected RxInteractor(Scheduler subscribeScheduler, Scheduler observeScheduler) {
-    requireNotNull(subscribeScheduler, "subscribeScheduler");
-    requireNotNull(observeScheduler, "observeScheduler");
+  protected RxInteractor(Scheduler subscribeOn, Scheduler observeOn) {
+    requireNotNull(subscribeOn, "subscribeOn");
+    requireNotNull(observeOn, "observeOn");
 
-    this.subscribeScheduler = subscribeScheduler;
-    this.observeScheduler = observeScheduler;
-    subscriptions = new CompositeSubscription();
+    this.subscribeOn = subscribeOn;
+    this.observeOn = observeOn;
+    subscriptions = new Subscriptions();
   }
 
   /**
@@ -72,16 +70,15 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    *     if the {@link Subscriber}'s {@code onError} method itself threw a {@code Throwable}
    * @since 0.1.0
    */
-  @SuppressWarnings("WeakerAccess")
-  public final void execute(Subscriber<? super ResponseModel> subscriber, @Nullable RequestModel requestModel) {
+  public final long execute(Subscriber<? super ResponseModel> subscriber, @Nullable RequestModel requestModel) {
     requireNotNull(subscriber, "subscriber");
 
     if (!(subscriber instanceof RxViperSubscriber)) {
       subscriber = RxViperSubscriber.of(subscriber);
     }
 
-    subscriptions.add(createObservable(requestModel).subscribeOn(subscribeScheduler)
-        .observeOn(observeScheduler)
+    return subscriptions.add(createObservable(requestModel).subscribeOn(subscribeOn)
+        .observeOn(observeOn)
         .subscribe(subscriber));
   }
 
@@ -95,9 +92,8 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    * @see #execute(Subscriber, Object)
    * @since 0.2.0
    */
-  @SuppressWarnings("WeakerAccess")
-  public final void execute(Subscriber<? super ResponseModel> subscriber) {
-    execute(subscriber, null);
+  public final long execute(Subscriber<? super ResponseModel> subscriber) {
+    return execute(subscriber, null);
   }
 
   /**
@@ -115,8 +111,8 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    * @see #execute(OnSuccess, OnFailure, OnComplete, Object)
    * @since 0.4.0
    */
-  public final void execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, OnComplete onComplete) {
-    execute(onSuccess, onFailure, onComplete, null);
+  public final long execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, OnComplete onComplete) {
+    return execute(onSuccess, onFailure, onComplete, null);
   }
 
   /**
@@ -135,13 +131,13 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    *     if {@code onSuccess} is null, or if {@code onFailure} is null, or if {@code onComplete} is null
    * @since 0.4.0
    */
-  public final void execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, OnComplete onComplete,
+  public final long execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, OnComplete onComplete,
       @Nullable RequestModel requestModel) {
     requireNotNull(onSuccess, "onSuccess");
     requireNotNull(onFailure, "onFailure");
     requireNotNull(onComplete, "onComplete");
 
-    execute(RxViperSubscriber.of(onSuccess, onFailure, onComplete), requestModel);
+    return execute(RxViperSubscriber.of(onSuccess, onFailure, onComplete), requestModel);
   }
 
   /**
@@ -158,6 +154,10 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
     subscriptions.clear();
   }
 
+  public final void unsubscribe(long id) {
+    subscriptions.unsubscribe(id);
+  }
+
   /**
    * Indicates whether this {@code RxInteractor} is currently unsubscribed.
    *
@@ -167,14 +167,15 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    */
   @Override
   public final boolean isUnsubscribed() {
-    return !subscriptions.hasSubscriptions();
+    return subscriptions.isEmpty();
   }
 
   @Override
-  protected final void execInternal(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, @Nullable RequestModel model) {
+  protected final long execInternal(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, @Nullable RequestModel model) {
     requireNotNull(onSuccess, "onSuccess");
     requireNotNull(onFailure, "onFailure");
-    execute(onSuccess, onFailure, OnComplete.EMPTY, model);
+
+    return execute(onSuccess, onFailure, OnComplete.EMPTY, model);
   }
 
   /**
@@ -197,7 +198,6 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    * @see #execute(OnSuccess, OnFailure, OnComplete, Object)
    * @since 0.1.0
    */
-  @SuppressWarnings("NullableProblems")
   @Nonnull
   protected abstract Observable<ResponseModel> createObservable(@Nullable RequestModel requestModel);
 }

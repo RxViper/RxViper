@@ -40,7 +40,7 @@ abstract class ViperInteractor<RequestModel, ResponseModel> extends Interactor<R
   }
 
   @Override
-  protected final void execInternal(final OnSuccess<? super ResponseModel> onSuccess, final OnFailure onFailure,
+  protected final long execInternal(final OnSuccess<? super ResponseModel> onSuccess, final OnFailure onFailure,
       @Nullable final RequestModel requestModel) {
     jobExecutor.execute(new Runnable() {
       @Override
@@ -67,6 +67,7 @@ abstract class ViperInteractor<RequestModel, ResponseModel> extends Interactor<R
         }
       }
     });
+    return 0;
   }
 
   @SuppressWarnings("WeakerAccess")

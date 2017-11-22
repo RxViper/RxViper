@@ -54,8 +54,8 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    * @see #execute(OnSuccess, Object)
    * @since 0.4.0
    */
-  public final void execute(OnSuccess<? super ResponseModel> onSuccess) {
-    execute(onSuccess, ON_FAILURE_NOT_IMPLEMENTED, null);
+  public final long execute(OnSuccess<? super ResponseModel> onSuccess) {
+    return execute(onSuccess, ON_FAILURE_NOT_IMPLEMENTED, null);
   }
 
   /**
@@ -70,8 +70,8 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    *     if the Observable calls {@code onFailure}
    * @since 0.4.0
    */
-  public final void execute(OnSuccess<? super ResponseModel> onSuccess, @Nullable RequestModel requestModel) {
-    execute(onSuccess, ON_FAILURE_NOT_IMPLEMENTED, requestModel);
+  public final long execute(OnSuccess<? super ResponseModel> onSuccess, @Nullable RequestModel requestModel) {
+    return execute(onSuccess, ON_FAILURE_NOT_IMPLEMENTED, requestModel);
   }
 
   /**
@@ -87,8 +87,8 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    * @see #execute(OnSuccess, Object)
    * @since 0.4.0
    */
-  public final void execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure) {
-    execute(onSuccess, onFailure, null);
+  public final long execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure) {
+    return execute(onSuccess, onFailure, null);
   }
 
   /**
@@ -103,13 +103,13 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    *     if {@code onSuccess} is null, or if {@code onFailure} is null
    * @since 0.4.0
    */
-  public final void execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, @Nullable RequestModel requestModel) {
+  public final long execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, @Nullable RequestModel requestModel) {
     requireNotNull(onSuccess, "onSuccess");
     requireNotNull(onFailure, "onFailure");
 
-    execInternal(onSuccess, onFailure, requestModel);
+    return execInternal(onSuccess, onFailure, requestModel);
   }
 
-  protected abstract void execInternal(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure,
+  protected abstract long execInternal(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure,
       @Nullable RequestModel requestModel);
 }
