@@ -34,7 +34,7 @@ abstract class GeneratorTest {
   @JvmField
   val temporaryFolder = TemporaryFolder()
 
-  protected lateinit var project: Project
+  private lateinit var project: Project
 
   @Before
   fun setUp() {
@@ -92,5 +92,5 @@ abstract class GeneratorTest {
 
   internal fun packageLine(screen: Screen) = "package ${screen.fullPackage};"
 
-  protected fun path(screen: Screen) = "${screen.fullPackage.replace('.', File.separatorChar)}${File.separatorChar}"
+  private fun path(screen: Screen) = "${screen.fullPackage.replace('.', File.separatorChar)}${File.separatorChar}"
 }

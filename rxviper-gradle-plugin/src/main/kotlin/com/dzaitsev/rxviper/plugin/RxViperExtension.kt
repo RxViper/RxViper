@@ -59,6 +59,6 @@ open class RxViperExtension(internal val project: Project) {
   fun screens(closure: Closure<NamedDomainObjectContainer<Screen>>) = screens.configure(closure)
 
   companion object {
-    @JvmStatic val NAME = "rxViper"
+    const val NAME = "rxViper"
   }
 }

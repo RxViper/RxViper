@@ -51,13 +51,10 @@ open class RxViperTask : DefaultTask() {
   }
 
   companion object {
-    @JvmStatic
-    val NAME = "generateRxViper"
+    const val NAME = "generateRxViper"
 
-    @JvmStatic
-    val GROUP = "RxViper"
+    const val GROUP = "RxViper"
 
-    @JvmStatic
-    val DESCRIPTION = "Generates VIPER modules adding them to right targets"
+    const val DESCRIPTION = "Generates VIPER modules adding them to right targets"
   }
 }
