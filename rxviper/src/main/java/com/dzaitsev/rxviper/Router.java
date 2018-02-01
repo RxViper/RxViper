@@ -17,7 +17,7 @@
 package com.dzaitsev.rxviper;
 
 /**
- * Contains navigation logic for describing which screens are shown in which order
+ * Contains navigation logic for describing which screens are shown in which order.
  *
  * @author Dmytro Zaitsev
  * @since 0.1.0

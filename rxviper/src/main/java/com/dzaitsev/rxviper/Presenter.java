@@ -24,7 +24,7 @@ import static com.dzaitsev.rxviper.RxViper.requireNotNull;
 
 /**
  * Contains view logic for preparing content for display (as received from the {@link Interactor}) and for reacting to user inputs (by
- * requesting new data from the Interactor).
+ * requesting new data from the {@code Interactor}).
  *
  * @author Dmytro Zaitsev
  * @since 0.1.0
@@ -37,12 +37,10 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * <p>
    * Doesn't call {@link #onTakeView} callback.
    *
-   * @param view
-   *     view that will be returned from {@link #getView()}.
+   * @param view the {@code ViewCallbacks} that will be returned from {@link #getView()}
    *
    * @since 0.11.0
    */
-  @SuppressWarnings("WeakerAccess")
   protected Presenter(@Nonnull V view) {
     requireNotNull(view);
     getProxy(viewProxy).set(view);
@@ -53,8 +51,8 @@ public abstract class Presenter<V extends ViewCallbacks> {
    *
    * @since 0.11.0
    */
-  @SuppressWarnings("WeakerAccess")
-  protected Presenter() {}
+  protected Presenter() {
+  }
 
   /**
    * Called to surrender control of taken view.
@@ -64,12 +62,10 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * <p>
    * Calls {@link #onDropView} before the reference to the view is cleared.
    *
-   * @param view
-   *     view is going to be dropped.
+   * @param view the {@code ViewCallbacks} is going to be dropped
    *
    * @since 0.1.0
    */
-  @SuppressWarnings("WeakerAccess")
   public final void dropView(@Nonnull V view) {
     requireNotNull(view);
 
@@ -87,7 +83,6 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @see #getView()
    * @since 0.7.0
    */
-  @SuppressWarnings("WeakerAccess")
   public final boolean hasView() {
     return currentView() != null;
   }
@@ -97,13 +92,11 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * <p>
    * As soon as the reference to the view is assigned, it calls {@link #onTakeView} callback.
    *
-   * @param view
-   *     view that will be returned from {@link #getView()}.
+   * @param view the {@code ViewCallbacks} that will be returned from {@link #getView()}
    *
    * @see #dropView(ViewCallbacks)
    * @since 0.1.0
    */
-  @SuppressWarnings("WeakerAccess")
   public final void takeView(@Nonnull V view) {
     requireNotNull(view);
 
@@ -126,7 +119,6 @@ public abstract class Presenter<V extends ViewCallbacks> {
    * @see #takeView(ViewCallbacks)
    * @since 0.1.0
    */
-  @SuppressWarnings("WeakerAccess")
   @Nonnull
   protected final V getView() {
     return viewProxy;
@@ -135,27 +127,23 @@ public abstract class Presenter<V extends ViewCallbacks> {
   /**
    * Called before view is dropped.
    *
-   * @param view
-   *     view is going to be dropped
+   * @param view the {@code ViewCallbacks} is going to be dropped
    *
    * @see #dropView(ViewCallbacks)
    * @since 0.7.0
    */
-  @SuppressWarnings("WeakerAccess")
-  protected void onDropView(@SuppressWarnings("NullableProblems") @Nonnull V view) {
+  protected void onDropView(@Nonnull V view) {
   }
 
   /**
    * Called after view is taken.
    *
-   * @param view
-   *     attached to this presenter
+   * @param view the {@code ViewCallbacks} attached to this presenter
    *
    * @see #takeView(ViewCallbacks)
    * @since 0.6.0
    */
-  @SuppressWarnings("WeakerAccess")
-  protected void onTakeView(@SuppressWarnings("NullableProblems") @Nonnull V view) {
+  protected void onTakeView(@Nonnull V view) {
   }
 
   @Nullable

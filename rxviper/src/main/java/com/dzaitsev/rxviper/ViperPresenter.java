@@ -39,14 +39,11 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * <p>
    * Doesn't call {@link #onTakeView} and {@link #onTakeRouter} callbacks.
    *
-   * @param view
-   *     view that will be returned from {@link #getView()}.
-   * @param router
-   *     router that will be returned from {@link #getRouter()}.
+   * @param view the {@code ViewCallbacks} that will be returned from {@link #getView()}
+   * @param router the {@code Router} that will be returned from {@link #getRouter()}
    *
    * @since 0.11.0
    */
-  @SuppressWarnings("WeakerAccess")
   protected ViperPresenter(@Nonnull V view, @Nonnull R router) {
     super(view);
     requireNotNull(router);
@@ -58,12 +55,10 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * <p>
    * Doesn't call {@link #onTakeView} callback.
    *
-   * @param view
-   *     view that will be returned from {@link #getView()}.
+   * @param view the {@code ViewCallbacks} that will be returned from {@link #getView()}
    *
    * @since 0.11.0
    */
-  @SuppressWarnings("WeakerAccess")
   protected ViperPresenter(@Nonnull V view) {
     super(view);
   }
@@ -73,12 +68,10 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * <p>
    * Doesn't call {@link #onTakeRouter} callback.
    *
-   * @param router
-   *     router that will be returned from {@link #getRouter()}.
+   * @param router the {@code Router} that will be returned from {@link #getRouter()}
    *
    * @since 0.11.0
    */
-  @SuppressWarnings("WeakerAccess")
   protected ViperPresenter(@Nonnull R router) {
     requireNotNull(router);
     getProxy(routerProxy).set(router);
@@ -89,8 +82,8 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    *
    * @since 0.11.0
    */
-  @SuppressWarnings("WeakerAccess")
-  protected ViperPresenter() {}
+  protected ViperPresenter() {
+  }
 
   /**
    * Called to surrender control of taken router.
@@ -100,12 +93,10 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * <p>
    * Calls {@link #onDropRouter} before the reference to the router is cleared.
    *
-   * @param router
-   *     router is going to be dropped
+   * @param router the {@code Router} is going to be dropped
    *
    * @since 0.1.0
    */
-  @SuppressWarnings("WeakerAccess")
   public final void dropRouter(@Nonnull R router) {
     requireNotNull(router);
 
@@ -123,7 +114,6 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @see #getRouter()
    * @since 0.7.0
    */
-  @SuppressWarnings("WeakerAccess")
   public final boolean hasRouter() {
     return currentRouter() != null;
   }
@@ -133,13 +123,11 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * <p>
    * As soon as the reference to the router is assigned, it calls {@link #onTakeRouter} callback.
    *
-   * @param router
-   *     router that will be returned from {@link #getRouter()}.
+   * @param router the {@code Router} that will be returned from {@link #getRouter()}
    *
    * @see #dropRouter(Router)
    * @since 0.1.0
    */
-  @SuppressWarnings("WeakerAccess")
   public final void takeRouter(@Nonnull R router) {
     requireNotNull(router);
 
@@ -162,7 +150,6 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    * @see #takeRouter(Router)
    * @since 0.1.0
    */
-  @SuppressWarnings("WeakerAccess")
   @Nonnull
   protected final R getRouter() {
     return routerProxy;
@@ -171,27 +158,23 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
   /**
    * Called before router is dropped.
    *
-   * @param router
-   *     router is going to be dropped
+   * @param router the {@code Router} is going to be dropped
    *
    * @see #dropRouter(Router)
    * @since 0.7.0
    */
-  @SuppressWarnings("WeakerAccess")
-  protected void onDropRouter(@SuppressWarnings("NullableProblems") @Nonnull R router) {
+  protected void onDropRouter(@Nonnull R router) {
   }
 
   /**
    * Called after router is taken.
    *
-   * @param router
-   *     router attached to this presenter
+   * @param router the {@code Router} attached to this presenter
    *
    * @see #takeRouter(Router)
    * @since 0.6.0
    */
-  @SuppressWarnings("WeakerAccess")
-  protected void onTakeRouter(@SuppressWarnings("NullableProblems") @Nonnull R router) {
+  protected void onTakeRouter(@Nonnull R router) {
   }
 
   @Nullable

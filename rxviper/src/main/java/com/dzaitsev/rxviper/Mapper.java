@@ -39,18 +39,14 @@ import static com.dzaitsev.rxviper.RxViper.requireNotNull;
  * elements in any specific order.</li>
  * </ul>
  *
- * @param <From>
- *     the type of input objects provided to the map operation.
- * @param <To>
- *     the type of output objects from map operation. May be the same type as {@code <From>}.
+ * @param <From> the type of input objects provided to the map operation.
+ * @param <To> the type of output objects from map operation. May be the same type as {@code <From>}.
  *
  * @author Dmytro Zaitsev
  * @since 0.1.0
  */
 public abstract class Mapper<From, To> implements Func1<From, To> {
-  /*
-   * @since 0.10.0
-   */
+  /* @since 0.10.0 */
   @Override
   public final To call(@Nonnull From from) {
     requireNotNull(from);
@@ -60,10 +56,9 @@ public abstract class Mapper<From, To> implements Func1<From, To> {
   /**
    * Map the provided collection of input objects to an appropriate collection of output objects.
    *
-   * @param entities
-   *     collection of input objects.
+   * @param entities the {@code Collection} of input objects
    *
-   * @return collection of output objects.
+   * @return collection of output objects
    *
    * @since 0.1.0
    */
@@ -80,8 +75,7 @@ public abstract class Mapper<From, To> implements Func1<From, To> {
   /**
    * Map the provided input object to an appropriate output object.
    *
-   * @param entity
-   *     input object
+   * @param entity the input object
    *
    * @return output object
    *

@@ -17,7 +17,7 @@
 package com.dzaitsev.rxviper;
 
 /**
- * Displays what it is told to by the {@link Presenter} and relays user input back to the Presenter
+ * Displays what it is told to by the {@link Presenter} and relays user input back to the Presenter.
  *
  * @author Dmytro Zaitsev
  * @since 0.3.0
