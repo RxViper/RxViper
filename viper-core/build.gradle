@@ -25,15 +25,15 @@ compileTestJava {
   targetCompatibility = 1.8
 }
 
-dependencies {
-  compile libraries.jsr305
-  compile project(':viper-commons')
-  compile project(':null-object')
+evaluationDependsOn(':viper-commons')
 
-  testCompile files(project(':viper-commons').sourceSets.test.output)
-  testCompile libraries.junit
-  testCompile libraries.mockito
-  testCompile libraries.truth
+dependencies {
+  implementation project(':viper-commons')
+  implementation project(':null-object')
+  testImplementation files(project(':viper-commons').sourceSets.test.output)
+  testImplementation libraries.junit
+  testImplementation libraries.mockito
+  testImplementation libraries.truth
 }
 
 apply from: rootProject.file('publish.gradle')

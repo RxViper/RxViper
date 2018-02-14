@@ -3,7 +3,10 @@ apply plugin: 'java-library'
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
+evaluationDependsOn(':viper-commons')
+
 dependencies {
-  compile libraries.jsr305
-  compile project(':viper-commons')
+  implementation project(':viper-commons')
+  testImplementation files(project(':viper-commons').sourceSets.test.output)
+  testImplementation libraries.junit
 }

@@ -10,11 +10,14 @@ compileTestJava {
   targetCompatibility = 1.8
 }
 
+evaluationDependsOn(':viper-commons')
+
 dependencies {
-  compile project(':viper-core')
-  compile libraries.rxJava
-  testCompile files(project(':viper-commons').sourceSets.test.output)
-  testCompile libraries.junit
-  testCompile libraries.mockito
-  testCompile libraries.truth
+  implementation project(':viper-commons')
+  implementation project(':viper-core')
+  implementation libraries.rxJava
+  testImplementation files(project(':viper-commons').sourceSets.test.output)
+  testImplementation libraries.junit
+  testImplementation libraries.mockito
+  testImplementation libraries.truth
 }

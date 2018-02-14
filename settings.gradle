@@ -16,7 +16,7 @@
 include ':viper-core', ':viper-commons'
 include ':viper-executors'
 include ':viper-rx1'
-include ':viper-rx2'
+//include ':viper-rx2'
 //include ':viper-executors-android'
 include ':null-object'
 //include ':viper-gradle-plugin'

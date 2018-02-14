@@ -23,7 +23,9 @@ kotlin {
 }
 
 dependencies {
-  compile project(':viper-rx1')
-  compile libraries.kotlinStdLib
-  compile libraries.kotlinxCoroutinesCore
+  implementation project(':viper-core')
+  implementation project(':viper-rx1')
+  implementation libraries.rxJava
+  implementation libraries.kotlinStdLib
+  implementation libraries.kotlinxCoroutinesCore
 }

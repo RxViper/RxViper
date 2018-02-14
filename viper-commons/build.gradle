@@ -20,8 +20,7 @@ sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 dependencies {
-  compile libraries.jsr305
-
-  testCompile libraries.junit
-  testCompile libraries.truth
+  api libraries.jsr305
+  testImplementation libraries.junit
+  testImplementation libraries.truth
 }
