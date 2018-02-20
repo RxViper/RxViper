@@ -20,7 +20,7 @@ import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.dzaitsev.viper.TestUtil.checkIllegalArgumentException;
+import static com.dzaitsev.viper.TestUtil.assertThrowsNPE;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -56,6 +56,6 @@ public final class MapperTest {
 
   @Test
   public void shouldNotRespectNullCollections() {
-    checkIllegalArgumentException(() -> mapper.map((Collection<Integer>) null));
+    assertThrowsNPE(() -> mapper.map((Collection<Integer>) null));
   }
 }

@@ -18,7 +18,7 @@ package com.dzaitsev.viper.executors;
 
 import java.util.concurrent.Executor;
 
-import static com.dzaitsev.viper.Intrinsics.requireNotNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -29,7 +29,7 @@ import static com.dzaitsev.viper.Intrinsics.requireNotNull;
 class InstantExecutor implements Executor {
   @Override
   public void execute(Runnable runnable) {
-    requireNotNull(runnable, "runnable");
+    requireNonNull(runnable, "runnable");
     runnable.run();
   }
 }

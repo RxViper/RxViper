@@ -27,7 +27,7 @@ import rx.Scheduler;
 import rx.Subscriber;
 import rx.Subscription;
 
-import static com.dzaitsev.viper.Intrinsics.requireNotNull;
+import static java.util.Objects.requireNonNull;
 
 public abstract class RxInteractor<RequestModel, ResponseModel> extends Interactor<RequestModel, ResponseModel> implements Subscription {
   @Nonnull private final Scheduler     subscribeOn;
@@ -43,8 +43,8 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    * @since 0.1.0
    */
   protected RxInteractor(Scheduler subscribeOn, Scheduler observeOn) {
-    requireNotNull(subscribeOn, "subscribeOn");
-    requireNotNull(observeOn, "observeOn");
+    requireNonNull(subscribeOn, "subscribeOn");
+    requireNonNull(observeOn, "observeOn");
 
     this.subscribeOn = subscribeOn;
     this.observeOn = observeOn;
@@ -62,7 +62,7 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    *
    * @throws IllegalStateException
    *     if {@code subscribe} is unable to obtain an {@code OnSubscribe<>} function
-   * @throws IllegalArgumentException
+   * @throws NullPointerException
    *     if the {@link Subscriber} provided as the argument to {@code subscribe} is {@code null}
    * @throws rx.exceptions.OnErrorNotImplementedException
    *     if the {@link Subscriber}'s {@code onError} method is null
@@ -71,7 +71,7 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    * @since 0.1.0
    */
   public final long execute(Subscriber<? super ResponseModel> subscriber, @Nullable RequestModel requestModel) {
-    requireNotNull(subscriber, "subscriber");
+    requireNonNull(subscriber, "subscriber");
 
     if (!(subscriber instanceof RxViperSubscriber)) {
       subscriber = RxViperSubscriber.of(subscriber);
@@ -106,7 +106,7 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    * @param onComplete
    *     the {@code OnComplete} you have designed to accept a completion notification from the Observable
    *
-   * @throws IllegalArgumentException
+   * @throws NullPointerException
    *     if {@code onNext} is null, or if {@code onError} is null, or if {@code onComplete} is null
    * @see #execute(OnSuccess, OnFailure, OnComplete, Object)
    * @since 0.4.0
@@ -127,15 +127,15 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
    * @param requestModel
    *     parameter which will be passed to {@link #createObservable(Object)}.
    *
-   * @throws IllegalArgumentException
+   * @throws NullPointerException
    *     if {@code onSuccess} is null, or if {@code onFailure} is null, or if {@code onComplete} is null
    * @since 0.4.0
    */
   public final long execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, OnComplete onComplete,
       @Nullable RequestModel requestModel) {
-    requireNotNull(onSuccess, "onSuccess");
-    requireNotNull(onFailure, "onFailure");
-    requireNotNull(onComplete, "onComplete");
+    requireNonNull(onSuccess, "onSuccess");
+    requireNonNull(onFailure, "onFailure");
+    requireNonNull(onComplete, "onComplete");
 
     return execute(RxViperSubscriber.of(onSuccess, onFailure, onComplete), requestModel);
   }
@@ -172,8 +172,8 @@ public abstract class RxInteractor<RequestModel, ResponseModel> extends Interact
 
   @Override
   protected final long execInternal(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, @Nullable RequestModel model) {
-    requireNotNull(onSuccess, "onSuccess");
-    requireNotNull(onFailure, "onFailure");
+    requireNonNull(onSuccess, "onSuccess");
+    requireNonNull(onFailure, "onFailure");
 
     return execute(onSuccess, onFailure, OnComplete.EMPTY, model);
   }

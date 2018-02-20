@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 
 import static com.dzaitsev.nullobject.NullObject.createProxy;
 import static com.dzaitsev.nullobject.NullObject.unwrap;
-import static com.dzaitsev.viper.Intrinsics.requireNotNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Contains view logic for preparing content for display (as received from the {@link Interactor}) and for reacting to user inputs (by
@@ -50,7 +50,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
   @SuppressWarnings("WeakerAccess")
   protected ViperPresenter(V view, R router) {
     super(view);
-    requireNotNull(router, "router");
+    requireNonNull(router, "router");
     unwrap(routerProxy).set(router);
   }
 
@@ -81,7 +81,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    */
   @SuppressWarnings("WeakerAccess")
   protected ViperPresenter(R router) {
-    requireNotNull(router, "router");
+    requireNonNull(router, "router");
     unwrap(routerProxy).set(router);
   }
 
@@ -108,7 +108,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    */
   @SuppressWarnings("WeakerAccess")
   public final void dropRouter(R router) {
-    requireNotNull(router, "router");
+    requireNonNull(router, "router");
 
     if (currentRouter() == router) {
       onDropRouter(router);
@@ -142,7 +142,7 @@ public abstract class ViperPresenter<V extends ViewCallbacks, R extends Router> 
    */
   @SuppressWarnings("WeakerAccess")
   public final void takeRouter(R router) {
-    requireNotNull(router, "router");
+    requireNonNull(router, "router");
 
     final R currentRouter = currentRouter();
     if (currentRouter != router) {

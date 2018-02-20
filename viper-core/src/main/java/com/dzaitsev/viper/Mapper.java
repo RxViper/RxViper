@@ -19,7 +19,7 @@ package com.dzaitsev.viper;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.dzaitsev.viper.Intrinsics.requireNotNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Converts entities to basic model objects used by the {@link Interactor}.
@@ -57,7 +57,7 @@ public abstract class Mapper<From, To> {
    * @since 0.1.0
    */
   public Collection<To> map(Collection<From> entities) {
-    requireNotNull(entities, "entities");
+    requireNonNull(entities, "entities");
     final Collection<To> result = new ArrayList<>(entities.size());
     //noinspection Convert2streamapi
     for (From from : entities) {

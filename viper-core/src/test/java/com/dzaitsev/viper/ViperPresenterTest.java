@@ -22,7 +22,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.dzaitsev.viper.TestUtil.assertNotThrows;
-import static com.dzaitsev.viper.TestUtil.checkIllegalArgumentException;
+import static com.dzaitsev.viper.TestUtil.assertThrowsNPE;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -128,12 +128,12 @@ public final class ViperPresenterTest {
 
   @Test
   public void takenRouterShouldNotBeNull() {
-    checkIllegalArgumentException(() -> presenter.takeRouter(null));
+    assertThrowsNPE(() -> presenter.takeRouter(null));
   }
 
   @Test
   public void droppedRouterShouldNotBeNull() {
-    checkIllegalArgumentException(() -> presenter.dropRouter(null));
+    assertThrowsNPE(() -> presenter.dropRouter(null));
   }
 
   @Test
@@ -143,10 +143,10 @@ public final class ViperPresenterTest {
 
   @Test
   public void constructorArgsShouldNotBeNull() {
-    checkIllegalArgumentException(() -> new TestViperPresenter((TestRouter) null));
-    checkIllegalArgumentException(() -> new TestViperPresenter((TestViewCallbacks) null));
-    checkIllegalArgumentException(() -> new TestViperPresenter(null, router));
-    checkIllegalArgumentException(() -> new TestViperPresenter(mock(TestViewCallbacks.class), null));
+    assertThrowsNPE(() -> new TestViperPresenter((TestRouter) null));
+    assertThrowsNPE(() -> new TestViperPresenter((TestViewCallbacks) null));
+    assertThrowsNPE(() -> new TestViperPresenter(null, router));
+    assertThrowsNPE(() -> new TestViperPresenter(mock(TestViewCallbacks.class), null));
   }
 
   @Test

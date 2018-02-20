@@ -20,7 +20,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.dzaitsev.viper.Intrinsics.requireNotNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * ~ ~ ~ ~ Description ~ ~ ~ ~
@@ -35,7 +35,7 @@ class AlternateExecutor implements Executor {
 
   @Override
   public void execute(Runnable runnable) {
-    requireNotNull(runnable, "runnable");
+    requireNonNull(runnable, "runnable");
 
     final TimedDecorator timed = new TimedDecorator(runnable, System.currentTimeMillis(), counter.incrementAndGet());
     queue.add(timed);
@@ -56,7 +56,7 @@ class AlternateExecutor implements Executor {
     private final int      count;
 
     TimedDecorator(Runnable delegate, long execTime, int count) {
-      requireNotNull(delegate, "delegate");
+      requireNonNull(delegate, "delegate");
       this.delegate = delegate;
       this.execTime = execTime;
       this.count = count;

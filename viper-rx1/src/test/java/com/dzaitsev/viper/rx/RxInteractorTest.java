@@ -25,7 +25,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
-import static com.dzaitsev.viper.TestUtil.checkIllegalArgumentException;
+import static com.dzaitsev.viper.TestUtil.assertThrowsNPE;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -119,47 +119,47 @@ public final class RxInteractorTest {
 
   @Test
   public void subscriberShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute((Subscriber) null));
+    assertThrowsNPE(() -> interactor.execute((Subscriber) null));
   }
 
   @Test
   public void subscriberParamShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute((Subscriber) null, PARAM));
+    assertThrowsNPE(() -> interactor.execute((Subscriber) null, PARAM));
   }
 
   @Test
   public void onNextShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute((OnSuccess) null));
+    assertThrowsNPE(() -> interactor.execute((OnSuccess) null));
   }
 
   @Test
   public void onNextParamShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute((OnSuccess) null, PARAM));
+    assertThrowsNPE(() -> interactor.execute((OnSuccess) null, PARAM));
   }
 
   @Test
   public void onErrorShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute(ON_SUCCESS, (OnFailure) null));
+    assertThrowsNPE(() -> interactor.execute(ON_SUCCESS, (OnFailure) null));
   }
 
   @Test
   public void onErrorParamShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute(ON_SUCCESS, null, PARAM));
+    assertThrowsNPE(() -> interactor.execute(ON_SUCCESS, null, PARAM));
   }
 
   @Test
   public void onCompletedShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute(ON_SUCCESS, ON_FAILURE, (OnComplete) null));
+    assertThrowsNPE(() -> interactor.execute(ON_SUCCESS, ON_FAILURE, (OnComplete) null));
   }
 
   @Test
   public void onCompletedParamShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute(ON_SUCCESS, ON_FAILURE, null, PARAM));
+    assertThrowsNPE(() -> interactor.execute(ON_SUCCESS, ON_FAILURE, null, PARAM));
   }
 
   @Test
   public void subscribeOnShouldNotBeNull() {
-    checkIllegalArgumentException(() -> new RxInteractor<Object, Object>(null, Schedulers.immediate()) {
+    assertThrowsNPE(() -> new RxInteractor<Object, Object>(null, Schedulers.immediate()) {
       @Override
       protected Observable<Object> createObservable(final Object o) {
         return null;
@@ -169,7 +169,7 @@ public final class RxInteractorTest {
 
   @Test
   public void observeOnOnShouldNotBeNull() {
-    checkIllegalArgumentException(() -> new RxInteractor<Object, Object>(null, Schedulers.immediate()) {
+    assertThrowsNPE(() -> new RxInteractor<Object, Object>(null, Schedulers.immediate()) {
       @Override
       protected Observable<Object> createObservable(final Object o) {
         return null;

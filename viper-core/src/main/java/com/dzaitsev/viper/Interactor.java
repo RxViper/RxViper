@@ -20,7 +20,7 @@ import com.dzaitsev.viper.callbacks.OnFailure;
 import com.dzaitsev.viper.callbacks.OnSuccess;
 import javax.annotation.Nullable;
 
-import static com.dzaitsev.viper.Intrinsics.requireNotNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Contains the business logic as specified by a use case
@@ -47,7 +47,7 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    * @param onSuccess
    *     the {@code OnSuccess<ResponseModel>} you have designed to accept emissions from the Observable
    *
-   * @throws IllegalArgumentException
+   * @throws NullPointerException
    *     if {@code onSuccess} is null
    * @throws UnsupportedOperationException
    *     if the Observable calls {@code onFailure}
@@ -64,7 +64,7 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    * @param onSuccess
    *     the {@code OnSuccess<ResponseModel>} you have designed to accept emissions from the Observable
    *
-   * @throws IllegalArgumentException
+   * @throws NullPointerException
    *     if {@code onSuccess} is null
    * @throws UnsupportedOperationException
    *     if the Observable calls {@code onFailure}
@@ -82,7 +82,7 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    * @param onFailure
    *     the {@code OnFailure} you have designed to accept any error notification from the Observable
    *
-   * @throws IllegalArgumentException
+   * @throws NullPointerException
    *     if {@code onSuccess} is null, or if {@code onFailure} is null
    * @see #execute(OnSuccess, Object)
    * @since 0.4.0
@@ -99,13 +99,13 @@ public abstract class Interactor<RequestModel, ResponseModel> {
    * @param onFailure
    *     the {@code OnFailure} you have designed to accept any error notification from the Observable
    *
-   * @throws IllegalArgumentException
+   * @throws NullPointerException
    *     if {@code onSuccess} is null, or if {@code onFailure} is null
    * @since 0.4.0
    */
   public final long execute(OnSuccess<? super ResponseModel> onSuccess, OnFailure onFailure, @Nullable RequestModel requestModel) {
-    requireNotNull(onSuccess, "onSuccess");
-    requireNotNull(onFailure, "onFailure");
+    requireNonNull(onSuccess, "onSuccess");
+    requireNonNull(onFailure, "onFailure");
 
     return execInternal(onSuccess, onFailure, requestModel);
   }

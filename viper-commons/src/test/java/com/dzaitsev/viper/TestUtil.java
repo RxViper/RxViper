@@ -24,7 +24,6 @@ import static com.google.common.truth.Truth.assertThat;
  * @author Dmytro Zaitsev
  * @since 2016-Nov-19, 23:35
  */
-
 public final class TestUtil {
   static void assertThrows(Class<? extends Throwable> throwableClass, Runnable action) {
     check(action, true, throwableClass);
@@ -34,8 +33,8 @@ public final class TestUtil {
     check(action, false, throwableClass);
   }
 
-  public static void checkIllegalArgumentException(Runnable action) {
-    assertThrows(IllegalArgumentException.class, action);
+  public static void assertThrowsNPE(Runnable action) {
+    assertThrows(NullPointerException.class, action);
   }
 
   private static void check(Runnable action, boolean shouldThrow, Class<? extends Throwable> throwableClass) {
