@@ -1,6 +1,15 @@
 ## Changelog
-##### 1.0.0-RC1
+##### 1.0.0-RC3
+* Fix `IllegalAccessException` in `NullObject` (Closes [#55]).
+* Bump RxJava version to `1.3.4`.
+* Plugin: rename `split` to `splitPackages`
+* Small improvements
 
+##### 1.0.0-RC2 (skipped)
+* Introduce a plugin for Gradle (Closes [#50]).
+* Add support for JSR-305 `Nullable`/`Nonnull` annotations (Closes [#49]).
+
+##### 1.0.0-RC1
 * Use dynamic proxying for nullsafe using view and router. (Closes [#44]).
 * Added constructors for `Presenter` and `ViperPresenter`. (Closes [#41]).
 * Bump RxJava version to `1.2.4`.
@@ -80,3 +89,6 @@
 [#39]: https://github.com/RxViper/RxViper/issues/39
 [#41]: https://github.com/RxViper/RxViper/issues/41
 [#44]: https://github.com/RxViper/RxViper/issues/44
+[#49]: https://github.com/RxViper/RxViper/issues/49
+[#50]: https://github.com/RxViper/RxViper/issues/50
+[#55]: https://github.com/RxViper/RxViper/issues/55

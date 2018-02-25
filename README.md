@@ -18,7 +18,7 @@ This is a micro framework with a small, extensible API which provides basic abst
 Grab via Gradle:
 
 ```groovy
-compile 'com.dzaitsev.rxviper:rxviper:1.0.0-rc1'
+compile 'com.dzaitsev.rxviper:rxviper:1.0.0-rc3'
 ```
 
 Maven:
@@ -27,14 +27,14 @@ Maven:
 <dependency>
     <groupId>com.dzaitsev.rxviper</groupId>
     <artifactId>rxviper</artifactId>
-    <version>1.0.0-rc1</version>
+    <version>1.0.0-rc3</version>
 </dependency>
 ```
 
 ## License
 
 ```
-Copyright 2017 Dmytro Zaitsev
+Copyright 2018 Dmytro Zaitsev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
