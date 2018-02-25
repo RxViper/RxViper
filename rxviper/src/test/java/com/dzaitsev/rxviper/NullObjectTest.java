@@ -40,9 +40,20 @@ public final class NullObjectTest {
   }
 
   @Test
-  public void shoulInvokeTargetMethods() throws Throwable {
+  public void shouldInvokeAccessibleTargetMethods() throws Throwable {
     final TestViewCallbacks spy = spy(target);
     final Method doJob = TestViewCallbacks.class.getMethod("doJob");
+    doJob.setAccessible(true);
+    final NullObject<TestViewCallbacks> nullObject = new NullObject<>(spy);
+    nullObject.invoke(null, doJob, new Object[0]);
+    verify(spy).doJob();
+  }
+
+  @Test
+  public void shouldInvokeInaccessibleTargetMethods() throws Throwable {
+    final TestViewCallbacks spy = spy(target);
+    final Method doJob = TestViewCallbacks.class.getMethod("doJob");
+    doJob.setAccessible(false);
     final NullObject<TestViewCallbacks> nullObject = new NullObject<>(spy);
     nullObject.invoke(null, doJob, new Object[0]);
     verify(spy).doJob();

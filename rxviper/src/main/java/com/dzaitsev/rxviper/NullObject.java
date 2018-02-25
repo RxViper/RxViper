@@ -37,7 +37,14 @@ final class NullObject<T> implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     final T target = get();
-    return target == null ? null : method.invoke(target, args);
+    if (target == null) {
+      return null;
+    } else {
+      if (!method.isAccessible()) {
+        method.setAccessible(true);
+      }
+      return method.invoke(target, args);
+    }
   }
 
   void clear() {
