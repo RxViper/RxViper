@@ -56,8 +56,7 @@ final class RxViper {
     return (NullObject<T>) Proxy.getInvocationHandler(target);
   }
 
-  @SuppressWarnings("unchecked")
-  static Class getGenericParameterClass(final Class actualClass, final Class genericClass, final int parameterIndex) {
+  static Class getGenericParameterClass(final Class<?> actualClass, final Class<?> genericClass, final int parameterIndex) {
     check(genericClass.isAssignableFrom(actualClass) && !genericClass.equals(actualClass),
         format("Class %s is not a superclass of %s.", genericClass.getName(), actualClass.getName()));
     final boolean isInterface = genericClass.isInterface();
@@ -125,8 +124,7 @@ final class RxViper {
     return actualArgumentIndex;
   }
 
-  @SuppressWarnings("unchecked")
-  private static Type getGenericInterface(final Class sourceClass, final Class genericInterface) {
+  private static Type getGenericInterface(final Class<?> sourceClass, final Class<?> genericInterface) {
     final Type[] types = sourceClass.getGenericInterfaces();
     for (Type type : types) {
       if (type instanceof Class) {
