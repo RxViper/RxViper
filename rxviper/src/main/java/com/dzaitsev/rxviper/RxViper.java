@@ -17,6 +17,7 @@
 package com.dzaitsev.rxviper;
 
 import java.lang.reflect.GenericDeclaration;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
@@ -107,6 +108,7 @@ final class RxViper {
   private static <T, G> T createProxy(T target, Class<G> baseClass, Class<? extends G> childClass, int index) {
     final Class typeArgument = getGenericParameterClass(childClass, baseClass, index);
     check(typeArgument.isInterface(), format("%s must be an interface.", typeArgument));
+    checkNoPublicGetters(typeArgument);
     return (T) Proxy.newProxyInstance(childClass.getClassLoader(), new Class[] { typeArgument }, new NullObject<>(target));
   }
 
@@ -143,6 +145,14 @@ final class RxViper {
   private static void check(boolean condition, String message) {
     if (!condition) {
       throw new IllegalStateException(message);
+    }
+  }
+
+  static void checkNoPublicGetters(Class<?> clazz) {
+    final Method[] methods = clazz.getMethods();
+    for (Method m : methods) {
+      final Class<?> type = m.getReturnType();
+      check(type == Void.TYPE, format("Method %s must be void, but returns %s.", m.getName(), type.getSimpleName()));
     }
   }
 }
