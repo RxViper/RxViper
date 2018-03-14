@@ -142,9 +142,37 @@ public final class RxViperTest {
   }
 
   @Test
-  public void testName() {}
+  public void shouldNotHaveGetters() {
+    RxViper.checkNoPublicGetters(IDontHaveGetters.class);
+  }
+
+  @Test
+  public void shouldThrowIfHasGetter() {
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage("Method getObject must be void, but returns Object.");
+    RxViper.checkNoPublicGetters(IHaveGetter.class);
+  }
+
+  @Test
+  public void shouldThrowIfInheritedGetter() {
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage("Method getObject must be void, but returns Object.");
+    RxViper.checkNoPublicGetters(IHaveInheritedGetter.class);
+  }
 
   interface InterfaceA<I> {} /*Integer*/
 
   interface InterfaceB<D, I> extends InterfaceA<I> {} /*Double, Integer*/
+
+  interface IDontHaveGetters {
+    Void iAmVoid();
+  }
+
+  interface IHaveGetter {
+    Object getObject();
+  }
+
+  interface IHaveInheritedGetter extends IHaveGetter {
+    void iAmVoidToo();
+  }
 }
