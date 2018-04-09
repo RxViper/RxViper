@@ -16,12 +16,12 @@
 apply plugin: 'kotlin'
 
 dependencies {
-  compile gradleApi()
-  compile libraries.kotlin
-  compile libraries.javaPoet
-  compile project(':rxviper')
-  testCompile libraries.junit
-  testCompile libraries.truth
+  implementation gradleApi()
+  implementation libraries.kotlin
+  implementation libraries.javaPoet
+  implementation project(':rxviper')
+  testImplementation libraries.junit
+  testImplementation libraries.truth
 }
 
 apply from: rootProject.file('publish.gradle')

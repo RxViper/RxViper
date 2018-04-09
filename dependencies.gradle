@@ -17,28 +17,26 @@ ext {
   versions = [
       rxViper          : POM_VERSION,
       // Gradle Plugins
-      androidPlugin    : '2.2.2',
+      androidPlugin    : '3.1.0',
       bintrayPlugin    : '1.8.0',
       mavenPlugin      : '1.4.1',
       licensePlugin    : '0.14.0',
-      retrolambdaPlugin: '3.7.0',
-      aptPlugin        : '1.8',
       versionsPlugin   : '0.17.0',
       // Java libraries
-      rxJava           : '1.3.4',
-      dagger           : '2.14.1',
+      rxJava           : '1.3.8',
+      dagger           : '2.15',
       jsr250           : '1.0',
       jsr305           : '3.0.2',
       junit            : '4.12',
-      mockito          : '2.13.0',
-      truth            : '0.39',
-      javaPoet         : '1.9.0',
+      mockito          : '2.18.0',
+      truth            : '0.40',
+      javaPoet         : '1.10.0',
       // Android libraries
       rxAndroid        : '1.2.1',
-      support          : '25.0.0',
-      constraintLayout : '1.0.0-beta4',
+      support          : '27.0.0',
+      constraintLayout : '1.0.2',
       // Kotlin
-      kotlin           : '1.2.20'
+      kotlin           : '1.2.31'
   ]
 
   gradlePlugins = [
@@ -47,8 +45,6 @@ ext {
       bintray    : "com.jfrog.bintray.gradle:gradle-bintray-plugin:${versions.bintrayPlugin}",
       maven      : "com.github.dcendents:android-maven-gradle-plugin:${versions.mavenPlugin}",
       license    : "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${versions.licensePlugin}",
-      retrolambda: "me.tatarka:gradle-retrolambda:${versions.retrolambdaPlugin}",
-      apt        : "com.neenbedankt.gradle.plugins:android-apt:${versions.aptPlugin}",
       versions   : "com.github.ben-manes:gradle-versions-plugin:${versions.versionsPlugin}",
       kotlin     : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
   ]

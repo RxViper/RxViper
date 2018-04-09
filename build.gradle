@@ -21,14 +21,13 @@ buildscript {
   repositories {
     jcenter()
     maven { url "https://plugins.gradle.org/m2/" }
+    google()
   }
   dependencies {
     classpath gradlePlugins.android
     classpath gradlePlugins.bintray
     classpath gradlePlugins.maven
     classpath gradlePlugins.license
-    classpath gradlePlugins.apt
-    classpath gradlePlugins.retrolambda
     classpath gradlePlugins.versions
     classpath gradlePlugins.kotlin
     classpath gradlePlugins.rxViper
@@ -38,6 +37,7 @@ buildscript {
 allprojects {
   repositories {
     jcenter()
+    google()
   }
 
   apply from: rootProject.file('license.gradle')
@@ -54,5 +54,5 @@ task licenseFormatEverything(type: nl.javadude.gradle.plugins.license.License) {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '3.4.1'
+  gradleVersion = '4.6'
 }
