@@ -21,14 +21,15 @@ import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 class ViewCallbacksGeneratorTest : GeneratorTest() {
 
   override fun defaultSource(screen: Screen, generator: Generator): String {
-    return "${packageLine(screen)}\n" +
-        "\n" +
-        "import com.dzaitsev.rxviper.ViewCallbacks;\n" +
-        "import javax.annotation.Generated;\n" +
-        "\n" +
-        "${generatedAnnotation(generator)}\n" +
-        "public interface ${generator.typeSpecName} extends ViewCallbacks {\n" +
-        "}\n"
+    return """${packageLine(screen)}
+
+import com.dzaitsev.rxviper.ViewCallbacks;
+import javax.annotation.Generated;
+
+${generatedAnnotation(generator)}
+public interface ${generator.typeSpecName} extends ViewCallbacks {
+}
+"""
   }
 
   override fun createGenerator(screen: Screen) = ViewCallbacksGenerator(screen)

@@ -24,39 +24,40 @@ class PresenterGeneratorTest : GeneratorTest() {
     val screenName = screen.name.capitalize()
     val interactorClass = "${screenName}Interactor"
     val interactorName = interactorClass.decapitalize()
-    return "${packageLine(screen)}\n" +
-        "\n" +
-        "import com.dzaitsev.rxviper.ViperPresenter;\n" +
-        "import javax.annotation.Generated;\n" +
-        "import rx.functions.Action1;\n" +
-        "\n" +
-        "${generatedAnnotation(generator)}\n" +
-        "public final class ${generator.typeSpecName} extends ViperPresenter<${screenName}ViewCallbacks, ${screenName}Router> {\n" +
-        "  private final $interactorClass $interactorName;\n" +
-        "\n" +
-        "  public ${generator.typeSpecName}($interactorClass $interactorName) {\n" +
-        "    this.$interactorName = $interactorName;\n" +
-        "  }\n" +
-        "\n" +
-        "  public void do$screenName(Object requestModel) {\n" +
-        "    $interactorName.execute(new Action1<Object>() {\n" +
-        "      @Override\n" +
-        "      public void call(Object o) {\n" +
-        "        // TODO: Implement onNext here...\n" +
-        "      }\n" +
-        "    }, new Action1<Throwable>() {\n" +
-        "      @Override\n" +
-        "      public void call(Throwable t) {\n" +
-        "        // TODO: Implement onError here...\n" +
-        "      }\n" +
-        "    }, requestModel);\n" +
-        "  }\n" +
-        "\n" +
-        "  @Override\n" +
-        "  protected void onDropView(${screenName}ViewCallbacks view) {\n" +
-        "    $interactorName.unsubscribe();\n" +
-        "  }\n" +
-        "}\n"
+    return """${packageLine(screen)}
+
+import com.dzaitsev.rxviper.ViperPresenter;
+import javax.annotation.Generated;
+import rx.functions.Action1;
+
+${generatedAnnotation(generator)}
+public final class ${generator.typeSpecName} extends ViperPresenter<${screenName}ViewCallbacks, ${screenName}Router> {
+  private final $interactorClass $interactorName;
+
+  public ${generator.typeSpecName}($interactorClass $interactorName) {
+    this.$interactorName = $interactorName;
+  }
+
+  public void do$screenName(Object requestModel) {
+    $interactorName.execute(requestModel, new Action1<Object>() {
+      @Override
+      public void call(Object o) {
+        // TODO: Implement onNext here...
+      }
+    }, new Action1<Throwable>() {
+      @Override
+      public void call(Throwable t) {
+        // TODO: Implement onError here...
+      }
+    });
+  }
+
+  @Override
+  protected void onDropView(${screenName}ViewCallbacks view) {
+    $interactorName.unsubscribe();
+  }
+}
+"""
   }
 
   override fun createGenerator(screen: Screen) = PresenterGenerator(screen)

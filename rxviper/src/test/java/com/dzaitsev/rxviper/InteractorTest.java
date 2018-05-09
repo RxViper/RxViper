@@ -65,7 +65,7 @@ public final class InteractorTest {
 
   @Test
   public void shouldCreateObservableSubscriberParam() {
-    interactor.execute(SUBSCRIBER, PARAM);
+    interactor.execute(PARAM, SUBSCRIBER);
     verify(interactor).createObservable(PARAM);
   }
 
@@ -77,7 +77,7 @@ public final class InteractorTest {
 
   @Test
   public void shouldCreateObservableOnNextParam() {
-    interactor.execute(ON_NEXT, PARAM);
+    interactor.execute(PARAM, ON_NEXT);
     verify(interactor).createObservable(PARAM);
   }
 
@@ -95,13 +95,13 @@ public final class InteractorTest {
 
   @Test
   public void shouldCreateObservableOnNextOnErrorParam() {
-    interactor.execute(ON_NEXT, ON_ERROR, PARAM);
+    interactor.execute(PARAM, ON_NEXT, ON_ERROR);
     verify(interactor).createObservable(PARAM);
   }
 
   @Test
   public void shouldCreateObservableOnNextOnErrorOnCompletedParam() {
-    interactor.execute(ON_NEXT, ON_ERROR, ON_COMPLETED, PARAM);
+    interactor.execute(PARAM, ON_NEXT, ON_ERROR, ON_COMPLETED);
     verify(interactor).createObservable(PARAM);
   }
 
@@ -125,7 +125,7 @@ public final class InteractorTest {
 
   @Test
   public void subscriberParamShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute((Subscriber) null, PARAM));
+    checkIllegalArgumentException(() -> interactor.execute(PARAM, (Subscriber) null));
   }
 
   @Test
@@ -135,27 +135,27 @@ public final class InteractorTest {
 
   @Test
   public void onNextParamShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute((Action1) null, PARAM));
+    checkIllegalArgumentException(() -> interactor.execute(PARAM, (Action1) null));
   }
 
   @Test
   public void onErrorShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute(ON_NEXT, (Action1) null));
+    checkIllegalArgumentException(() -> interactor.execute(ON_NEXT, null));
   }
 
   @Test
   public void onErrorParamShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute(ON_NEXT, null, PARAM));
+    checkIllegalArgumentException(() -> interactor.execute(PARAM, ON_NEXT, null));
   }
 
   @Test
   public void onCompletedShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute(ON_NEXT, ON_ERROR, (Action0) null));
+    checkIllegalArgumentException(() -> interactor.execute(ON_NEXT, ON_ERROR, null));
   }
 
   @Test
   public void onCompletedParamShouldNotBeNull() {
-    checkIllegalArgumentException(() -> interactor.execute(ON_NEXT, ON_ERROR, null, PARAM));
+    checkIllegalArgumentException(() -> interactor.execute(PARAM, ON_NEXT, ON_ERROR, null));
   }
 
   @Test

@@ -19,6 +19,7 @@ dependencies {
   implementation gradleApi()
   implementation libraries.kotlin
   implementation libraries.javaPoet
+  implementation libraries.rxJava
   implementation project(':rxviper')
   testImplementation libraries.junit
   testImplementation libraries.truth

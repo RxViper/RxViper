@@ -65,12 +65,12 @@ rxViper {
       useLambdas true
       useCases {
         getItems {
-          requestClass Long.class
-          requestClass String.class
+          requestClass Long
+          responseClass String
         }
         watchPorn {
-          requestClass Void.class
-          responseClass Boolean.class
+          requestClass Void
+          responseClass Boolean
         }
         buyGoods
       }

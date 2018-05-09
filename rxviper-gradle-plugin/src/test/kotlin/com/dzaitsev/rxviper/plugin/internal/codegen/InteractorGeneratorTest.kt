@@ -21,25 +21,26 @@ import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 class InteractorGeneratorTest : GeneratorTest() {
 
   override fun defaultSource(screen: Screen, generator: Generator): String {
-    return "${packageLine(screen)}\n" +
-        "\n" +
-        "import com.dzaitsev.rxviper.Interactor;\n" +
-        "import javax.annotation.Generated;\n" +
-        "import rx.Observable;\n" +
-        "import rx.Scheduler;\n" +
-        "\n" +
-        "${generatedAnnotation(generator)}\n" +
-        "public final class ${generator.typeSpecName} extends Interactor<Object, Object> {\n" +
-        "  public ${generator.typeSpecName}(Scheduler subscribeScheduler, Scheduler observeScheduler) {\n" +
-        "    super(subscribeScheduler, observeScheduler);\n" +
-        "  }\n" +
-        "\n" +
-        "  @Override\n" +
-        "  protected Observable<Object> createObservable(Object requestModel) {\n" +
-        "    // TODO: Write your business logic here...\n" +
-        "    return Observable.empty();\n" +
-        "  }\n" +
-        "}\n"
+    return """${packageLine(screen)}
+
+import com.dzaitsev.rxviper.Interactor;
+import javax.annotation.Generated;
+import rx.Observable;
+import rx.Scheduler;
+
+${generatedAnnotation(generator)}
+public final class ${generator.typeSpecName} extends Interactor<Object, Object> {
+  public ${generator.typeSpecName}(Scheduler subscribeScheduler, Scheduler observeScheduler) {
+    super(subscribeScheduler, observeScheduler);
+  }
+
+  @Override
+  protected Observable<Object> createObservable(Object requestModel) {
+    // TODO: Write your business logic here...
+    return Observable.empty();
+  }
+}
+"""
   }
 
   override fun createGenerator(screen: Screen) = InteractorGenerator(screen)

@@ -68,27 +68,27 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @param onNext the {@code Action1<ResponseModel>} you have designed to accept emissions from the {@code Observable}
    *
    * @throws IllegalArgumentException if {@code onNext} is {@code null}
-   * @see #execute(Action1, Object)
+   * @see #execute(Object, Action1)
    * @since 0.4.0
    */
   public final void execute(@Nonnull Action1<? super ResponseModel> onNext) {
-    execute(onNext, (RequestModel) null);
+    execute(null, onNext);
   }
 
   /**
    * Subscribes to an {@code Observable} and provides a callback to handle the items it emits.
    *
-   * @param onNext the {@code Action1<ResponseModel>} you have designed to accept emissions from the {@code Observable}
    * @param requestModel the request message to a replier system which receives and processes the request
+   * @param onNext the {@code Action1<ResponseModel>} you have designed to accept emissions from the {@code Observable}
    *
    * @throws IllegalArgumentException if {@code onNext} is {@code null}
    * @see #execute(Action1)
    * @since 0.4.0
    */
-  public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nullable RequestModel requestModel) {
+  public final void execute(@Nullable RequestModel requestModel, @Nonnull Action1<? super ResponseModel> onNext) {
     requireNotNull(onNext);
 
-    execute(new ActionSubscriber<>(onNext, ERROR_NOT_IMPLEMENTED, Actions.empty()), requestModel);
+    execute(requestModel, new ActionSubscriber<>(onNext, ERROR_NOT_IMPLEMENTED, Actions.empty()));
   }
 
   /**
@@ -98,30 +98,30 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @param onError the {@code Action1<Throwable>} you have designed to accept any error notification from the {@code Observable}
    *
    * @throws IllegalArgumentException if {@code onNext} is {@code null}, or if {@code onError} is {@code null}
-   * @see #execute(Action1, Action1, Object)
+   * @see #execute(Object, Action1, Action1)
    * @since 0.4.0
    */
   public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nonnull Action1<Throwable> onError) {
-    execute(onNext, onError, (RequestModel) null);
+    execute(null, onNext, onError);
   }
 
   /**
    * Subscribes to an {@code Observable} and provides callbacks to handle the items it emits and any error notification it issues.
    *
+   * @param requestModel the request message to a replier system which receives and processes the request
    * @param onNext the {@code Action1<ResponseModel>} you have designed to accept emissions from the {@code Observable}
    * @param onError the {@code Action1<Throwable>} you have designed to accept any error notification from the {@code Observable}
-   * @param requestModel the request message to a replier system which receives and processes the request
    *
    * @throws IllegalArgumentException if {@code onNext} is {@code null}, or if {@code onError} is {@code null}
    * @see #execute(Action1, Action1)
    * @since 0.4.0
    */
-  public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nonnull Action1<Throwable> onError,
-      @Nullable RequestModel requestModel) {
+  public final void execute(@Nullable RequestModel requestModel, @Nonnull Action1<? super ResponseModel> onNext,
+      @Nonnull Action1<Throwable> onError) {
     requireNotNull(onNext);
     requireNotNull(onError);
 
-    execute(new ActionSubscriber<>(onNext, onError, Actions.empty()), requestModel);
+    execute(requestModel, new ActionSubscriber<>(onNext, onError, Actions.empty()));
   }
 
   /**
@@ -134,35 +134,35 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    *
    * @throws IllegalArgumentException if {@code onNext} is {@code null}, or if {@code onError} is {@code null}, or if {@code
    *     onComplete} is {@code null}
-   * @see #execute(Action1, Action1, Action0, Object)
+   * @see #execute(Object, Action1, Action1, Action0)
    * @since 0.4.0
    */
   public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nonnull Action1<Throwable> onError,
       @Nonnull Action0 onCompleted) {
-    execute(onNext, onError, onCompleted, null);
+    execute(null, onNext, onError, onCompleted);
   }
 
   /**
    * Subscribes to an {@code Observable} and provides callbacks to handle the items it emits and any error or completion notification it
    * issues.
    *
+   * @param requestModel the request message to a replier system which receives and processes the request
    * @param onNext the {@code Action1<ResponseModel>} you have designed to accept emissions from the {@code Observable}
    * @param onError the {@code Action1<Throwable>} you have designed to accept any error notification from the {@code Observable}
    * @param onCompleted the {@code Action0} you have designed to accept a completion notification from the {@code Observable}
-   * @param requestModel the request message to a replier system which receives and processes the request
    *
    * @throws IllegalArgumentException if {@code onNext} is {@code null}, or if {@code onError} is {@code null}, or if {@code
    *     onComplete} is {@code null}
    * @see #execute(Action1, Action1, Action0)
    * @since 0.4.0
    */
-  public final void execute(@Nonnull Action1<? super ResponseModel> onNext, @Nonnull Action1<Throwable> onError,
-      @Nonnull Action0 onCompleted, @Nullable RequestModel requestModel) {
+  public final void execute(@Nullable RequestModel requestModel, @Nonnull Action1<? super ResponseModel> onNext,
+      @Nonnull Action1<Throwable> onError, @Nonnull Action0 onCompleted) {
     requireNotNull(onNext);
     requireNotNull(onError);
     requireNotNull(onCompleted);
 
-    execute(new ActionSubscriber<>(onNext, onError, onCompleted), requestModel);
+    execute(requestModel, new ActionSubscriber<>(onNext, onError, onCompleted));
   }
 
   /**
@@ -171,25 +171,25 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    *
    * @param subscriber the {@code Subscriber} that will handle emissions and notifications from the {@code Observable}
    *
-   * @see #execute(Subscriber, Object)
+   * @see #execute(Object, Subscriber)
    * @since 0.2.0
    */
   public final void execute(@Nonnull Subscriber<? super ResponseModel> subscriber) {
-    execute(subscriber, null);
+    execute(null, subscriber);
   }
 
   /**
    * Subscribes to an {@code Observable} and provides a {@code Subscriber} that implements functions to handle the items the {@code
    * Observable} emits and any error or completion notification it issues.
    *
-   * @param subscriber the {@code Subscriber} that will handle emissions and notifications from the {@code Observable}
    * @param requestModel the request message to a replier system which receives and processes the request
+   * @param subscriber the {@code Subscriber} that will handle emissions and notifications from the {@code Observable}
    *
    * @throws IllegalStateException if {@code subscribe} is unable to obtain an {@code OnSubscribe<>} function
    * @see #execute(Subscriber)
    * @since 0.1.0
    */
-  public final void execute(@Nonnull Subscriber<? super ResponseModel> subscriber, @Nullable RequestModel requestModel) {
+  public final void execute(@Nullable RequestModel requestModel, @Nonnull Subscriber<? super ResponseModel> subscriber) {
     requireNotNull(subscriber);
 
     subscriptions.add(createObservable(requestModel).subscribeOn(subscribeScheduler)
@@ -232,13 +232,13 @@ public abstract class Interactor<RequestModel, ResponseModel> implements Subscri
    * @return source {@code Observable}
    *
    * @see #execute(Subscriber)
-   * @see #execute(Subscriber, Object)
+   * @see #execute(Object, Subscriber)
    * @see #execute(Action1)
-   * @see #execute(Action1, Object)
+   * @see #execute(Object, Action1)
    * @see #execute(Action1, Action1)
-   * @see #execute(Action1, Action1, Object)
+   * @see #execute(Object, Action1, Action1)
    * @see #execute(Action1, Action1, Action0)
-   * @see #execute(Action1, Action1, Action0, Object)
+   * @see #execute(Object, Action1, Action1, Action0)
    * @since 0.1.0
    */
   @Nonnull

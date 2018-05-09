@@ -61,6 +61,8 @@ public final class MainPresenter extends ViperPresenter<MainViewCallbacks, MainR
   public void fetchCheeses(int count) {
     getView().showProgress();
     interactor.execute(
+        // parameter
+        count,
         // onNext
         cheeses -> {
           cachedData = cheeses;
@@ -71,9 +73,8 @@ public final class MainPresenter extends ViperPresenter<MainViewCallbacks, MainR
         throwable -> {
           getView().showError();
           getView().hideProgress();
-        },
-        // argument
-        count);
+        }
+    );
   }
 
   public void onItemClicked(CheeseViewModel model) {

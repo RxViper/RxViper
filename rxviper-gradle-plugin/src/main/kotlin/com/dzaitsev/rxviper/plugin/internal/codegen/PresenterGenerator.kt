@@ -65,16 +65,16 @@ internal class PresenterGenerator(screen: Screen) : Generator(screen) {
 
         presenterBuilder.addField(ClassName.get(screen.fullPackage, className), argName, Modifier.PRIVATE, Modifier.FINAL)
         presenterBuilder.addMethod(when {
-          screen.useLambdas -> methodBuilder.addStatement("\$N.execute(\$N -> {\n" +
+          screen.useLambdas -> methodBuilder.addStatement("\$N.execute(\$N, \$N -> {\n" +
               "  // TODO: Implement onNext here...\n" +
               "}, t -> {\n" +
               "  // TODO: Implement onError here...\n" +
-              "}, \$N)", argName, useCase.responseClass.simpleName.first().toLowerCase().toString(), "requestModel").build()
-          else -> methodBuilder.addStatement("\$N.execute(\$L, \$L, \$N)",
+              "})", argName, "requestModel", useCase.responseClass.simpleName.first().toLowerCase().toString()).build()
+          else -> methodBuilder.addStatement("\$N.execute(\$N, \$L, \$L)",
               argName,
+              "requestModel",
               action1Anonymous(useCase.responseClass, useCase.responseClass.simpleName.first().toLowerCase().toString(), "TODO: Implement onNext here..."),
-              action1Anonymous(aClass<Throwable>(), "t", "TODO: Implement onError here..."),
-              "requestModel")
+              action1Anonymous(aClass<Throwable>(), "t", "TODO: Implement onError here..."))
               .build()
         })
       } else {

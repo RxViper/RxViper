@@ -21,15 +21,15 @@ import com.dzaitsev.rxviper.plugin.internal.dsl.Screen
 class RouterGeneratorTest : GeneratorTest() {
 
   override fun defaultSource(screen: Screen, generator: Generator): String {
-    return "${packageLine(screen)}\n" +
-        "\n" +
-        "import com.dzaitsev.rxviper.Router;\n" +
-        "import javax.annotation.Generated;\n" +
-        "\n" +
-        "${generatedAnnotation(generator)}\n" +
-        "public interface ${generator.typeSpecName} extends Router {\n" +
-        methods(screen.routesTo) +
-        "}\n"
+    return """${packageLine(screen)}
+
+import com.dzaitsev.rxviper.Router;
+import javax.annotation.Generated;
+
+${generatedAnnotation(generator)}
+public interface ${generator.typeSpecName} extends Router {
+${methods(screen.routesTo)}}
+"""
   }
 
   override fun createGenerator(screen: Screen) = RouterGenerator(screen)
