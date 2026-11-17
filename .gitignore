@@ -117,3 +117,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 /repo
+# Kotlin and nested module outputs
+.kotlin/
+**/build/

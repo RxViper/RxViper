@@ -1,60 +1,52 @@
-/*
- * Copyright 2017 Dmytro Zaitsev
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2026 Dmytro Zaitsev. Licensed under the Apache License, Version 2.0.
 
 package com.dzaitsev.rxviper.plugin
 
-import com.dzaitsev.rxviper.plugin.internal.codegen.InteractorGenerator
-import com.dzaitsev.rxviper.plugin.internal.codegen.PresenterGenerator
-import com.dzaitsev.rxviper.plugin.internal.codegen.RouterGenerator
-import com.dzaitsev.rxviper.plugin.internal.codegen.ViewCallbacksGenerator
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.FileSystemOperations
+import org.gradle.api.provider.MapProperty
+import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import javax.inject.Inject
 
-open class RxViperTask : DefaultTask() {
+/** Generates a reproducible source tree. The output directory must contain only generated files. */
+@CacheableTask
+abstract class RxViperTask : DefaultTask() {
+    @get:Input
+    abstract val sources: MapProperty<String, String>
 
-  init {
-    group = GROUP
-    description = DESCRIPTION
-  }
+    @get:OutputDirectory
+    abstract val outputDirectory: DirectoryProperty
 
-  private val rxViper = project.extensions.getByType(aClass<RxViperExtension>())
-  var destinationDir = rxViper.destinationDir; @JvmName("destinationDir") set
-  var screens = rxViper.screens; @JvmName("screens") set
+    @get:Inject
+    abstract val fileSystemOperations: FileSystemOperations
 
-  @TaskAction
-  fun generateRxViper() {
-    destinationDir.parentFile?.mkdirs()
-    screens.all { screen ->
-      with(mutableListOf(ViewCallbacksGenerator(screen), PresenterGenerator(screen))) {
-        if (screen.includeRouter) {
-          add(RouterGenerator(screen))
-        }
-        if (screen.includeInteractor) {
-          add(InteractorGenerator(screen))
-        }
-        forEach { it.saveTo(destinationDir) }
-      }
+    init {
+        group = "RxViper"
+        description = "Generates Kotlin VIPER scaffolding. Copy it into src/main/kotlin before editing."
     }
-  }
 
-  companion object {
-    const val NAME = "generateRxViper"
-
-    const val GROUP = "RxViper"
-
-    const val DESCRIPTION = "Generates VIPER modules adding them to right targets"
-  }
+    @TaskAction
+    fun generateRxViper() {
+        val staging = temporaryDir.resolve("sources")
+        staging.deleteRecursively()
+        staging.mkdirs()
+        sources.get().forEach { (relativePath, source) ->
+            require(!java.io.File(relativePath).isAbsolute && '\\' !in relativePath &&
+                relativePath.split('/').none { it == ".." }) {
+                "Generated path must remain inside the output directory: $relativePath"
+            }
+            staging.resolve(relativePath).apply {
+                parentFile.mkdirs()
+                writeText(source)
+            }
+        }
+        fileSystemOperations.sync {
+            it.from(staging)
+            it.into(outputDirectory)
+        }
+    }
 }

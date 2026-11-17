@@ -1,18 +1,4 @@
-/*
- * Copyright 2017 Dmytro Zaitsev
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2026 Dmytro Zaitsev. Licensed under the Apache License, Version 2.0.
 
 package com.dzaitsev.rxviper.plugin
 
@@ -20,10 +6,26 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 class RxViperPlugin : Plugin<Project> {
-  override fun apply(project: Project) {
-    with(project) {
-      extensions.add(RxViperExtension.NAME, RxViperExtension(this))
-      tasks.create(RxViperTask.NAME, aClass<RxViperTask>())
+    override fun apply(project: Project) {
+        val extension = project.extensions.create("rxViper", RxViperExtension::class.java)
+        extension.outputDirectory.convention(project.layout.buildDirectory.dir("generated/rxviper/kotlin"))
+        project.tasks.register("generateRxViper", RxViperTask::class.java) { task ->
+            task.outputDirectory.set(extension.outputDirectory)
+            task.sources.set(project.providers.provider {
+                KotlinGenerator.generate(
+                    extension.packageName.get(),
+                    extension.backend.get(),
+                    extension.screens.map { screen ->
+                        ScreenSpec(
+                            screen.getName(),
+                            screen.includeRouter.get(),
+                            screen.includeInteractor.get(),
+                            screen.routesTo.get(),
+                            screen.useCases.map { UseCaseSpec(it.getName(), it.requestType.get(), it.responseType.get()) },
+                        )
+                    },
+                )
+            })
+        }
     }
-  }
 }

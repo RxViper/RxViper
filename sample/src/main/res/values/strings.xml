@@ -17,7 +17,9 @@
 -->
 <resources>
   <string name="app_name">RxViperSample</string>
-  <string name="error">Error</string>
+  <string name="cheese_title">RxViper cheeses</string>
+  <string name="reload_cheeses">Reload cheeses</string>
+  <string name="cheese_details">%1$s\n\n%2$s cheese</string>
 
   <string-array name="hard_cheeses">
     <item>Abbaye du Mont des Cats</item>

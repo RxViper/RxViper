@@ -1,4 +1,33 @@
 ## Changelog
+
+### 2.0.0-SNAPSHOT (unreleased)
+
+This is a source and binary breaking rewrite; see [MIGRATION.md](MIGRATION.md).
+
+- Rewrite the runtime, tests, code generator and Android sample in Kotlin.
+- Extract `rxviper-core` with no Android, RxJava or coroutine runtime dependency;
+  share presenters, lifecycle handling, callback contracts and mappers.
+- Add independent `rxviper-rxjava`, `rxviper-rxjava2`, `rxviper-rxjava3` and
+  `rxviper-coroutines` artifacts. Complete RxJava 2 support ([#43]).
+- Add suspend and Flow interactors with injected dispatchers, caller-owned scopes,
+  structured cancellation and explicit error callbacks.
+- Separate reusable `clear()` from terminal Rx disposal; return per-execution
+  native handles and cancel safely during synchronous source creation/callbacks.
+- Defer Rx source creation onto the subscription scheduler, preserve Flowable
+  backpressure and document worker/UI scheduling ([#40]).
+- Preserve weak, detached no-op view/router proxies; make lifecycle cleanup safe
+  for hook exceptions and reentrant attachment, and unwrap callback exceptions.
+- Generate backend-specific Kotlin VIPER scaffolding with modern Gradle properties,
+  reproducible output and tested examples ([#52]). IDE templates ([#53]) remain
+  a separate request.
+- Add detailed module, lifecycle, usage, build and migration documentation ([#21]).
+- Modernize to checksummed Gradle 9.9.1, Kotlin 2.4.21, RxJava 1.3.8 / 2.2.21 /
+  3.1.12, coroutines 1.11.0 and Android Gradle Plugin 9.5.1; centralize versions.
+- Replace JCenter/Bintray and obsolete plugins with Maven Central/Google and
+  local Maven publication, including the Gradle plugin marker.
+- Update the opt-in Android sample with lifecycle cancellation, list/details
+  navigation, current Android SDK and presenter tests; add automated build checks.
+
 ##### 1.0.0-RC3
 * Fix `IllegalAccessException` in `NullObject` (Closes [#55]).
 * Bump RxJava version to `1.3.4`.
@@ -39,7 +68,7 @@
 
 ##### 0.6.0
 * `Interactor` works efficiently and safely with subscriptions. (Closes [#13]).
-* Published on [Bintray]. 
+* Published on [Bintray].
 
 ##### 0.5.1
 * `Interactor.execute(lambda, param)` respects passed param. (Closes [#9]).
@@ -66,7 +95,7 @@
  * `Presenter#dropView()`,
  * `Presenter#getRouter()`,
  * `Presenter#getView()`
- 
+
 ##### 0.1.1
 * Submitted first usable version
 
@@ -92,3 +121,8 @@
 [#49]: https://github.com/RxViper/RxViper/issues/49
 [#50]: https://github.com/RxViper/RxViper/issues/50
 [#55]: https://github.com/RxViper/RxViper/issues/55
+[#21]: https://github.com/RxViper/RxViper/issues/21
+[#40]: https://github.com/RxViper/RxViper/issues/40
+[#43]: https://github.com/RxViper/RxViper/issues/43
+[#52]: https://github.com/RxViper/RxViper/issues/52
+[#53]: https://github.com/RxViper/RxViper/issues/53
