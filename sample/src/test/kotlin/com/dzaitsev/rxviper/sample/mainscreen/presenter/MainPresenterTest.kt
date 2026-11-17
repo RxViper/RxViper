@@ -1,6 +1,7 @@
 /* Copyright 2016–2026 Dmytro Zaitsev. Licensed under the Apache License, Version 2.0. */
 package com.dzaitsev.rxviper.sample.mainscreen.presenter
 
+import com.dzaitsev.rxviper.SuspendInteractor as SuspendInteractorContract
 import com.dzaitsev.rxviper.coroutines.SuspendInteractor
 import com.dzaitsev.rxviper.sample.data.Cheese
 import com.dzaitsev.rxviper.sample.data.CheeseType
@@ -24,11 +25,9 @@ class MainPresenterTest {
     @Test
     fun `completed data replays on reattachment without another request`() = runTest {
         var executions = 0
-        val interactor = object : SuspendInteractor<Int, List<Cheese>>(StandardTestDispatcher(testScheduler)) {
-            override suspend fun run(request: Int): List<Cheese> {
-                executions++
-                return listOf(cheese)
-            }
+        val interactor = SuspendInteractorContract<Int, List<Cheese>> {
+            executions++
+            listOf(cheese)
         }
         val presenter = MainPresenter(interactor, this)
         val first = RecordingView()
@@ -75,10 +74,8 @@ class MainPresenterTest {
     }
 
     @Test
-    fun `use case failures are displayed and loading stops`() = runTest {
-        val interactor = object : SuspendInteractor<Int, List<Cheese>>(StandardTestDispatcher(testScheduler)) {
-            override suspend fun run(request: Int): List<Cheese> = error("Repository unavailable")
-        }
+    fun `interactor failures are displayed and loading stops`() = runTest {
+        val interactor = SuspendInteractorContract<Int, List<Cheese>> { error("Repository unavailable") }
         val presenter = MainPresenter(interactor, this)
         val view = RecordingView()
         presenter.takeView(view)

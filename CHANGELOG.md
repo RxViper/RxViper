@@ -9,6 +9,10 @@ This is a source and binary breaking rewrite; see [MIGRATION.md](MIGRATION.md).
   share presenters, lifecycle handling, callback contracts and mappers.
 - Add independent `rxviper-rxjava`, `rxviper-rxjava2`, `rxviper-rxjava3` and
   `rxviper-coroutines` artifacts. Complete RxJava 2 support ([#43]).
+- Add backend-neutral `Interactor` and `SuspendInteractor` invocation contracts to core;
+  make the sample and generated coroutine presenters accept contracts and lambda fakes.
+- Move callback `execute` helpers to backend extensions while preserving managed
+  Rx cancellation and coroutine scope ownership; extension imports are now required.
 - Add suspend and Flow interactors with injected dispatchers, caller-owned scopes,
   structured cancellation and explicit error callbacks.
 - Separate reusable `clear()` from terminal Rx disposal; return per-execution
@@ -27,6 +31,8 @@ This is a source and binary breaking rewrite; see [MIGRATION.md](MIGRATION.md).
   and shared JVM/Android SDK conventions, retaining per-module JVM 17 overrides.
 - Replace JCenter/Bintray and obsolete plugins with Maven Central/Google and
   local Maven publication, including the Gradle plugin marker.
+- Add the sample's ProGuard file required by Trellis release builds, retaining
+  the view/router interfaces invoked by dynamic proxies.
 - Update the opt-in Android sample with lifecycle cancellation, list/details
   navigation, current Android SDK and presenter tests; add automated build checks.
 

@@ -43,7 +43,7 @@ class MainActivity : Activity(), MainViewCallbacks, MainRouter {
             setOnItemClickListener { _, _, position, _ -> presenter.onItemClicked(cheeses[position]) }
         }
 
-        // Construct dependencies at the edge; presenter and use case have no Android dependency.
+        // Construct dependencies at the edge; presenter and interactor have no Android dependency.
         val arrays = listOf(
             R.array.hard_cheeses to CheeseType.HARD,
             R.array.semi_hard_cheeses to CheeseType.SEMI_HARD,

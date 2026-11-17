@@ -21,7 +21,7 @@ class RxViperPlugin : Plugin<Project> {
                             screen.includeRouter.get(),
                             screen.includeInteractor.get(),
                             screen.routesTo.get(),
-                            screen.useCases.map { UseCaseSpec(it.getName(), it.requestType.get(), it.responseType.get()) },
+                            screen.interactors.map { InteractorSpec(it.getName(), it.requestType.get(), it.responseType.get()) },
                         )
                     },
                 )

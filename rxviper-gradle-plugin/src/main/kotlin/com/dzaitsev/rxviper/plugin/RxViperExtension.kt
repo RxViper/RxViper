@@ -2,6 +2,7 @@
 
 package com.dzaitsev.rxviper.plugin
 
+import groovy.lang.Closure
 import org.gradle.api.Action
 import org.gradle.api.Named
 import org.gradle.api.NamedDomainObjectContainer
@@ -21,6 +22,8 @@ open class RxViperExtension @Inject constructor(objects: ObjectFactory) {
     }
 
     fun screens(action: Action<NamedDomainObjectContainer<Screen>>) = action.execute(screens)
+
+    fun screens(closure: Closure<*>) { screens.configure(closure) }
 }
 
 class Screen(private val screenName: String, objects: ObjectFactory) : Named {
@@ -29,15 +32,17 @@ class Screen(private val screenName: String, objects: ObjectFactory) : Named {
     val includeRouter: Property<Boolean> = objects.property(Boolean::class.java).convention(true)
     val includeInteractor: Property<Boolean> = objects.property(Boolean::class.java).convention(true)
     val routesTo: ListProperty<String> = objects.listProperty(String::class.java).convention(emptyList())
-    val useCases: NamedDomainObjectContainer<UseCase> = objects.domainObjectContainer(UseCase::class.java) {
-        UseCase(it, objects)
+    val interactors: NamedDomainObjectContainer<Interactor> = objects.domainObjectContainer(Interactor::class.java) {
+        Interactor(it, objects)
     }
 
-    fun useCases(action: Action<NamedDomainObjectContainer<UseCase>>) = action.execute(useCases)
+    fun interactors(action: Action<NamedDomainObjectContainer<Interactor>>) = action.execute(interactors)
+
+    fun interactors(closure: Closure<*>) { interactors.configure(closure) }
 }
 
-class UseCase(private val useCaseName: String, objects: ObjectFactory) : Named {
-    override fun getName(): String = useCaseName
+class Interactor(private val interactorName: String, objects: ObjectFactory) : Named {
+    override fun getName(): String = interactorName
 
     /** Fully qualified Kotlin type name; use kotlin.Unit for an interactor without input. */
     val requestType: Property<String> = objects.property(String::class.java).convention("kotlin.Unit")

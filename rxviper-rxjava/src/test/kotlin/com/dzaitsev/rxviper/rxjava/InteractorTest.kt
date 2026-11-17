@@ -1,5 +1,7 @@
 package com.dzaitsev.rxviper.rxjava
 
+import com.dzaitsev.rxviper.Interactor as InteractorContract
+
 import rx.Observable
 import rx.Scheduler
 import rx.observers.TestSubscriber
@@ -15,7 +17,7 @@ import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class InteractorTest {
-    private fun useCase(
+    private fun newInteractor(
         subscribe: Scheduler = Schedulers.trampoline(),
         observe: Scheduler = Schedulers.trampoline(),
         factory: (Int) -> Observable<Int>,
@@ -26,7 +28,7 @@ class InteractorTest {
     @Test
     fun `each subscription constructs a fresh source only when subscribed`() {
         val requests = mutableListOf<Int>()
-        val interactor = useCase { request ->
+        val interactor = newInteractor { request ->
             requests += request
             Observable.just(request)
         }
@@ -48,7 +50,7 @@ class InteractorTest {
         val subscribe = TestScheduler()
         val observe = TestScheduler()
         val events = mutableListOf<String>()
-        val interactor = useCase(subscribe, observe) {
+        val interactor = newInteractor(subscribe, observe) {
             events += "constructed:$it"
             Observable.just(it)
         }
@@ -68,7 +70,7 @@ class InteractorTest {
     fun `factory exceptions are delivered through the error callback`() {
         val expected = IllegalArgumentException("factory")
         val errors = mutableListOf<Throwable>()
-        val interactor = useCase { throw expected }
+        val interactor = newInteractor { throw expected }
         val handle = interactor.execute(0, { error("Unexpected value") }, errors::add)
         assertEquals(1, errors.size)
         assertSame(expected, errors.single())
@@ -80,7 +82,7 @@ class InteractorTest {
         val expected = IllegalStateException("source")
         val errors = mutableListOf<Throwable>()
         var completed = false
-        val interactor = useCase { Observable.error(expected) }
+        val interactor = newInteractor { Observable.error(expected) }
         val handle = interactor.execute(0, { error("Unexpected value") }, errors::add) {
             completed = true
         }
@@ -93,7 +95,7 @@ class InteractorTest {
     fun `synchronous completion closes its execution handle`() {
         val values = mutableListOf<Int>()
         var completions = 0
-        val interactor = useCase { Observable.just(it) }
+        val interactor = newInteractor { Observable.just(it) }
         val handle = interactor.execute(9, values::add, { throw AssertionError(it) }) {
             completions++
         }
@@ -108,7 +110,7 @@ class InteractorTest {
         val source = PublishSubject.create<Int>()
         val firstValues = mutableListOf<Int>()
         val secondValues = mutableListOf<Int>()
-        val interactor = useCase { source }
+        val interactor = newInteractor { source }
         val first = interactor.execute(1, firstValues::add, { throw AssertionError(it) })
         val second = interactor.execute(2, secondValues::add, { throw AssertionError(it) })
         source.onNext(10)
@@ -126,7 +128,7 @@ class InteractorTest {
     fun `clear cancels active work and permits another execution`() {
         val source = PublishSubject.create<Int>()
         val values = mutableListOf<Int>()
-        val interactor = useCase { source }
+        val interactor = newInteractor { source }
         val first = interactor.execute(1, values::add, { throw AssertionError(it) })
         interactor.clear()
         assertTrue(first.isUnsubscribed)
@@ -144,7 +146,7 @@ class InteractorTest {
     @Test
     fun `terminal close cancels work and rejects subsequent managed execution`() {
         val source = PublishSubject.create<Int>()
-        val interactor = useCase { source }
+        val interactor = newInteractor { source }
         val handle = interactor.execute(0, {}, { throw AssertionError(it) })
         interactor.unsubscribe()
         interactor.unsubscribe()
@@ -160,7 +162,7 @@ class InteractorTest {
     fun `cancellation before scheduler activation prevents source construction`() {
         val scheduler = TestScheduler()
         var constructions = 0
-        val interactor = useCase(scheduler, scheduler) {
+        val interactor = newInteractor(scheduler, scheduler) {
             constructions++
             Observable.just(it)
         }
@@ -174,9 +176,10 @@ class InteractorTest {
     @Test
     fun `direct invocation is caller owned independently of managed lifecycle`() {
         val source = PublishSubject.create<Int>()
-        val interactor = useCase { source }
+        val interactor = newInteractor { source }
         val subscriber = TestSubscriber<Int>()
-        interactor(1).subscribe(subscriber)
+        val contract: InteractorContract<Int, Observable<Int>> = interactor
+        contract(1).subscribe(subscriber)
         interactor.clear()
         interactor.unsubscribe()
         source.onNext(8)
@@ -184,7 +187,7 @@ class InteractorTest {
         subscriber.assertValues(8)
         subscriber.assertCompleted()
         val next = TestSubscriber<Int>()
-        useCase { Observable.just(it) }.also { it.unsubscribe() }(9).subscribe(next)
+        newInteractor { Observable.just(it) }.also { it.unsubscribe() }(9).subscribe(next)
         next.assertValues(9)
         next.assertCompleted()
     }
@@ -195,7 +198,7 @@ class InteractorTest {
         val sourceEffects = mutableListOf<Int>()
         var completions = 0
         lateinit var interactor: Interactor<Int, Int>
-        interactor = useCase { request ->
+        interactor = newInteractor { request ->
             interactor.clear()
             Observable.just(request).doOnNext { sourceEffects += it }
         }
@@ -212,7 +215,7 @@ class InteractorTest {
         val values = mutableListOf<Int>()
         val sourceEffects = mutableListOf<Int>()
         var completions = 0
-        val interactor = useCase { request ->
+        val interactor = newInteractor { request ->
             Observable.range(request, 3).doOnNext { sourceEffects += it }
         }
         val handle = interactor.execute(7, {

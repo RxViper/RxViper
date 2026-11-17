@@ -34,7 +34,7 @@ rxViper {
     screens {
         create("home") {
             routesTo.set(listOf("Details", "Settings"))
-            useCases {
+            interactors {
                 create("loadItems") {
                     requestType.set("kotlin.Unit")
                     responseType.set("kotlin.String")
@@ -53,12 +53,17 @@ entire output directory, including removal of obsolete files. Never point
 `outputDirectory` at a directory containing handwritten files.
 
 The default backend is coroutines; each generated coroutine presenter accepts a
-caller-owned scope. Interactors receive an explicit dispatcher or pair of Rx
+caller-owned scope and core `SuspendInteractor` contracts, allowing interactor or
+lambda implementations. Generated files import their backend's `execute`
+extension. Rx presenters keep concrete interactor parameters because they manage
+those interactors with `clear()`. Interactors receive an explicit dispatcher or pair of Rx
 schedulers. Generated presenters cancel their work when a view is dropped. The
 scope's dispatcher must be appropriate for view callbacks (usually Main on
 Android). The plugin does not add Android or a Main dispatcher dependency.
 
 Migration from the old DSL:
+
+- Rename the old `useCases { ... }` block to `interactors { ... }`.
 
 - Configuration values use Gradle `Property.set(...)` and `ListProperty.set(...)`.
 - `requestClass` and `responseClass` become fully qualified Kotlin `requestType`

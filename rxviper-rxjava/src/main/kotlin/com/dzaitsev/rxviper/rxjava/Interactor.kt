@@ -2,6 +2,7 @@
 
 package com.dzaitsev.rxviper.rxjava
 
+import com.dzaitsev.rxviper.Interactor as InteractorContract
 import rx.Observable
 import rx.Scheduler
 import rx.Subscription
@@ -9,34 +10,25 @@ import rx.Subscriber
 import rx.subscriptions.CompositeSubscription
 
 /**
- * RxJava 1 use case with injected scheduling. [clear] cancels current executions and allows reuse;
+ * RxJava 1 interactor with injected scheduling. [clear] cancels current executions and allows reuse;
  * [unsubscribe] permanently closes execution. Subscriptions to [invoke] are caller-owned.
  */
 abstract class Interactor<Request, Response : Any>(
     private val subscribeScheduler: Scheduler,
     private val observeScheduler: Scheduler,
-) : Subscription {
+) : InteractorContract<Request, Observable<Response>>, Subscription {
     private val executions = CompositeSubscription()
 
     protected abstract fun createObservable(request: Request): Observable<Response>
 
-    operator fun invoke(request: Request): Observable<Response> =
+    final override operator fun invoke(request: Request): Observable<Response> =
         Observable.defer { createObservable(request) }
             .subscribeOn(subscribeScheduler)
             .observeOn(observeScheduler)
 
-    fun execute(
-        request: Request,
-        onNext: (Response) -> Unit,
-        onError: (Throwable) -> Unit,
-        onComplete: () -> Unit = {},
-    ): Subscription {
+    /** Registers ownership before subscription so synchronous cancellation is effective. */
+    internal fun subscribeManaged(request: Request, subscriber: Subscriber<Response>): Subscription {
         check(!isUnsubscribed) { "This interactor has been unsubscribed" }
-        val subscriber = object : Subscriber<Response>() {
-            override fun onNext(value: Response) { onNext.invoke(value) }
-            override fun onError(failure: Throwable) { onError.invoke(failure) }
-            override fun onCompleted() { onComplete.invoke() }
-        }
         executions.add(subscriber)
         if (!subscriber.isUnsubscribed) {
             invoke(request)

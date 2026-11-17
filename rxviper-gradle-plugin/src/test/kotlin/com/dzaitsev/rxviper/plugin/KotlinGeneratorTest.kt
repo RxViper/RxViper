@@ -20,7 +20,7 @@ class KotlinGeneratorTest {
     val temporary = TemporaryFolder()
 
     private val screens = listOf(
-        ScreenSpec("main", true, true, listOf("Details"), listOf(UseCaseSpec("load", "kotlin.Unit", "kotlin.String"))),
+        ScreenSpec("main", true, true, listOf("Details"), listOf(InteractorSpec("load", "kotlin.Unit", "kotlin.String"))),
         ScreenSpec("plain", false, false, emptyList(), emptyList()),
         ScreenSpec("fallback", false, true, emptyList(), emptyList()),
     )
@@ -75,10 +75,13 @@ class KotlinGeneratorTest {
                 assertTrue("override suspend fun run" in interactor)
                 assertFalse("io.reactivex" in interactor)
                 assertTrue("it.cancel()" in presenter)
+                assertTrue("com.dzaitsev.rxviper.SuspendInteractor<kotlin.Unit, kotlin.String>" in presenter)
+                assertTrue("import com.dzaitsev.rxviper.coroutines.execute" in presenter)
             } else {
                 assertTrue(".${backend.name.lowercase()}.Interactor" in interactor)
                 assertFalse("kotlinx.coroutines" in interactor)
                 assertTrue("loadInteractor.clear()" in presenter)
+                assertTrue("import com.dzaitsev.rxviper.${backend.name.lowercase()}.execute" in presenter)
             }
             assertFalse(result.containsKey("example/plain/PlainRouter.kt"))
             assertFalse(result.containsKey("example/plain/PlainInteractor.kt"))
@@ -93,8 +96,8 @@ class KotlinGeneratorTest {
         val invalid = listOf(
             screens.first().copy(name = "../main"),
             screens.first().copy(routesTo = listOf("Details", "details")),
-            screens.first().copy(useCases = listOf(UseCaseSpec("load", "kotlin.Unit", "List<String>"))),
-            screens.first().copy(useCases = listOf(UseCaseSpec("load", "kotlin.Unit", "kotlin.String"), UseCaseSpec("Load", "kotlin.Unit", "kotlin.String"))),
+            screens.first().copy(interactors = listOf(InteractorSpec("load", "kotlin.Unit", "List<String>"))),
+            screens.first().copy(interactors = listOf(InteractorSpec("load", "kotlin.Unit", "kotlin.String"), InteractorSpec("Load", "kotlin.Unit", "kotlin.String"))),
         )
         invalid.forEach { screen ->
             assertFailsWith<IllegalArgumentException> { KotlinGenerator.generate("example", Backend.COROUTINES, listOf(screen)) }

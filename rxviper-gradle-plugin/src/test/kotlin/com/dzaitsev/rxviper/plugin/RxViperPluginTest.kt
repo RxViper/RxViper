@@ -24,10 +24,10 @@ class RxViperPluginTest {
         val task = project.tasks.getByName("generateRxViper") as RxViperTask
         extension.packageName.set("example.later")
         extension.backend.set(Backend.RXJAVA3)
-        extension.screens.create("home")
+        extension.screens.create("home").interactors.create("load")
         assertEquals(4, task.sources.get().size)
         assertTrue(task.sources.get().keys.all { it.startsWith("example/later/home/") })
-        assertTrue("rxjava3.Interactor" in task.sources.get().getValue("example/later/home/HomeInteractor.kt"))
+        assertTrue("rxjava3.Interactor" in task.sources.get().getValue("example/later/home/LoadInteractor.kt"))
     }
 
     @Test
@@ -44,6 +44,12 @@ class RxViperPluginTest {
                     create('home') {
                         includeRouter.set(INCLUDE_ROUTER)
                         routesTo.set(['Details'])
+                        interactors {
+                            create('load') {
+                                requestType.set('kotlin.Unit')
+                                responseType.set('kotlin.String')
+                            }
+                        }
                     }
                 }
             }

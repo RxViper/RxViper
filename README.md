@@ -26,7 +26,7 @@ not publish a release to Maven Central or the Gradle Plugin Portal.
 
 | Artifact | Public API | Runtime dependencies beyond Kotlin |
 | --- | --- | --- |
-| `rxviper-core` | `Presenter`, `ViperPresenter`, `ViewCallbacks`, `Router`, `Mapper` | None |
+| `rxviper-core` | `Presenter`, `ViperPresenter`, `ViewCallbacks`, `Router`, `Mapper`, `Interactor`, `SuspendInteractor` | None |
 | `rxviper-rxjava` | `rxjava.Interactor` returning `Observable` / `Subscription` | Core, RxJava 1.3.8 |
 | `rxviper-rxjava2` | `rxjava2.Interactor` returning `Flowable` / `Disposable` | Core, RxJava 2.2.21 |
 | `rxviper-rxjava3` | `rxjava3.Interactor` returning `Flowable` / `Disposable` | Core, RxJava 3.1.12 |
@@ -135,6 +135,30 @@ class NavigationPresenter : com.dzaitsev.rxviper.ViperPresenter<ProfileView, Pro
 
 Full [core lifecycle details](rxviper-core/README.md).
 
+## Interactor contracts
+
+The `com.dzaitsev.rxviper` package in core defines two small functional interfaces:
+`Interactor<Request, Result>` with `operator fun invoke`, and
+`SuspendInteractor<Request, Result>` with
+`suspend operator fun invoke`. The suspend contract uses the Kotlin language only;
+core still has no dependency on `kotlinx.coroutines`.
+
+RxJava interactors implement `Interactor` with their native `Observable` or `Flowable`
+as the result. `FlowInteractor` implements `Interactor<Request, Flow<Response>>`, and
+the coroutine `SuspendInteractor` implements core's suspending contract.
+Scheduling and subscription ownership stay in the backend modules.
+
+Presenters can depend on a contract and accept either an interactor implementation
+or a lambda. For example, a test can inject
+`com.dzaitsev.rxviper.SuspendInteractor<Int, List<Cheese>> { listOf(cheese) }`
+without subclassing an interactor. The sample and generated coroutine presenters use this approach.
+
+All callback-based `execute` helpers are extensions in the selected backend's
+package. Import the extension when using it; direct `interactor(request)` calls need
+no extension import. Coroutine extensions work on the core contracts, including
+lambda implementations. Rx extensions receive the concrete interactor so managed
+subscriptions still participate in its `clear()` and terminal disposal.
+
 ## Coroutines
 
 A suspend interactor represents a single result. Its dispatcher controls the work;
@@ -143,6 +167,7 @@ Use `Unit` for a use case without a request.
 
 ```kotlin
 import com.dzaitsev.rxviper.coroutines.SuspendInteractor
+import com.dzaitsev.rxviper.coroutines.execute
 import kotlinx.coroutines.CoroutineDispatcher
 
 class LoadName(dispatcher: CoroutineDispatcher) : SuspendInteractor<Long, String>(dispatcher) {
@@ -164,7 +189,9 @@ Neither interactor owns a global or hidden scope. Cancellation propagates to the
 work and is never reported to `onError`; cancelled streams do not call `onComplete`.
 Errors from downstream callbacks propagate to the owning scope. `invoke` propagates
 source errors directly; the `execute` convenience functions route source errors to
-the explicit error callback. On Android, use a Main scope and add
+the explicit error callback. Plain contract implementations run in the supplied
+scope's context; only the dispatcher-aware interactor classes switch upstream work
+to their injected dispatcher. On Android, use a Main scope and add
 `kotlinx-coroutines-android` in the application; core has no Android dependency.
 
 ## RxJava 1, 2 and 3
@@ -174,6 +201,7 @@ and artifact names differ. RxJava 1 uses Observable and `createObservable`.
 
 ```kotlin
 import com.dzaitsev.rxviper.rxjava3.Interactor
+import com.dzaitsev.rxviper.rxjava3.execute
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Scheduler
 

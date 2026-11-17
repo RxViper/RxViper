@@ -1,7 +1,8 @@
 # RxViper core
 
 This Kotlin/JVM module depends only on the Kotlin standard library. It contains
-`Presenter`, `ViperPresenter`, `ViewCallbacks`, `Router`, and `Mapper` in
+`Presenter`, `ViperPresenter`, `ViewCallbacks`, `Router`, `Mapper`, `Interactor`, and
+`SuspendInteractor` in
 `com.dzaitsev.rxviper`.
 
 Presenters take explicit interface class tokens. This avoids runtime discovery of
@@ -36,5 +37,15 @@ a drop hook survives cleanup and takes priority over the outer replacement.
 
 `Mapper` is a backend-neutral functional interface. Use `mapper::map` with Rx
 operators, `mapper(value)` for a direct call, and `mapper.mapAll(values)` for an
-ordered list. No async interactor contract is forced into core: suspend functions,
-Flow, Observable, and Flowable retain their native APIs in the adapter modules.
+ordered list.
+
+`Interactor<Request, Result>` declares `operator fun invoke(request): Result`.
+`SuspendInteractor<Request, Result>` declares its suspending counterpart. Both are
+functional interfaces, so a presenter can accept an interactor or a small lambda
+implementation in tests. The suspend contract needs only the Kotlin standard
+library, not `kotlinx.coroutines`.
+
+A result may be a plain value or a native stream supplied by a backend. Core has
+no imports of Flow, Observable, Flowable, scheduler, scope, subscription or Job.
+Dispatcher-aware base classes and optional `execute` extensions live in backend
+modules. Resource ownership is not part of these invocation-only contracts.

@@ -5,6 +5,10 @@ The original cheese browser is rewritten in Kotlin using `rxviper-core` and
 interfaces, the presenter owns display logic, and a suspend interactor loads
 the data. Dependencies are constructed directly in the Activity.
 
+The presenter depends on core's `SuspendInteractor` contract and calls the coroutine
+`execute` extension. Production supplies a dispatcher-aware `SuspendInteractor`;
+tests can supply a suspend lambda without inheriting a backend class.
+
 The sample is optional so building the library requires no Android SDK:
 
 ```shell
@@ -23,3 +27,7 @@ is propagated and is never displayed as a loading error.
 The sample uses platform widgets to keep attention on VIPER and coroutine
 ownership. The library also works with AndroidX, Compose, or other JVM UIs;
 those integrations belong to the consuming application.
+
+Release builds use Trellis's shrinking configuration. `proguard-rules.pro` retains
+view and router interfaces invoked through RxViper's dynamic proxies. The full
+sample can be built with `./gradlew -PandroidSample=true :sample:assemble`.

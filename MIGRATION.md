@@ -30,11 +30,35 @@ in the caller's coroutine/collector, or the scope-taking `execute` helper. The
 caller owns its scope and cancels each returned Job on view detach. Cancellation
 is never converted into an ordinary error. No Rx type crosses into this module.
 
+All callback `execute` functions are now top-level extensions rather than members.
+Add the import for the backend you use, for example
+`import com.dzaitsev.rxviper.coroutines.execute` or
+`import com.dzaitsev.rxviper.rxjava3.execute`. Kotlin call syntax and callback
+parameters stay the same. This is a binary API change; recompile consumers when
+updating from an earlier 2.0 snapshot.
+
+Core's `com.dzaitsev.rxviper` package defines invocation contracts:
+`Interactor<Request, Result>` for Rx/Flow results and
+`SuspendInteractor<Request, Response>` for a suspending result.
+Coroutine presenters can accept `com.dzaitsev.rxviper.SuspendInteractor` instead
+of the dispatcher-aware `com.dzaitsev.rxviper.coroutines.SuspendInteractor` base
+class. Callback extensions support these interfaces, so lambda implementations
+work too. The adapter base classes still provide injected scheduling; a bare
+contract implementation owns that policy itself.
+
+Rx extensions keep registration and cleanup inside the concrete interactor via
+an internal subscription method. `clear()` and terminal disposal retain their
+existing behavior, including cancellation during synchronous source creation or
+callbacks. A core `Interactor` reference exposes native invocation, not managed Rx
+execution or lifecycle methods.
+
 Lifecycle hook parameters remain supported: `onTakeView(view)`, `onDropView(view)`,
 `onTakeRouter(router)`, `onDropRouter(router)`. Use the protected proxy properties
 inside asynchronous callbacks to avoid capturing an actual Activity or router.
 Explicit class tokens replace the old generic reflection inference; no shrinker
 rules are needed to retain generic superclass signatures for presenter discovery.
+For Android builds with shrinking enabled, retain the view/router callback
+interfaces used by dynamic proxies; `sample/proguard-rules.pro` contains examples.
 
 Callbacks remain weakly held, Unit-only interfaces. Detached proxy calls are no-ops.
 Keep lifecycle operations and callback delivery on the same UI thread. Retaining

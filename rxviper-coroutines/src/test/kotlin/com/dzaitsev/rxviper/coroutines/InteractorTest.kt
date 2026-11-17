@@ -3,6 +3,8 @@
 
 package com.dzaitsev.rxviper.coroutines
 
+import com.dzaitsev.rxviper.SuspendInteractor as SuspendInteractorContract
+import com.dzaitsev.rxviper.Interactor
 import kotlin.coroutines.ContinuationInterceptor
 import kotlin.test.*
 import kotlinx.coroutines.*
@@ -30,7 +32,8 @@ class InteractorTest {
         }
         val results = mutableListOf<Int>()
         val scope = CoroutineScope(coroutineContext + caller)
-        val job = interactor.execute(scope, 21, {
+        val contract: SuspendInteractorContract<Int, Int> = interactor
+        val job = contract.execute(scope, 21, {
             results += it
         }, { fail("Unexpected failure", it) })
         assertTrue(results.isEmpty())
@@ -121,7 +124,8 @@ class InteractorTest {
                 }
             }
         }
-        val source = interactor(10)
+        val contract: Interactor<Int, Flow<Int>> = interactor
+        val source = contract(10)
         assertEquals(0, constructions)
         assertEquals(listOf(10, 11), source.toList())
         assertEquals(listOf(10, 11), source.toList())

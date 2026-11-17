@@ -4,14 +4,14 @@ package com.dzaitsev.rxviper.plugin
 
 import java.util.Locale
 
-internal data class UseCaseSpec(val name: String, val requestType: String, val responseType: String)
+internal data class InteractorSpec(val name: String, val requestType: String, val responseType: String)
 
 internal data class ScreenSpec(
     val name: String,
     val includeRouter: Boolean,
     val includeInteractor: Boolean,
     val routesTo: List<String>,
-    val useCases: List<UseCaseSpec>,
+    val interactors: List<InteractorSpec>,
 )
 
 /** Pure source generation: no Gradle, reflection, runtime backend or codegen library required. */
@@ -37,7 +37,7 @@ internal object KotlinGenerator {
             val pkg = "$packageName.${screen.name.lowercase(Locale.ROOT)}"
             qualifiedName(pkg)
             val cases = if (screen.includeInteractor) {
-                screen.useCases.ifEmpty { listOf(UseCaseSpec(screen.name, "kotlin.Unit", "kotlin.Any")) }
+                screen.interactors.ifEmpty { listOf(InteractorSpec(screen.name, "kotlin.Unit", "kotlin.Any")) }
             } else {
                 emptyList()
             }
@@ -67,23 +67,30 @@ internal object KotlinGenerator {
             }
             add(pkg, "${prefix}Presenter", presenter(prefix, parent, cases, backend))
             if (screen.includeInteractor) {
-                cases.forEach { useCase ->
-                    val interactorName = "${useCase.name.replaceFirstChar { it.uppercaseChar() }}Interactor"
-                    add(pkg, interactorName, interactor(interactorName, useCase, backend))
+                cases.forEach { spec ->
+                    val interactorName = "${spec.name.replaceFirstChar { it.uppercaseChar() }}Interactor"
+                    add(pkg, interactorName, interactor(interactorName, spec, backend))
                 }
             }
         }
         return sources
     }
 
-    private fun presenter(prefix: String, parent: String, cases: List<UseCaseSpec>, backend: Backend): String {
+    private fun presenter(prefix: String, parent: String, cases: List<InteractorSpec>, backend: Backend): String {
         if (cases.isEmpty()) return "class ${prefix}Presenter : $parent"
         val coroutine = backend == Backend.COROUTINES
-        fun title(spec: UseCaseSpec) = spec.name.replaceFirstChar { it.uppercaseChar() }
-        fun field(spec: UseCaseSpec) = "${spec.name.replaceFirstChar { it.lowercaseChar() }}Interactor"
+        fun title(spec: InteractorSpec) = spec.name.replaceFirstChar { it.uppercaseChar() }
+        fun field(spec: InteractorSpec) = "${spec.name.replaceFirstChar { it.lowercaseChar() }}Interactor"
         val constructor = buildList {
             if (coroutine) add("    private val scope: kotlinx.coroutines.CoroutineScope,")
-            cases.forEach { add("    private val ${field(it)}: ${title(it)}Interactor,") }
+            cases.forEach {
+                val type = if (coroutine) {
+                    "com.dzaitsev.rxviper.SuspendInteractor<${it.requestType}, ${it.responseType}>"
+                } else {
+                    "${title(it)}Interactor"
+                }
+                add("    private val ${field(it)}: $type,")
+            }
         }.joinToString("\n")
         val methods = cases.joinToString("\n\n") { spec ->
             val default = if (spec.requestType == "kotlin.Unit") " = Unit" else ""
@@ -102,18 +109,20 @@ internal object KotlinGenerator {
         val cleanup = if (coroutine) "        jobs.forEach { it.cancel() }\n        jobs.clear()" else {
             cases.joinToString("\n") { "        ${field(it)}.clear()" }
         }
-        return "class ${prefix}Presenter(\n$constructor\n) : $parent {\n$state$methods\n\n" +
+        val extensionPackage = if (coroutine) "coroutines" else backend.name.lowercase(Locale.ROOT)
+        return "import com.dzaitsev.rxviper.$extensionPackage.execute\n\n" +
+            "class ${prefix}Presenter(\n$constructor\n) : $parent {\n$state$methods\n\n" +
             "    override fun onDropView(view: ${prefix}ViewCallbacks) {\n$cleanup\n    }\n}"
     }
 
-    private fun interactor(name: String, spec: UseCaseSpec, backend: Backend): String {
+    private fun interactor(name: String, spec: InteractorSpec, backend: Backend): String {
         val types = "<${spec.requestType}, ${spec.responseType}>"
         if (backend == Backend.COROUTINES) {
             return """
                 |class $name(dispatcher: kotlinx.coroutines.CoroutineDispatcher) :
                 |    com.dzaitsev.rxviper.coroutines.SuspendInteractor$types(dispatcher) {
                 |    override suspend fun run(request: ${spec.requestType}): ${spec.responseType} =
-                |        TODO("Implement this use case")
+                |        TODO("Implement this interactor")
                 |}
             """.trimMargin()
         }
@@ -131,7 +140,7 @@ internal object KotlinGenerator {
             |    observeScheduler: $rx.Scheduler,
             |) : com.dzaitsev.rxviper.$module.Interactor$types(subscribeScheduler, observeScheduler) {
             |    override fun create$stream(request: ${spec.requestType}): $rx.$stream<${spec.responseType}> =
-            |        $rx.$stream.empty() // Replace with this use case's data source.
+            |        $rx.$stream.empty() // Replace with this interactor's data source.
             |}
         """.trimMargin()
     }
