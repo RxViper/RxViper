@@ -35,6 +35,6 @@ trellis {
 
     // Runtime libraries and generator build without an Android SDK.
     if (providers.gradleProperty("androidSample").orNull == "true") {
-        androidApp("sample", "com.dzaitsev.rxviper.sample")
+        androidApp("sample", "com.dzaitsev.rxviper.sample") { usesCompose = true }
     }
 }

@@ -1,20 +1,23 @@
 /* Copyright 2016–2026 Dmytro Zaitsev. Licensed under the Apache License, Version 2.0. */
 package com.dzaitsev.rxviper.sample.detailsscreen
 
-import android.app.Activity
 import android.os.Bundle
-import android.widget.TextView
-import com.dzaitsev.rxviper.sample.R
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import com.dzaitsev.rxviper.sample.ui.RxViperTheme
 
-class DetailsActivity : Activity() {
+class DetailsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_details)
-        findViewById<TextView>(R.id.details).text = getString(
-            R.string.cheese_details,
-            intent.getStringExtra(CHEESE_NAME).orEmpty(),
-            intent.getStringExtra(CHEESE_TYPE).orEmpty(),
-        )
+        enableEdgeToEdge()
+        val name = intent.getStringExtra(CHEESE_NAME).orEmpty()
+        val type = intent.getStringExtra(CHEESE_TYPE).orEmpty()
+        setContent {
+            RxViperTheme {
+                DetailsScreen(name = name, type = type, onBack = { finish() })
+            }
+        }
     }
 
     companion object {

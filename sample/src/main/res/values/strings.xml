@@ -19,7 +19,15 @@
   <string name="app_name">RxViperSample</string>
   <string name="cheese_title">RxViper cheeses</string>
   <string name="reload_cheeses">Reload cheeses</string>
-  <string name="cheese_details">%1$s\n\n%2$s cheese</string>
+  <string name="cheese_details_title">Cheese details</string>
+  <string name="cheese_type">%1$s cheese</string>
+  <string name="loading_cheeses">Loading cheeses…</string>
+  <string name="no_cheeses">No cheeses to show.</string>
+  <string name="back">Back</string>
+  <plurals name="cheese_count">
+    <item quantity="one">%1$d cheese</item>
+    <item quantity="other">%1$d cheeses</item>
+  </plurals>
 
   <string-array name="hard_cheeses">
     <item>Abbaye du Mont des Cats</item>

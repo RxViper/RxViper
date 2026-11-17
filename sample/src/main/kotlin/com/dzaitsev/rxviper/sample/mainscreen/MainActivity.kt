@@ -1,15 +1,15 @@
 /* Copyright 2016–2026 Dmytro Zaitsev. Licensed under the Apache License, Version 2.0. */
 package com.dzaitsev.rxviper.sample.mainscreen
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
-import android.widget.ProgressBar
-import android.widget.TextView
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.lifecycleScope
 import com.dzaitsev.rxviper.sample.R
 import com.dzaitsev.rxviper.sample.data.Cheese
 import com.dzaitsev.rxviper.sample.data.CheeseStorage
@@ -18,30 +18,18 @@ import com.dzaitsev.rxviper.sample.detailsscreen.DetailsActivity
 import com.dzaitsev.rxviper.sample.mainscreen.domain.GetCheesesInteractor
 import com.dzaitsev.rxviper.sample.mainscreen.presenter.MainPresenter
 import com.dzaitsev.rxviper.sample.mainscreen.router.MainRouter
+import com.dzaitsev.rxviper.sample.mainscreen.view.MainScreen
+import com.dzaitsev.rxviper.sample.mainscreen.view.MainUiState
 import com.dzaitsev.rxviper.sample.mainscreen.view.MainViewCallbacks
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import com.dzaitsev.rxviper.sample.ui.RxViperTheme
 
-class MainActivity : Activity(), MainViewCallbacks, MainRouter {
-    private val screenScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+class MainActivity : ComponentActivity(), MainViewCallbacks, MainRouter {
     private lateinit var presenter: MainPresenter
-    private lateinit var adapter: ArrayAdapter<String>
-    private lateinit var progress: ProgressBar
-    private lateinit var errorMessage: TextView
-    private var cheeses = emptyList<Cheese>()
+    private var uiState by mutableStateOf(MainUiState())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        progress = findViewById(R.id.progress)
-        errorMessage = findViewById(R.id.error_message)
-        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
-        findViewById<ListView>(R.id.cheeses).apply {
-            adapter = this@MainActivity.adapter
-            setOnItemClickListener { _, _, position, _ -> presenter.onItemClicked(cheeses[position]) }
-        }
+        enableEdgeToEdge()
 
         // Construct dependencies at the edge; presenter and interactor have no Android dependency.
         val arrays = listOf(
@@ -53,8 +41,16 @@ class MainActivity : Activity(), MainViewCallbacks, MainRouter {
         val catalog = arrays.flatMap { (array, type) ->
             resources.getStringArray(array).map { name -> name to type }
         }.mapIndexed { index, (name, type) -> Cheese(index.toLong(), name, type) }
-        presenter = MainPresenter(GetCheesesInteractor(CheeseStorage(catalog)), screenScope)
-        findViewById<Button>(R.id.reload).setOnClickListener { presenter.fetchCheeses() }
+        presenter = MainPresenter(GetCheesesInteractor(CheeseStorage(catalog)), lifecycleScope)
+        setContent {
+            RxViperTheme {
+                MainScreen(
+                    state = uiState,
+                    onReload = { presenter.fetchCheeses() },
+                    onCheeseSelected = presenter::onItemClicked,
+                )
+            }
+        }
     }
 
     override fun onStart() {
@@ -69,25 +65,19 @@ class MainActivity : Activity(), MainViewCallbacks, MainRouter {
         super.onStop()
     }
 
-    override fun onDestroy() {
-        screenScope.cancel()
-        super.onDestroy()
-    }
-
     override fun showLoading(loading: Boolean) {
-        progress.visibility = if (loading) View.VISIBLE else View.GONE
-        if (loading) errorMessage.visibility = View.GONE
+        uiState = uiState.copy(
+            isLoading = loading,
+            errorMessage = if (loading) null else uiState.errorMessage,
+        )
     }
 
     override fun showCheeses(cheeses: List<Cheese>) {
-        this.cheeses = cheeses
-        adapter.clear()
-        adapter.addAll(cheeses.map { "${it.name} · ${it.type.label}" })
+        uiState = uiState.copy(cheeses = cheeses.toList(), errorMessage = null)
     }
 
     override fun showError(message: String) {
-        errorMessage.text = message
-        errorMessage.visibility = View.VISIBLE
+        uiState = uiState.copy(errorMessage = message)
     }
 
     override fun navigateToDetails(cheese: Cheese) {

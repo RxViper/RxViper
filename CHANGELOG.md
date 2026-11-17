@@ -31,6 +31,10 @@ This is a source and binary breaking rewrite; see [MIGRATION.md](MIGRATION.md).
   and shared JVM/Android SDK conventions, retaining per-module JVM 17 overrides.
 - Replace JCenter/Bintray and obsolete plugins with Maven Central/Google and
   local Maven publication, including the Gradle plugin marker.
+- Rewrite the sample screens with Jetpack Compose and Material 3, enabling the
+  compiler through Trellis and bridging presenter callbacks into Compose state.
+- Add host-side Compose UI tests for list actions, loading, errors, empty results
+  and details navigation, alongside the presenter tests.
 - Add the sample's ProGuard file required by Trellis release builds, retaining
   the view/router interfaces invoked by dynamic proxies.
 - Update the opt-in Android sample with lifecycle cancellation, list/details

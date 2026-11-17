@@ -242,9 +242,14 @@ against every backend in tests.
 ## Android sample
 
 The [cheese browser sample](sample/README.md) uses the same core with coroutine
-interactors, native Android widgets and explicit dependency construction. It
-illustrates list/details navigation, main-thread callbacks, cancellation on view
-detach and scope cleanup on destruction.
+interactors, Jetpack Compose/Material 3 screens and explicit dependency construction.
+Presenter callbacks update Compose state; reload and selection events flow back
+to the presenter and router. It illustrates list/details navigation, main-thread
+callbacks, cancellation on view detach and lifecycle scope cleanup on destruction.
+
+Trellis enables Compose through `usesCompose = true` in the sample declaration.
+Compose UI tests run with Robolectric as part of the Android unit-test task,
+without requiring an emulator.
 
 ```sh
 ./gradlew -PandroidSample=true :sample:assembleDebug :sample:testDebugUnitTest :sample:lintDebug
