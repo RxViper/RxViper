@@ -1,14 +1,26 @@
 # RxViper
 
-A small Kotlin/JVM library for VIPER architecture: **View, Interactor, Presenter,
-Entity, Router**. Views display data and forward user input; presenters coordinate
+This is a micro framework with a small, extensible API which provides basic
+abstractions for building your apps using VIPER architecture.
+
+> I copy these classes into all apps I make. I'm tired of doing it. Now it's a library. ©
+
+Now written in Kotlin, RxViper works in Android apps and ordinary JVM applications.
+VIPER stands for **View, Interactor, Presenter, Entity, Router**.
+Views display data and forward user input; presenters coordinate
 presentation; interactors implement use cases; entities represent domain data;
 routers own navigation. Your application supplies storage, networking and dependency
-injection. The library works in Android apps and ordinary JVM applications.
+injection.
 
 This is the **2.0.0-SNAPSHOT** rewrite. It intentionally changes the 1.x API and
 artifact layout. These snapshot coordinates are for local builds; this change does
 not publish a release to Maven Central or the Gradle Plugin Portal.
+
+## Dedicated slides and video from my talk @ GDG Minsk 2016
+
+[SpeakerDeck](https://speakerdeck.com/dmitriyzaitsev/viper-sexy-architecting-or-mvp-on-steroids) or [SlideShare](http://www.slideshare.net/DmitriyZaitsev2/sexy-architecting-viper-mvp-on-steroids)
+
+[![My talk @ GDG Minsk](https://img.youtube.com/vi/pSSN_dnadKU/0.jpg)](https://www.youtube.com/watch?v=pSSN_dnadKU)
 
 ## Modules
 
@@ -207,10 +219,7 @@ detach and scope cleanup on destruction.
 See [MIGRATION.md](MIGRATION.md) for artifact, package, lifecycle, mapper and generator
 changes. This rewrite is source and binary incompatible with 1.x.
 
-## Background and license
-
-Original architecture talk: [GDG Minsk 2016 slides](https://speakerdeck.com/dmitriyzaitsev/viper-sexy-architecting-or-mvp-on-steroids)
-and [video](https://www.youtube.com/watch?v=pSSN_dnadKU).
+## License
 
 Copyright 2016–2026 Dmytro Zaitsev. Licensed under the
 [Apache License, Version 2.0](LICENSE.txt).
