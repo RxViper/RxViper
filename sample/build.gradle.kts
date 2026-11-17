@@ -1,15 +1,6 @@
-plugins {
-    alias(libs.plugins.android.application)
-}
-
 android {
-    namespace = "com.dzaitsev.rxviper.sample"
-    compileSdk = 37
-
     defaultConfig {
         applicationId = "com.dzaitsev.rxviper.sample"
-        minSdk = 23
-        targetSdk = 37
         versionCode = 2
         versionName = project.version.toString()
     }
@@ -18,6 +9,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+// The Android app uses JVM 17; published runtime jars keep Trellis's JVM 8 default.
+kotlin {
+    compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
 }
 
 dependencies {

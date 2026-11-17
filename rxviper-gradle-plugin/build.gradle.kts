@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm")
     `java-gradle-plugin`
 }
 
+// Gradle plugins run on JVM 17; runtime libraries keep the shared JVM 8 target.
 kotlin {
     compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
 }

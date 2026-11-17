@@ -23,6 +23,8 @@ This is a source and binary breaking rewrite; see [MIGRATION.md](MIGRATION.md).
 - Add detailed module, lifecycle, usage, build and migration documentation ([#21]).
 - Modernize to checksummed Gradle 9.9.1, Kotlin 2.4.21, RxJava 1.3.8 / 2.2.21 /
   3.1.12, coroutines 1.11.0 and Android Gradle Plugin 9.5.1; centralize versions.
+- Adopt Trellis 1.0.0 for module declarations, Kotlin/Android plugin application
+  and shared JVM/Android SDK conventions, retaining per-module JVM 17 overrides.
 - Replace JCenter/Bintray and obsolete plugins with Maven Central/Google and
   local Maven publication, including the Gradle plugin marker.
 - Update the opt-in Android sample with lifecycle cancellation, list/details

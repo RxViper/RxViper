@@ -52,6 +52,14 @@ Use JDK 17 or newer (validated with JDK 21). Runtime jars target JVM 8 bytecode;
 the Gradle plugin targets JVM 17. Sources and published metadata use Kotlin 2.4.21.
 An Android SDK is required only for the opt-in sample.
 
+Module declarations in `settings.gradle.kts` use
+[Trellis](https://github.com/DmitriyZaitsev/trellis). Its root conventions plugin
+applies the Kotlin/Android plugins and shares the JVM target and Android SDK
+levels. Runtime modules use JVM 8; the generator and Android sample override the
+target to JVM 17 in their build scripts. Publishing and test dependencies remain
+in the root build script. `trellisVersion` in `gradle.properties` pins both Trellis
+plugins to 1.0.0, since the settings plugin resolves before version catalogs exist.
+
 ```sh
 ./gradlew check assemble
 ./gradlew publishAllPublicationsToBuildRepository

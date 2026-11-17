@@ -1,4 +1,1 @@
-plugins {
-    kotlin("jvm")
-    `java-library`
-}
+// Shared JVM conventions are configured by Trellis; core has no backend dependencies.
